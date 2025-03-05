@@ -1,41 +1,16 @@
-import 'dart:math';
-
-import 'package:app_mochila/styles/app_colors.dart';
-import 'package:app_mochila/styles/constants.dart';
-import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/presentation/widgets/inputs.dart';
+import 'package:app_mochila/styles/base_scaffold.dart';
+import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
