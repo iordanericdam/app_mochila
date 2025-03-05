@@ -4,14 +4,14 @@ import 'package:app_mochila/services/form_validator.dart';
 
 class PasswordInput extends StatefulWidget {
   final TextEditingController? controller;
-  final String labelText;
+  final String hintText;
   final TextEditingController? emailController;
   final FormFieldValidator<String>? validator;
 
   const PasswordInput({
     super.key,
     this.controller,
-    this.labelText = "Contraseña",
+    this.hintText = "Contraseña",
     this.emailController,
     this.validator,
   });
@@ -33,7 +33,7 @@ class PasswordInputState extends State<PasswordInput> {
   Widget build(BuildContext context) {
     return CustomInput(
       controller: widget.controller,
-      hintText: widget.labelText,
+      hintText: widget.hintText,
       obscureText: !_passwordVisible, // Oculta o muestra la contraseña
       validator: widget.validator ?? validatePassword,
       suffixIcon: IconButton(

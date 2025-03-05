@@ -1,5 +1,9 @@
+import 'package:app_mochila/presentation/screens/eric_explicacion.dart';
+import 'package:app_mochila/presentation/screens/login_screen.dart';
+import 'package:app_mochila/presentation/widgets/buttons.dart';
 import 'package:app_mochila/presentation/widgets/password_custom_input.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
+import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +18,7 @@ class NewPasswordScreen extends StatefulWidget {
 class _NewPasswordScreenState extends State<NewPasswordScreen> {
   @override
   Widget build(BuildContext context) {
-    return const BaseScaffold(
+    return BaseScaffold(
       body: WhiteBaseContainer(
           child: Align(
         alignment: Alignment.topLeft,
@@ -33,9 +37,28 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
             ),
             sizedBox,
-            PasswordInput(),
+            const PasswordInput(),
             kHalfSizedBox,
-            PasswordInput(),
+            const PasswordInput(
+              hintText: "Repite la contraseña",
+            ),
+            sizedBox,
+            SizedBox(
+              height: kdefaultPadding * 2,
+              width: MediaQuery.of(context).size.width,
+              child: CustomElevatedButton(
+                text: 'Actualizar contraseña',
+                backgroundColor: AppColors.recoverButtonColor,
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()),
+                  );
+                },
+              ),
+            )
           ],
         )),
       )),
