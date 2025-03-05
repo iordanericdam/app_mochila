@@ -5,32 +5,52 @@ class CustomInput extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
   final Function(String)? onChanged;
+  final FormFieldValidator<String>? validator;
+  final String? errorText;
+  final TextInputType? keyboardType;
+  final Icon? icon;
+  final bool obscureText;
+  final Widget? suffixIcon;
 
   const CustomInput(
-      {super.key, required this.hintText, this.controller, this.onChanged});
+      {super.key,
+      required this.hintText,
+      this.controller,
+      this.onChanged,
+      this.validator,
+      this.icon,
+      this.obscureText = false,
+      this.keyboardType,
+      this.errorText,
+      this.suffixIcon});
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
       onChanged: onChanged,
+      validator: validator,
+      obscureText: obscureText,
+      keyboardType: keyboardType ?? TextInputType.text,
+      forceErrorText: errorText,
       decoration: InputDecoration(
+        suffixIcon: suffixIcon,
         hintText: hintText,
         hintStyle: TextStyle(color: Colors.grey[500]),
         filled: true,
         fillColor: Colors.grey[100],
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(15),
           borderSide: const BorderSide(
               color: AppColors.strokeInputLoginColor, width: 2),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(15),
           borderSide: const BorderSide(
               color: AppColors.strokeInputLoginColor, width: 2),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(15),
           borderSide:
               const BorderSide(color: AppColors.startButtonColor, width: 2),
         ),
