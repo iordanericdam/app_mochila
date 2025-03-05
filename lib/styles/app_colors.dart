@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+
   static const backGroundLoginColor1 = Color(0xFF5DB3E3);
   static const backGroundLoginColor2 =  Color(0xFF340670);
   static const backgroundLogoColor=   Color(0xFF2D2B2B);
@@ -35,5 +36,11 @@ class AppColors {
   begin: Alignment.centerLeft,
   end: Alignment.centerRight,
   );
+
+
+//Colors para TeXto
+
+  static const textColor = Color(0xFF000000);
+  static var hintTextColor = Colors.grey[100];
 
 }

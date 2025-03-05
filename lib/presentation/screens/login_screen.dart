@@ -1,4 +1,5 @@
 import 'package:app_mochila/presentation/widgets/inputs.dart';
+import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
@@ -13,44 +14,90 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      body: Stack(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                margin: const EdgeInsets.only(top: kdefaultPadding),
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  height: MediaQuery.of(context).size.height / 3.5,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 7,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                decoration: const BoxDecoration(color: Colors.white),
-                height: MediaQuery.of(context).size.height / 1.5,
-                child: const Padding(
-                  // Quitar
-                  padding: kmedium,
-                  child: Column(
-                    children: [
-                      CustomInput(
-                        hintText: "Introduce tu email",
-                      )
-                    ],
+    return SafeArea(
+      child: BaseScaffold(
+        body: Column(
+          children: [
+            Expanded(
+              flex: 3,
+              child:SingleChildScrollView(
+                 child: Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  margin: const EdgeInsets.only(top: kdefaultPadding),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    height: MediaQuery.of(context).size.height / 5,
                   ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+              )
+             ,
+            Expanded(
+              flex: 7,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  decoration: const BoxDecoration(color: Colors.white),
+                  height: MediaQuery.of(context).size.height / 1.5,
+                  child: Padding(
+                    // Quitar
+                    padding: kmedium,
+                    child: Column(
+                      children: [
+                        kHalfSizedBox,
+                        const Text(
+                          "Login",
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.heroTitle,
+                        ),
+                        kHalfSizedBox,
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: const TextSpan(
+                            text: 'Inicio de sesión ', // Texto con estilo normal
+                            style: AppTextStyle.normal,
+                            children: [
+                              TextSpan(
+                                text: 'NombreApp',
+                                style: AppTextStyle.normalBold
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Text(
+                        //   'Inicio de sesión NombreApp',
+                        //   style: AppTextStyle.title,
+                        //   textAlign: TextAlign.center,
+                        // ),
+                        sizedBox,
+                        const Text(
+                          'Email',
+                          style: AppTextStyle.title,
+                          textAlign: TextAlign.left,
+                        ),
+                        const CustomInput(
+                          hintText: "Introduce tu email",
+                        ),
+                        sizedBox,
+                         const Text(
+                          'Password',
+                          style: AppTextStyle.title,
+                          textAlign: TextAlign.left,
+                        ),
+                        const CustomInput(
+                          hintText: "Introduce tu password",
+                        ),
+                        
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
