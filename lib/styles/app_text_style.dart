@@ -23,6 +23,13 @@ class AppTextStyle {
     color: AppColors.textColor,
   );
 
+  static const TextStyle buttonsWhite = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: AppColors.backGroundInputColor,
+  );
+
   static const TextStyle normalBold = TextStyle(
     fontFamily: 'Montserrat',
     fontSize: 16,
@@ -30,7 +37,7 @@ class AppTextStyle {
     color: AppColors.textColor,
   );
 
-   static TextStyle normalGrey = TextStyle(
+  static TextStyle normalGrey = TextStyle(
     fontFamily: 'Montserrat',
     fontSize: 16,
     fontWeight: FontWeight.normal,

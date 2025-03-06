@@ -4,6 +4,7 @@ import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
 import 'package:app_mochila/services/form_validator.dart';
 import 'package:app_mochila/styles/app_colors.dart';
+import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
@@ -33,13 +34,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             children: [
               const Text(
                 "Recuperar contraseña",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: AppTextStyle.title,
               ),
               sizedBox,
-              const Text(
-                "Introduce tu email para poder cambiar la contraseña",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-              ),
+              const Text("Introduce tu email para poder cambiar la contraseña",
+                  style: AppTextStyle.normal),
               sizedBox,
               CustomInput(
                   hintText: "Introduce tu email",
