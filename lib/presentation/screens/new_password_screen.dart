@@ -1,4 +1,3 @@
-import 'package:app_mochila/presentation/screens/eric_explicacion.dart';
 import 'package:app_mochila/presentation/screens/login_screen.dart';
 import 'package:app_mochila/presentation/widgets/buttons.dart';
 import 'package:app_mochila/presentation/widgets/password_custom_input.dart';
