@@ -1,4 +1,5 @@
 import 'package:app_mochila/presentation/screens/forgot_password_screen.dart';
+import 'package:app_mochila/presentation/screens/register_page.dart';
 import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/password_custom_input.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
@@ -105,8 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgotPasswordScreen()),
+                                  builder: (context) => const RegisterPage()),
                             );
                           },
                         ),
