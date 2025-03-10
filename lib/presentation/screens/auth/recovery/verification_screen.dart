@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:app_mochila/presentation/screens/new_password_screen.dart';
+import 'package:app_mochila/presentation/screens/auth/recovery/new_password_screen.dart';
 import 'package:app_mochila/presentation/widgets/buttons.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
 import 'package:app_mochila/styles/app_colors.dart';
@@ -84,7 +84,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 alignment: Alignment.center,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                   //crossAxisAlignment: CrossAxisAlignment.start,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       "¿No has recibido el email?",

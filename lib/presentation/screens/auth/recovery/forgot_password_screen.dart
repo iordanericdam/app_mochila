@@ -1,4 +1,4 @@
-import 'package:app_mochila/presentation/screens/verification_screen.dart';
+import 'package:app_mochila/presentation/screens/auth/recovery/verification_screen.dart';
 import 'package:app_mochila/presentation/widgets/buttons.dart';
 import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
