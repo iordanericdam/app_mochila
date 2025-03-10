@@ -27,6 +27,9 @@ const kDoubleSizedBox = SizedBox(
   height: kDefaultPadding * 2,
 );
 
+const kleftPadding = EdgeInsets.only(left: 5);
+
+
 const String mobilePattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
 
 //validation for email

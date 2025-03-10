@@ -1,0 +1,23 @@
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+
+  # Utiliza la imagen de fondo que tenga el gradiente
+  #background_image: "assets/images/background.png"
+  color: '#8288ff'
+  # Esta imagen se usará como logo, se mostrará en el centro de la pantalla de inicio
+  image: "assets/images/logo_splash.png"
+  branding: "assets/images/branding.png"
+  branding_mode: bottom
+  branding_bottom_padding: 100
+
+
+  #Para las nuevas versiones de Android
+  android_12:
+    color: '#8288ff'
+    image: "assets/images/logo_splash.png"
+   
+
+  
+

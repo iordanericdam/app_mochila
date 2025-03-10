@@ -11,7 +11,7 @@ class PasswordInput extends StatefulWidget {
   const PasswordInput({
     super.key,
     this.controller,
-    this.hintText = "Contraseña",
+    this.hintText = "Introduce tu contraseña",
     this.emailController,
     this.validator,
   });

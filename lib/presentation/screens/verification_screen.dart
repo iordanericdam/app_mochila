@@ -84,7 +84,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 alignment: Alignment.center,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  // crossAxisAlignment: CrossAxisAlignment.start,
+                   //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       "¿No has recibido el email?",

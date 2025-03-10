@@ -1,18 +1,39 @@
 import 'package:app_mochila/presentation/screens/login_screen.dart';
-import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding); //PRESERVE EL SPLASHSCREEN HASTA QUE EL METODO REMOVE ES LLAMDO 
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget { //SE HA CAMBIADO EL STATELES POR EL STATEFUL PARA PODER USAR EL MÉTODO INIT
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() { //AGREGAMOS EL METODO INIT
+    super.initState();  
+    initialization();
+  }
+
+  void initialization() async{ //CREAMOS EL METODO ASINCRONO, DÁNDOLE UN DELAY Y BORRAMOS EL SPLASH Y LO LLAMAMOS DESDE EL INITSATE
+    print('cargando...');
+    await Future.delayed(const Duration(seconds: 3));
+    print('Entrando');
+    FlutterNativeSplash.remove();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'AppMochila',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Montserrat',
@@ -26,3 +47,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+ 

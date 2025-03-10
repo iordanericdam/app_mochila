@@ -43,4 +43,17 @@ class AppTextStyle {
     fontWeight: FontWeight.normal,
     color: AppColors.hintTextColor,
   );
+
+  static const TextStyle buttonTextNormal = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: 12,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textColor,
+  );
+   static const TextStyle buttonTextBold = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textColor,
+  );
 }
