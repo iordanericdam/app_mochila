@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../styles/app_colors.dart'; // Asegúrate de importar los colores si los tienes en otro archivo
 
 class CustomInput extends StatelessWidget {
-  final String hintText;
+  final String? hintText;
   final TextEditingController? controller;
   final Function(String)? onChanged;
   final FormFieldValidator<String>? validator;
@@ -15,7 +15,7 @@ class CustomInput extends StatelessWidget {
 
   const CustomInput(
       {super.key,
-      required this.hintText,
+      this.hintText,
       this.controller,
       this.onChanged,
       this.validator,
@@ -36,7 +36,7 @@ class CustomInput extends StatelessWidget {
       forceErrorText: errorText,
       decoration: InputDecoration(
         suffixIcon: suffixIcon,
-        hintText: hintText,
+        hintText: hintText ?? "",
         hintStyle: AppTextStyle.normal,
         filled: true,
         fillColor: Colors.grey[100],
