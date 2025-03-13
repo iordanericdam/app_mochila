@@ -43,9 +43,9 @@ class _LoginScreenState extends State<LoginScreen> {
     var response = await ApiService.login(email, password);
 
     if (response != null) {
-      print('Login exitoso: ${response.toString()}');
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Inicio de sesión exitoso')));
+      print('Login : ${response.toString()}');
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(response.toString())));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Error en el inicio de sesión')));
