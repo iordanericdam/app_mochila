@@ -9,6 +9,7 @@ import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:app_mochila/services/api_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,6 +22,36 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final double logoAreaHeight = 220;
+
+// Future indica que la función es asíncrona y que el resultado estará disponible en el futuro.
+// async (asíncrono) Cuando declaramos una función con async, indicamos que la función puede realizar operaciones asíncronas.
+// await (esperar) Se usa dentro de una función async. Hace que la ejecución espere hasta que la operación asíncrona se complete antes de continuar
+//
+  Future<void> _login() async {
+    // Obtener el email y la contraseña ingresados por el usuario
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    // Verificar si los campos están vacíos
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Por favor, completa todos los campos')));
+      return;
+    }
+
+    // Llamar al servicio de API para realizar el inicio de sesión
+    var response = await ApiService.login(email, password);
+
+    if (response != null) {
+      print('Login exitoso: ${response.toString()}');
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Inicio de sesión exitoso')));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error en el inicio de sesión')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -89,6 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       CustomInput(
                           hintText: "Introduce tu email",
                           keyboardType: TextInputType.emailAddress,
+                          controller: emailController,
                           validator: (value) {
                             return emailValidator(value);
                           }),
@@ -101,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       kHalfSizedBox,
-                      const PasswordInput(),
+                      PasswordInput(controller: passwordController),
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
@@ -127,6 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           gradient: AppColors.loginButtonColor,
                           onPressed: () {
                             // LOGICA DE CREDENCIALES Y NAVEGACION AL HOME O WELCOME.
+                            _login();
                           },
                         ),
                       ),
