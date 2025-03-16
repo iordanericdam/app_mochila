@@ -37,6 +37,7 @@ dependencies:
   pinput: ^5.0.1
   flutter_native_splash: ^2.4.5
   http: ^0.13.5
+  logger: ^2.5.0
 
 dev_dependencies:
   flutter_test:

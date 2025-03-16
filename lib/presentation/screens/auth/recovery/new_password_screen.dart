@@ -2,8 +2,8 @@ import 'package:app_mochila/presentation/screens/auth/login_screen.dart';
 import 'package:app_mochila/presentation/widgets/buttons.dart';
 import 'package:app_mochila/presentation/widgets/password_custom_input.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
-import 'package:app_mochila/services/api_service.dart';
 import 'package:app_mochila/services/form_validator.dart';
+import 'package:app_mochila/services/reset_password.dart';
 import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/styles/constants.dart';
@@ -22,11 +22,12 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
   // final pinController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPwController = TextEditingController();
+  final _resetPasswordKey = GlobalKey<FormState>();
 
   Future<void> handlePasswordReset(
       String email, String code, String newPassword) async {
     FocusScope.of(context).unfocus();
-    var response = await ApiService.resetPassword(email, code, newPassword);
+    var response = await ResetPassword.resetPassword(email, code, newPassword);
 
     if (response != null) {
       print('Contraseña restablecida correctamente: ${response.toString()}');
@@ -46,49 +47,53 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
           child: Align(
         alignment: Alignment.topLeft,
         child: Form(
+            key: _resetPasswordKey,
             child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Nueva contraseña",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            sizedBox,
-            const Text(
-              "Solo un paso más! Introduce la nueva contraseña y vualeve a disfrutar de tus mochilas.",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-            ),
-            sizedBox,
-            PasswordInput(
-              controller: passwordController,
-              validator: (value) {
-                validatePassword(value);
-              },
-            ),
-            kHalfSizedBox,
-            PasswordInput(
-              hintText: "Repite la contraseña",
-              controller: confirmPwController,
-              validator: (value) {
-                validateConfirmPassword(value, passwordController);
-              },
-            ),
-            sizedBox,
-            SizedBox(
-              height: kdefaultPadding * 2,
-              width: MediaQuery.of(context).size.width,
-              child: CustomElevatedButton(
-                text: 'Actualizar contraseña',
-                backgroundColor: AppColors.recoverButtonColor,
-                onPressed: () {
-                  handlePasswordReset(
-                      widget.email, widget.code, passwordController.text);
-                },
-              ),
-            )
-          ],
-        )),
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Nueva contraseña",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                sizedBox,
+                const Text(
+                  "Solo un paso más! Introduce la nueva contraseña y vualeve a disfrutar de tus mochilas.",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                ),
+                sizedBox,
+                PasswordInput(
+                  hintText: "Introduce una contraseña",
+                  controller: passwordController,
+                  validator: (value) {
+                    return validatePassword(value);
+                  },
+                ),
+                kHalfSizedBox,
+                PasswordInput(
+                  hintText: "Repite la contraseña",
+                  controller: confirmPwController,
+                  validator: (value) {
+                    return validateConfirmPassword(value, passwordController);
+                  },
+                ),
+                sizedBox,
+                SizedBox(
+                  height: kdefaultPadding * 2,
+                  width: MediaQuery.of(context).size.width,
+                  child: CustomElevatedButton(
+                    text: 'Actualizar contraseña',
+                    backgroundColor: AppColors.recoverButtonColor,
+                    onPressed: () {
+                      if (_resetPasswordKey.currentState!.validate()) {
+                        handlePasswordReset(
+                            widget.email, widget.code, passwordController.text);
+                      }
+                    },
+                  ),
+                )
+              ],
+            )),
       )),
     );
   }

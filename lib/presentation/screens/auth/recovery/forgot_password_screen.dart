@@ -2,8 +2,8 @@ import 'package:app_mochila/presentation/screens/auth/recovery/verification_scre
 import 'package:app_mochila/presentation/widgets/buttons.dart';
 import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
-import 'package:app_mochila/services/api_service.dart';
 import 'package:app_mochila/services/form_validator.dart';
+import 'package:app_mochila/services/reset_password.dart';
 import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
@@ -21,21 +21,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
   final _resetPasswordKey = GlobalKey<FormState>();
 
-  Future<void> handlePasswordReset(BuildContext context) async {
-    FocusScope.of(context).unfocus();
+  Future<void> handlePasswordReset(BuildContext context, String email) async {
+    await ResetPassword.sendResetPasswordCode(email);
 
-    if (_resetPasswordKey.currentState!.validate()) {
-      String email = _emailController.text.trim();
-
-      await ApiService.sendResetPasswordCode(email);
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                VerificationScreen(email: _emailController.text)),
-      );
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              VerificationScreen(email: _emailController.text)),
+    );
   }
 
   @override
@@ -76,12 +70,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     FocusScope.of(context).unfocus();
                     if (_resetPasswordKey.currentState!.validate()) {
                       final email = _emailController.text.trim();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                VerificationScreen(email: email)),
-                      );
+                      handlePasswordReset(context, email);
                     }
                   },
                 ),

@@ -1,45 +1,12 @@
 import 'dart:convert';
+import 'package:app_mochila/services/common.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = 'https://uemproyecto.site/api';
-
-// Es un método asíncrono (async) porque realiza una solicitud HTTP.
-// ¿Simpre usa Future con async? Cuando declaras una función que realiza una operación asíncrona y quieres usar await dentro de ella, debes marcarla con async.
-// Devuelve un Future<Map<String, dynamic>?>, lo que significa que retorna un JSON convertido en mapa (Map) si la respuesta es correcta, o null si hay error.
-  static Future<Map<String, dynamic>?> login(
-      String email, String password) async {
-    var url = Uri.parse('$baseUrl/login');
-    var headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
-    var body = json.encode({"email": email, "password": password});
-
-    try {
-      // await → Hace que el código espere hasta que se reciba la respuesta.
-      var response = await http.post(url, headers: headers, body: body);
-      // Manejo de la respuesta
-      if (response.statusCode == 200) {
-        return json.decode(response.body);
-      } else {
-        print('Error: ${response.body}');
-        return null;
-      }
-    } catch (e) {
-      // Si ocurre un error de conexión o servidor, el catch captura la excepción y devuelve null.
-      print('Exception: $e');
-      return null;
-    }
-  }
-
   /// Método para verificar si un email existe en el sistema
   static Future<Map<String, dynamic>?> checkEmail(String email) async {
-    var url = Uri.parse('$baseUrl/check-email');
-    var headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
+    var url = Uri.parse('${Common.baseUrl}/check-email');
+    var headers = Common.headers;
     var body = json.encode({"email": email});
     try {
       var response = await http.post(url, headers: headers, body: body);
@@ -58,10 +25,7 @@ class ApiService {
 // Método para enviar un código de restablecimiento de contraseña al correo electrónico
   static Future<void> sendResetPasswordCode(String email) async {
     // Definir los encabezados de la solicitud
-    var headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
+    var headers = Common.headers;
 
     // Crear la solicitud HTTP de tipo POST para la API de restablecimiento de contraseña
     var request = http.Request('POST',
@@ -91,11 +55,8 @@ class ApiService {
   // Método para verificar el código de restablecimiento de contraseña
   static Future<Map<String, dynamic>?> verifyResetPasswordCode(
       String email, String code) async {
-    var url = Uri.parse('$baseUrl/verify-reset-password-code');
-    var headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
+    var url = Uri.parse('${Common.baseUrl}/verify-reset-password-code');
+    var headers = Common.headers;
     var body = json.encode({
       "email": email,
       "code": code,
@@ -120,11 +81,8 @@ class ApiService {
   // Método para restablecer la contraseña
   static Future<Map<String, dynamic>?> resetPassword(
       String email, String code, String newPassword) async {
-    var url = Uri.parse('$baseUrl/reset-password');
-    var headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
+    var url = Uri.parse('${Common.baseUrl}/reset-password');
+    var headers = Common.headers;
     var body = json.encode({
       "email": email,
       "code": code,

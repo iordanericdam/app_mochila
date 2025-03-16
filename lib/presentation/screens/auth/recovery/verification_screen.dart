@@ -1,7 +1,7 @@
 import 'package:app_mochila/presentation/screens/auth/recovery/new_password_screen.dart';
 import 'package:app_mochila/presentation/widgets/buttons.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
-import 'package:app_mochila/services/api_service.dart';
+import 'package:app_mochila/services/reset_password.dart';
 import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
@@ -10,19 +10,20 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
-class VerificationScreen extends StatelessWidget {
+class VerificationScreen extends StatefulWidget {
   final String email;
   VerificationScreen({super.key, required this.email});
+
+  @override
+  State<VerificationScreen> createState() => _VerificationScreenState();
+}
+
+class _VerificationScreenState extends State<VerificationScreen> {
   final pinController = TextEditingController();
 
   // void _reloadScreen(pin) {
-  //   Navigator.of(context).pushReplacement(
-  //     MaterialPageRoute(builder: (context) => const VerificationScreen(email: 'email',)),
-  //   );
-  // }
-
   Future<void> handlePasswordVerification(String email, String code) async {
-    var response = await ApiService.verifyResetPasswordCode(email, code);
+    var response = await ResetPassword.verifyResetPasswordCode(email, code);
     if (response != null) {
       // Si la respuesta devuelta es válida, se pueden realizar algunos acciones
       print('Código de verificación correcto: ${response.toString()}');
@@ -65,7 +66,7 @@ class VerificationScreen extends StatelessWidget {
                 style: AppTextStyle.normal,
                 children: [
                   TextSpan(
-                    text: email,
+                    text: widget.email,
                     style: AppTextStyle.normalBold,
                   ),
                   const TextSpan(
@@ -83,7 +84,9 @@ class VerificationScreen extends StatelessWidget {
                 separatorBuilder: (index) => const SizedBox(width: 10),
                 controller: pinController,
                 length: 5,
-                onCompleted: (pin) => {},
+                onCompleted: (pin) => {
+                  handlePasswordVerification(widget.email, pin),
+                },
                 defaultPinTheme: PinTheme(
                   width: 56,
                   height: 56,
@@ -101,9 +104,7 @@ class VerificationScreen extends StatelessWidget {
               child: CustomElevatedButton(
                 text: 'Comprobar codigo',
                 backgroundColor: AppColors.recoverButtonColor,
-                onPressed: () {
-                  handlePasswordVerification(widget.email, pinController.text);
-                },
+                onPressed: () {},
               ),
             ),
             sizedBox,
@@ -120,7 +121,6 @@ class VerificationScreen extends StatelessWidget {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           // Implementar logica de reenvio de correo
-                          print("aa");
                         },
                     ),
                   ],

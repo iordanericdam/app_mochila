@@ -149,57 +149,6 @@ class _RegisterPageState extends State<RegisterPage> {
     ));
   }
 
-  Widget _buildRegisterButton() {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: AppColors.loginButtonColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: ElevatedButton(
-        onPressed: () {
-          if (_formKey.currentState?.validate() ?? false) {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text("Aviso"),
-                  content: const Text("Cuenta creada con éxito"),
-                  actions: [
-                    FilledButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("cerrar"),
-                    ),
-                  ],
-                );
-              },
-            );
-          }
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15),
-          child: Text(
-            "Crear cuenta",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildLoginText() {
     return RichText(
       textAlign: TextAlign.center,
