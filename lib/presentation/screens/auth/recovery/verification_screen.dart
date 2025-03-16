@@ -1,6 +1,7 @@
 import 'package:app_mochila/presentation/screens/auth/recovery/new_password_screen.dart';
 import 'package:app_mochila/presentation/widgets/buttons.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
+import 'package:app_mochila/services/api_service.dart';
 import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
@@ -19,6 +20,24 @@ class VerificationScreen extends StatelessWidget {
   //     MaterialPageRoute(builder: (context) => const VerificationScreen(email: 'email',)),
   //   );
   // }
+
+  Future<void> handlePasswordVerification(String email, String code) async {
+    var response = await ApiService.verifyResetPasswordCode(email, code);
+    if (response != null) {
+      // Si la respuesta devuelta es válida, se pueden realizar algunos acciones
+      print('Código de verificación correcto: ${response.toString()}');
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => NewPasswordScreen(
+                  email: widget.email,
+                  code: pinController.text,
+                )),
+      );
+    } else {
+      print('Error en la verificación del código');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +102,7 @@ class VerificationScreen extends StatelessWidget {
                 text: 'Comprobar codigo',
                 backgroundColor: AppColors.recoverButtonColor,
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const NewPasswordScreen()),
-                  );
+                  handlePasswordVerification(widget.email, pinController.text);
                 },
               ),
             ),
