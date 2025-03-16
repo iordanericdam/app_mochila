@@ -1,8 +1,10 @@
+import 'package:app_mochila/models/User.dart';
 import 'package:app_mochila/presentation/screens/auth/login_screen.dart';
 import 'package:app_mochila/presentation/widgets/button_login.dart';
 import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/password_custom_input.dart';
 import 'package:app_mochila/services/form_validator.dart';
+import 'package:app_mochila/services/register.dart';
 import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
@@ -18,17 +20,49 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final _formKey = GlobalKey<FormState>();
+  final _registerKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _nombreController = TextEditingController();
   final _passwordController = TextEditingController();
   final _passwordConfirmController = TextEditingController();
+  Future<void> _register(String email, String password, String name) async {
+    FocusScope.of(context).unfocus();
+    print('Registrando usuario...');
+    // Llamar al servicio de API para realizar el inicio de sesión
+    var response = await Register.register(email, password, name);
+
+    if (response != null && response.containsKey("user")) {
+      print(
+          'Usuario registrado: ${response["user"]}'); // Verifica si "user" está en la respuesta
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Registrado correctamente'),
+            backgroundColor: Colors.green),
+      );
+
+      //REDIRECCIÓN
+      Future.delayed(const Duration(seconds: 1), () {
+        print("Redirigiendo al Login...");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Error en el registro'), backgroundColor: Colors.red),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
         body: SingleChildScrollView(
       child: Form(
-        key: _formKey,
+        key: _registerKey,
         child: Padding(
           padding: klarge,
           child: Column(
@@ -90,7 +124,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     CustomInput(
                       controller: _nombreController,
                       validator: (value) {
-                        int length = 8;
+                        int length = 4;
                         return genericValidator(value, length);
                       },
                     ),
@@ -132,7 +166,12 @@ class _RegisterPageState extends State<RegisterPage> {
                         text: 'Registrarse',
                         gradient: AppColors.loginButtonColor,
                         onPressed: () {
-                          // LOGICA DE CREDENCIALES Y NAVEGACION AL HOME O WELCOME.
+                          if (_registerKey.currentState!.validate()) {
+                            _register(
+                                _emailController.text,
+                                _passwordController.text,
+                                _nombreController.text);
+                          }
                         },
                       ),
                     ),
