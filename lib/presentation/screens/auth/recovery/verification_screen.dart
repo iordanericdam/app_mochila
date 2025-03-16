@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:app_mochila/presentation/screens/auth/recovery/new_password_screen.dart';
 import 'package:app_mochila/presentation/widgets/buttons.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
@@ -7,23 +5,20 @@ import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/styles/constants.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
-class VerificationScreen extends StatefulWidget {
-  const VerificationScreen({super.key});
-
-  @override
-  State<VerificationScreen> createState() => _VerificationScreenState();
-}
-
-class _VerificationScreenState extends State<VerificationScreen> {
+class VerificationScreen extends StatelessWidget {
+  final String email;
+  VerificationScreen({super.key, required this.email});
   final pinController = TextEditingController();
-  void _reloadScreen(pin) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const VerificationScreen()),
-    );
-  }
+
+  // void _reloadScreen(pin) {
+  //   Navigator.of(context).pushReplacement(
+  //     MaterialPageRoute(builder: (context) => const VerificationScreen(email: 'email',)),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +36,35 @@ class _VerificationScreenState extends State<VerificationScreen> {
               style: AppTextStyle.title,
             ),
             sizedBox,
-            const Text(
-              "Hemos enviado un email a email@email.com, introudce el codigo de verificacion.",
-              style: AppTextStyle.normal,
+            // Text(
+            //   "Si la cuenta existe, en la bandeja de entrada de  $email habra recibido un codigo, introducelo a continuacion.",
+            //   style: AppTextStyle.normal,
+            // ),
+            RichText(
+              text: TextSpan(
+                text: "Hemos enviado un codigo de verificacion a ",
+                style: AppTextStyle.normal,
+                children: [
+                  TextSpan(
+                    text: email,
+                    style: AppTextStyle.normalBold,
+                  ),
+                  const TextSpan(
+                    text: ". Por favor, introducelo a continuacion:",
+                    style: AppTextStyle.normal,
+                  ),
+                ],
+              ),
             ),
             sizedBox,
             sizedBox,
             SizedBox(
-              width: 600,
+              width: double.infinity,
               child: Pinput(
+                separatorBuilder: (index) => const SizedBox(width: 10),
                 controller: pinController,
                 length: 5,
-                onCompleted: (pin) => _reloadScreen(pin),
+                onCompleted: (pin) => {},
                 defaultPinTheme: PinTheme(
                   width: 56,
                   height: 56,
@@ -79,20 +91,25 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 },
               ),
             ),
-            kHalfSizedBox,
+            sizedBox,
             Align(
                 alignment: Alignment.center,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  //crossAxisAlignment: CrossAxisAlignment.start,
+                child: RichText(
+                    text: TextSpan(
+                  text: "No has recibido el codigo? ",
+                  style: AppTextStyle.normal,
                   children: [
-                    const Text(
-                      "¿No has recibido el email?",
-                      style: AppTextStyle.normal,
+                    TextSpan(
+                      text: "Reenviar",
+                      style: AppTextStyle.normalBold,
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          // Implementar logica de reenvio de correo
+                          print("aa");
+                        },
                     ),
-                    TextButton(onPressed: () {}, child: const Text("Reenviar"))
                   ],
-                ))
+                )))
           ],
         )),
       ),

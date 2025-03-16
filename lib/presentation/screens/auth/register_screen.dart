@@ -1,4 +1,5 @@
 import 'package:app_mochila/presentation/screens/auth/login_screen.dart';
+import 'package:app_mochila/presentation/widgets/button_login.dart';
 import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/password_custom_input.dart';
 import 'package:app_mochila/services/form_validator.dart';
@@ -62,10 +63,13 @@ class _RegisterPageState extends State<RegisterPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     sizedBox,
-                    const Text(
-                      'Email',
-                      style: AppTextStyle.buttonsWhite,
-                      textAlign: TextAlign.left,
+                    const Padding(
+                      padding: kleftPadding,
+                      child: Text(
+                        'Email',
+                        style: AppTextStyle.normalBoldWhite,
+                        textAlign: TextAlign.left,
+                      ),
                     ),
                     CustomInput(
                       controller: _emailController,
@@ -75,10 +79,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                     ),
                     sizedBox,
-                    const Text(
-                      'Nombre',
-                      style: AppTextStyle.title,
-                      textAlign: TextAlign.left,
+                    const Padding(
+                      padding: kleftPadding,
+                      child: Text(
+                        'Nombre',
+                        style: AppTextStyle.normalBoldWhite,
+                        textAlign: TextAlign.left,
+                      ),
                     ),
                     CustomInput(
                       controller: _nombreController,
@@ -88,10 +95,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                     ),
                     sizedBox,
-                    const Text(
-                      'Password',
-                      style: AppTextStyle.title,
-                      textAlign: TextAlign.left,
+                    const Padding(
+                      padding: kleftPadding,
+                      child: Text(
+                        'Password',
+                        style: AppTextStyle.normalBoldWhite,
+                        textAlign: TextAlign.left,
+                      ),
                     ),
                     PasswordInput(
                       controller: _passwordController,
@@ -100,10 +110,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                     ),
                     sizedBox,
-                    const Text(
-                      'Confirma la contraseña',
-                      style: AppTextStyle.title,
-                      textAlign: TextAlign.left,
+                    const Padding(
+                      padding: kleftPadding,
+                      child: Text(
+                        'Confirma la contraseña',
+                        style: AppTextStyle.normalBoldWhite,
+                        textAlign: TextAlign.left,
+                      ),
                     ),
                     PasswordInput(
                       controller: _passwordConfirmController,
@@ -113,7 +126,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                     ),
                     sizedBox,
-                    _buildRegisterButton(),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: CustomButtonLogin(
+                        text: 'Registrarse',
+                        gradient: AppColors.loginButtonColor,
+                        onPressed: () {
+                          // LOGICA DE CREDENCIALES Y NAVEGACION AL HOME O WELCOME.
+                        },
+                      ),
+                    ),
                     kHalfSizedBox,
                     Align(
                         alignment: Alignment.center, child: _buildLoginText()),

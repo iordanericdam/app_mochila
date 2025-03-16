@@ -101,7 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       kHalfSizedBox,
-                      const PasswordInput(),
+                      const PasswordInput(
+                        hintText: 'Introduce tu contraseña',
+                      ),
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(

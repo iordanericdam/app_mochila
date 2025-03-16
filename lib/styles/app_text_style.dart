@@ -37,6 +37,13 @@ class AppTextStyle {
     color: AppColors.textColor,
   );
 
+  static const TextStyle normalBoldWhite = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: Color.fromARGB(255, 255, 255, 255),
+  );
+
   static TextStyle normalGrey = TextStyle(
     fontFamily: 'Montserrat',
     fontSize: 16,
@@ -50,7 +57,7 @@ class AppTextStyle {
     fontWeight: FontWeight.normal,
     color: AppColors.textColor,
   );
-   static const TextStyle buttonTextBold = TextStyle(
+  static const TextStyle buttonTextBold = TextStyle(
     fontFamily: 'Montserrat',
     fontSize: 12,
     fontWeight: FontWeight.bold,

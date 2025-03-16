@@ -42,6 +42,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               sizedBox,
               CustomInput(
                   hintText: "Introduce tu email",
+                  controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     return emailValidator(value);
@@ -56,10 +57,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   onPressed: () {
                     FocusScope.of(context).unfocus();
                     if (_resetPasswordKey.currentState!.validate()) {
+                      final email = _emailController.text.trim();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => VerificationScreen()),
+                            builder: (context) =>
+                                VerificationScreen(email: email)),
                       );
                     }
                   },
