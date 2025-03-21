@@ -31,7 +31,10 @@ class BaseScaffold extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                   leading: IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => {
+                      Navigator.pop(context),
+                      FocusScope.of(context).unfocus(),
+                    },
                     icon: Container(
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,

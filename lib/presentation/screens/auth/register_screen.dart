@@ -31,18 +31,23 @@ class _RegisterPageState extends State<RegisterPage> {
     // Llamar al servicio de API para realizar el inicio de sesión
     var response = await Register.register(email, password, name);
 
-    if (response != null && response.containsKey("user")) {
+    if (response != null) {
       print(
           'Usuario registrado: ${response["user"]}'); // Verifica si "user" está en la respuesta
-
+      if (!mounted) {
+        return;
+      }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
             content: Text('Registrado correctamente'),
             backgroundColor: Colors.green),
       );
 
       //REDIRECCIÓN
       Future.delayed(const Duration(seconds: 1), () {
+        if (!mounted) {
+          return;
+        }
         print("Redirigiendo al Login...");
         Navigator.pushReplacement(
           context,
@@ -50,6 +55,9 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       });
     } else {
+      if (!mounted) {
+        return;
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text('Error en el registro'), backgroundColor: Colors.red),
@@ -106,6 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                     CustomInput(
+                      keyboardType: TextInputType.emailAddress,
                       controller: _emailController,
                       hintText: '',
                       validator: (value) {
