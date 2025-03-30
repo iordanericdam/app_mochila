@@ -18,6 +18,17 @@ String? genericValidator(String? value, int length) {
   return null;
 }
 
+String? telefonoValidator(String? value, int length) {
+  if (value == null || value.isEmpty) {
+    return null;
+  } else if (value.length < length) {
+    return 'El número debe tener al menos $length dígitos';
+  } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+    return 'Solo se permiten números';
+  }
+  return null;
+}
+
 String? emailValidator(String? value) {
   RegExp regExp = RegExp(emailPattern);
   if (value == null || value.isEmpty) {

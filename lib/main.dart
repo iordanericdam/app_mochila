@@ -1,12 +1,18 @@
 import 'package:app_mochila/presentation/screens/auth/login_screen.dart';
+import 'package:app_mochila/presentation/screens/auth/register/register_screen1.dart';
+import 'package:app_mochila/presentation/screens/auth/register/register_screen2.dart';
+import 'package:app_mochila/presentation/screens/auth/register/register_screen3.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() {
+  //debugPaintSizeEnabled = true;
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(
       widgetsBinding:
           widgetsBinding); //PRESERVE EL SPLASHSCREEN HASTA QUE EL METODO REMOVE ES LLAMDO
+  // runApp(const MyApp());
   runApp(const MyApp());
 }
 
@@ -45,7 +51,14 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen1(),
+        '/registerPage2': (context) => const RegisterScreen2(),
+        '/registerPage3': (context) => const RegisterScreen3(),
+        '/login': (context) => const LoginScreen(),
+      },
     );
   }
 }

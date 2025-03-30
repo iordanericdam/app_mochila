@@ -12,18 +12,18 @@ class CustomInput extends StatelessWidget {
   final Icon? icon;
   final bool obscureText;
   final Widget? suffixIcon;
-
-  const CustomInput(
-      {super.key,
-      this.hintText,
-      this.controller,
-      this.onChanged,
-      this.validator,
-      this.icon,
-      this.obscureText = false,
-      this.keyboardType,
-      this.errorText,
-      this.suffixIcon});
+  const CustomInput({
+    super.key,
+    this.hintText,
+    this.controller,
+    this.onChanged,
+    this.validator,
+    this.icon,
+    this.obscureText = false,
+    this.keyboardType,
+    this.errorText,
+    this.suffixIcon,
+  });
 
   @override
   Widget build(BuildContext context) {

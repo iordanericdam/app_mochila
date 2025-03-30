@@ -14,6 +14,7 @@ class WhiteBaseContainer extends StatelessWidget {
     return Container(
         margin: const EdgeInsets.only(top: kDefaultPadding),
         height: double.infinity,
+        //height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         decoration: whiteThing(),
         child: Padding(

@@ -1,0 +1,129 @@
+// lib/screens/register_screen1.dart
+import 'package:app_mochila/presentation/widgets/button_login.dart';
+import 'package:app_mochila/presentation/widgets/custom_input.dart';
+import 'package:app_mochila/presentation/widgets/white_base_container.dart';
+import 'package:app_mochila/providers/register_data_provider.dart';
+import 'package:app_mochila/services/form_validator.dart';
+import 'package:app_mochila/styles/app_colors.dart';
+import 'package:app_mochila/styles/app_text_style.dart';
+import 'package:app_mochila/styles/base_scaffold.dart';
+import 'package:app_mochila/styles/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class RegisterScreen1 extends ConsumerWidget {
+  const RegisterScreen1({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final registerData = ref.watch(registerDataProvider);
+    final nombreController = TextEditingController();
+    final usuarioController = TextEditingController();
+    final registerKey1 = GlobalKey<FormState>();
+
+    void _navigateToPage2aasdasd() {
+      if (nombreController.text.isNotEmpty &&
+          usuarioController.text.isNotEmpty) {
+        ref.read(registerDataProvider.notifier).state = registerData.copyWith(
+            nombre: nombreController.text, usuario: usuarioController.text);
+        Navigator.pushNamed(context, '/registerPage2');
+      }
+    }
+
+    return BaseScaffold(
+      appBar: AppBar(title: Text('Register - Page 1')),
+      body: WhiteBaseContainer(
+        child: Form(
+          key: registerKey1,
+          child: Padding(
+            padding: klarge,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Align(
+                    alignment: Alignment.topCenter,
+                    child: Column(
+                      children: [
+                        kDoubleSizedBox,
+                        SizedBox(),
+                        Text(
+                          "!Bienvenido!",
+                          style: AppTextStyle.heroTitle,
+                        ),
+                        sizedBox,
+                        Text(
+                          'Introduce tus datos para registrarte',
+                          style: AppTextStyle.normal,
+                        ),
+                        kDoubleSizedBox,
+                        sizedBox,
+                      ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: kleftPadding,
+                          child: Text(
+                            'Nombre',
+                            textAlign: TextAlign.left,
+                            style: AppTextStyle.title,
+                          ),
+                        ),
+                        kHalfSizedBox,
+                        CustomInput(
+                          hintText: 'Introduce tu nombre',
+                          validator: (value) {
+                            int length = 4;
+                            return genericValidator(value, length);
+                          },
+                        ),
+                        sizedBox,
+                        const Padding(
+                          padding: kleftPadding,
+                          child: Text(
+                            'Usuario',
+                            textAlign: TextAlign.left,
+                            style: AppTextStyle.title,
+                          ),
+                        ),
+                        kHalfSizedBox,
+                        CustomInput(
+                          hintText: 'Introduce tu usuario',
+                          // controller: usuarioController,
+                          validator: (value) {
+                            int length = 4;
+                            return genericValidator(value, length);
+                          },
+                        ),
+                        sizedBox,
+                        kDoubleSizedBox,
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: CustomButtonLogin(
+                            text: 'Inicia sesión',
+                            gradient: AppColors.loginButtonColor,
+                            onPressed: () {
+                              if (registerKey1.currentState!.validate()) {
+                                Navigator.pushNamed(context, '/registerPage2');
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
