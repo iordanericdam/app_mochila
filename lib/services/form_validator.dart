@@ -1,3 +1,4 @@
+import 'package:app_mochila/services/register.dart';
 import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
 

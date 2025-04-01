@@ -20,12 +20,12 @@ class Login {
       if (response.statusCode == 200) {
         return json.decode(response.body);
       } else {
-        print('Error: ${response.body}');
+        // print('Error: ${response.body}');
         return null;
       }
     } catch (e) {
       // Si ocurre un error de conexión o servidor, el catch captura la excepción y devuelve null.
-      print('Exception: $e');
+      // print('Exception: $e');
       return null;
     }
   }

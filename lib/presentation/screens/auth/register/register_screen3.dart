@@ -1,3 +1,4 @@
+import 'package:app_mochila/presentation/screens/auth/login_screen.dart';
 import 'package:app_mochila/presentation/widgets/button_login.dart';
 import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/password_custom_input.dart';
@@ -119,7 +120,12 @@ class _RegisterScreen3State extends State<RegisterScreen3> {
                                     const SnackBar(
                                         content: Text('Registro exitoso')),
                                   );
-                                  Navigator.pushNamed(context, '/login');
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginScreen()),
+                                  );
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(

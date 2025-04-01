@@ -8,6 +8,7 @@ import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class RegisterScreen1 extends StatefulWidget {
   const RegisterScreen1({super.key});
@@ -20,6 +21,37 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
   final nombreController = TextEditingController();
   final usuarioController = TextEditingController();
   final registerKey1 = GlobalKey<FormState>();
+  bool _usuarioExiste = false;
+  Timer? _debounce;
+
+  void _verificarUsuario(String username) async {
+    var response = await Register.checkUserName(username);
+    if (response != null && response['exists'] == true) {
+      setState(() {
+        _usuarioExiste = true;
+      });
+    } else {
+      setState(() {
+        _usuarioExiste = false;
+      });
+    }
+  }
+
+  // Utilizo dos metodos para evitar muchas llamadas a la Api, agrego un debounce para separar las llamadas a la API
+  void _onUserNameChanged(String username) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      _verificarUsuario(username);
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
@@ -61,7 +93,7 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                         const Padding(
                           padding: kleftPadding,
                           child: Text(
-                            'Nombre',
+                            'Nombre completo',
                             textAlign: TextAlign.left,
                             style: AppTextStyle.title,
                           ),
@@ -71,8 +103,7 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                           hintText: 'Introduce tu nombre',
                           controller: nombreController,
                           validator: (value) {
-                            int length = 4;
-                            return genericValidator(value, length);
+                            return genericValidator(value, 4);
                           },
                         ),
                         sizedBox,
@@ -88,10 +119,13 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                         CustomInput(
                           hintText: 'Introduce tu usuario',
                           controller: usuarioController,
+                          onChanged: _onUserNameChanged,
                           validator: (value) {
-                            int length = 4;
-                            return genericValidator(value, length);
+                            return genericValidator(value, 4);
                           },
+                          errorText: _usuarioExiste
+                              ? 'Este usuario ya se encentra registrado'
+                              : null,
                         ),
                         sizedBox,
                         kDoubleSizedBox,
@@ -101,37 +135,6 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                             text: 'Siguiente',
                             gradient: AppColors.loginButtonColor,
                             onPressed: () async {
-                              var nickNameDuplicated = false;
-                              var response = await Register.checkNickname(
-                                  nombreController.text);
-
-                              if (response != null &&
-                                  response['exists'] == true) {
-                                nickNameDuplicated = true;
-                              }
-
-                              var usernameDuplicated = false;
-                              response = await Register.checkUserName(
-                                  usuarioController.text);
-                              if (response != null &&
-                                  response['exists'] == true) {
-                                usernameDuplicated = true;
-                              }
-
-                              if (usernameDuplicated || nickNameDuplicated) {
-                                var message1 = usernameDuplicated
-                                    ? "❌ usuario ya está en uso"
-                                    : '';
-                                var message2 = nickNameDuplicated
-                                    ? " ❌ Ese nombre de usuario ya está en uso"
-                                    : '';
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(message1 + message2)));
-                                return;
-                              }
-
                               if (registerKey1.currentState!.validate()) {
                                 Navigator.pushNamed(
                                   context,

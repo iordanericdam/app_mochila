@@ -25,16 +25,18 @@ class CustomButtonLogin extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.5), //OPACIDAD DE LA SOMBRA Y COLOR
-            offset: const Offset(0, 4), 
-            blurRadius: 4, 
+            color:
+                Colors.black.withOpacity(0.5), //OPACIDAD DE LA SOMBRA Y COLOR
+            offset: const Offset(0, 4),
+            blurRadius: 4,
           ),
         ],
       ),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,  //FONDO TRANSPARENTE PARA VER EL GRADIENTE
+          backgroundColor:
+              Colors.transparent, //FONDO TRANSPARENTE PARA VER EL GRADIENTE
           shadowColor: Colors.transparent, // DESHABILITAMOS LA SOMBRA.
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),

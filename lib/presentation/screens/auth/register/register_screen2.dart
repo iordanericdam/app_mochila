@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:app_mochila/presentation/widgets/button_login.dart';
 import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
 import 'package:app_mochila/services/api_service.dart';
 import 'package:app_mochila/services/form_validator.dart';
+import 'package:app_mochila/services/register.dart';
 import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
@@ -20,6 +23,36 @@ class _RegisterScreen2State extends State<RegisterScreen2> {
   final emailController = TextEditingController();
   final telefonoController = TextEditingController();
   final registerKey2 = GlobalKey<FormState>();
+  bool _emailExiste = false;
+  Timer? _debounce;
+
+  void _verificarUsuario(String mail) async {
+    var response = await ApiService.checkEmail(mail);
+    if (response != null && response['exists'] == true) {
+      setState(() {
+        _emailExiste = true;
+      });
+    } else {
+      setState(() {
+        _emailExiste = false;
+      });
+    }
+  }
+
+  // Utilizo dos metodos para evitar muchas llamadas a la Api, agrego un debounce para separar las llamadas a la API
+  void _onEmailChange(String username) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      _verificarUsuario(username);
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +106,15 @@ class _RegisterScreen2State extends State<RegisterScreen2> {
                         kHalfSizedBox,
                         CustomInput(
                           hintText: 'Introduce tu email',
+                          keyboardType: TextInputType.emailAddress,
                           controller: emailController,
+                          onChanged: _onEmailChange,
                           validator: (value) {
                             return emailValidator(value);
                           },
+                          errorText: _emailExiste
+                              ? 'Este email ya se encentra registrado'
+                              : null,
                         ),
                         sizedBox,
                         const Padding(
@@ -104,16 +142,6 @@ class _RegisterScreen2State extends State<RegisterScreen2> {
                             text: 'Siguiente',
                             gradient: AppColors.loginButtonColor,
                             onPressed: () async {
-                              var response = await ApiService.checkEmail(
-                                  emailController.text);
-                              if (response != null &&
-                                  response['exists'] == true) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                            Text("❌ El email ya está en uso")));
-                                return;
-                              }
                               if (registerKey2.currentState!.validate()) {
                                 Navigator.pushNamed(
                                   context,
