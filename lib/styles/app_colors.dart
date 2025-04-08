@@ -32,5 +32,5 @@ class AppColors {
 //Colors para TeXto
 
   static const textColor = Color(0xFF000000);
-  static var hintTextColor = Colors.grey[100];
+  static var hintTextColor = const Color.fromARGB(255, 103, 101, 101);
 }

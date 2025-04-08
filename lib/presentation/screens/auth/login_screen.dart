@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
 //
   Future<void> _login(String email, String password) async {
     FocusScope.of(context).unfocus();
-    print('Email: $email, Password: $password');
+    //print('Email: $email, Password: $password');
     // Llamar al servicio de API para realizar el inicio de sesión
     var response = await Login.login(email, password);
 
