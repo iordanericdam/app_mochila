@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class Register {
   static Future<Map<String, dynamic>?> register(String email, String password,
-      String name, String nickname, String phone) async {
+      String name, String username, String phone) async {
     var url = Uri.parse('${Common.baseUrl}/register');
     var headers = Common.headers;
     var userData;
@@ -14,7 +14,7 @@ class Register {
         "email": email,
         "password": password,
         "name": name,
-        "nickname": nickname
+        "username": username,
       };
     } else {
       userData = {
@@ -22,7 +22,7 @@ class Register {
         "password": password,
         "name": name,
         "telefono": phone,
-        "nickname": nickname
+        "username": username,
       };
     }
     var body = json.encode(userData);
