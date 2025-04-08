@@ -1,7 +1,7 @@
 import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/custom_input_trip_tittle.dart';
 import 'package:app_mochila/presentation/widgets/date_selector.dart';
-import 'package:app_mochila/presentation/widgets/date_slector.dart';
+import 'package:app_mochila/presentation/widgets/date_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/styles/constants.dart';

@@ -188,6 +188,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                           ),
                         ),
+                         Center(
+                          child: TextButton(
+                            child: const Text(
+                              "SETUP VIAJE DIRECTO"
+                             ),
+                               onPressed: () {
+                              Navigator.pushNamed(context, '/setupBpTrip');
+                            },
+                            ),
+                          
+                          ),
                       ],
                     ),
                   ),
