@@ -20,7 +20,7 @@ class CustomElevatedButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(30),
         ),
         // padding: const EdgeInsets.symmetric(
         //     horizontal: 30, vertical: 15),
@@ -28,7 +28,7 @@ class CustomElevatedButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         text,
-        style: AppTextStyle.buttonsWhite,
+        style: AppTextStyle.buttonTextPurpleBg,
       ),
     );
   }

@@ -51,6 +51,13 @@ class AppTextStyle {
     color: AppColors.hintTextColor,
   );
 
+   static const TextStyle buttonTextPurpleBg = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
+    color: Color.fromARGB(255, 255, 255, 255),
+  );
+
   static const TextStyle buttonTextNormal = TextStyle(
     fontFamily: 'Montserrat',
     fontSize: 12,
