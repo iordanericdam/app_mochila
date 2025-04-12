@@ -1,3 +1,4 @@
+import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/app_colors.dart';
@@ -22,13 +23,8 @@ class CustomInputTripTitle extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.backGroundInputColor,
         borderRadius: BorderRadius.circular(30),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            offset: Offset(0, -2), // Sombra arriba
-            //blurRadius: 4,
-            //spreadRadius: 1,
-          ),
+        boxShadow: [
+          insideDefaultBoxShadow(),
         ],
       ),
       child: TextFormField(

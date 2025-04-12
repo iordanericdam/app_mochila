@@ -1,8 +1,10 @@
 import 'package:app_mochila/styles/app_colors.dart';
+import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateSelector extends StatefulWidget {
+  // Callback que devuelve las fechas seleccionadas al padre
   final Function(DateTime? fechaInicio, DateTime? fechaFin)? onDatesChanged;
 
   const DateSelector({super.key, this.onDatesChanged});
@@ -12,26 +14,29 @@ class DateSelector extends StatefulWidget {
 }
 
 class _DateSelectorState extends State<DateSelector> {
+  // Variables para guardar las fechas seleccionadas
   DateTime? _fechaInicio;
   DateTime? _fechaFin;
 
+  // Función para mostrar el selector de fecha (showDatePicker)
   Future<void> _selectDate({required bool isInicio}) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2100),
+      initialDate: DateTime.now(), 
+      firstDate: DateTime(2020),   
+      lastDate: DateTime(2100),    
     );
 
     if (picked != null) {
       setState(() {
+        // Asignamos la fecha seleccionada según si es inicio o fin
         if (isInicio) {
           _fechaInicio = picked;
         } else {
           _fechaFin = picked;
         }
 
-        // Devolvemos los valores al padre si se quiere guardar en BD 
+        // Si el widget padre necesita las fechas, se las enviamos
         if (widget.onDatesChanged != null) {
           widget.onDatesChanged!(_fechaInicio, _fechaFin);
         }
@@ -39,27 +44,27 @@ class _DateSelectorState extends State<DateSelector> {
     }
   }
 
+  // Formatear fecha  dd/MM/yyyy
   String _formatDate(DateTime? date) {
-    if (date == null) return '';
+    if (date == null) return ''; // Si no hay fecha no muestra nada
     return DateFormat('dd/MM/yyyy').format(date);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      //Contenedor principal del widget
       decoration: BoxDecoration(
-        color: AppColors.backGroundInputColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            offset: Offset(0, -2),
-          ),
+        color: AppColors.backGroundInputColor, 
+        borderRadius: BorderRadius.circular(20), 
+        boxShadow: [
+          insideDefaultBoxShadow(),
         ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20), 
       child: Row(
         children: [
+          //Parte izquierda
           Expanded(
             child: _buildFechaItem(
               label: 'Fecha Inicio',
@@ -67,14 +72,16 @@ class _DateSelectorState extends State<DateSelector> {
               onTap: () => _selectDate(isInicio: true),
             ),
           ),
+          // Separador
           const SizedBox(
             height: 40,
-             child: VerticalDivider(
+            child: VerticalDivider(
               thickness: 1,
               width: 35,
               color: Colors.grey,
             ),
           ),
+          //Parte derecha
           Expanded(
             child: _buildFechaItem(
               label: 'Fecha Fin',
@@ -87,38 +94,52 @@ class _DateSelectorState extends State<DateSelector> {
     );
   }
 
+  // Widget que construye cada uno de los selectores de fecha (Inicio y Fin)
   Widget _buildFechaItem({
     required String label,
     required DateTime? fecha,
     required VoidCallback onTap,
   }) {
     return InkWell(
-      onTap: onTap,
+      onTap: onTap, // Llama al selector de fecha al tocar
       child: Row(
         children: [
+          // Icono con fondo gris redondeado
           Container(
             decoration: const BoxDecoration(
               color: Color.fromARGB(136, 136, 135, 135),
               shape: BoxShape.circle,
             ),
             padding: const EdgeInsets.all(8),
-            child: const Icon(Icons.calendar_month,
-                size: 22, color: Colors.black87),
+            child: const Icon(
+              Icons.calendar_month,
+              size: 22,
+              color: Colors.black87,
+            ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 8), // Espacio entre icono y texto
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label,
-                  style: const TextStyle(fontSize: 14, color: Colors.black45,fontFamily: 'Montserrat')),
+              // Etiqueta para la fecha (Inicio o Fin)
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black45,
+                  fontFamily: 'Montserrat',
+                ),
+              ),
+              // Si hay una fecha seleccionada, se muestra
               if (fecha != null)
                 Text(
-                  _formatDate(fecha),
+                  _formatDate(fecha), // Muestra fecha en formato corto
                   style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                      fontFamily: 'Montserrat'),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                    fontFamily: 'Montserrat',
+                  ),
                 ),
             ],
           )

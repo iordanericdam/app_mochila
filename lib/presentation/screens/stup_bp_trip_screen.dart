@@ -1,4 +1,5 @@
 import 'package:app_mochila/presentation/widgets/buttons.dart';
+import 'package:app_mochila/presentation/widgets/category_selector.dart';
 import 'package:app_mochila/presentation/widgets/custom_input_description.dart';
 import 'package:app_mochila/presentation/widgets/custom_input_trip_tittle.dart';
 import 'package:app_mochila/presentation/widgets/date_selector.dart';
@@ -23,6 +24,7 @@ class _SetupBpTripScreenState extends State<SetupBpTripScreen> {
 
   DateTime? fechaInicio;
   DateTime? fechaFin;
+  String? selectedCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -106,13 +108,29 @@ class _SetupBpTripScreenState extends State<SetupBpTripScreen> {
                       ),
                     ),
                     sizedBox,
-                      const Padding(
+                    const Padding(
                       padding: kleftPadding,
                       child: Text(
                         "¿Temperatura",
                         style: AppTextStyle.title,
                       ),
                     ),
+                    sizedBox,
+                    const Padding(
+                      padding: kleftPadding,
+                      child: Text(
+                        "Categoria",
+                        style: AppTextStyle.title,
+                      ),
+                    ),
+                    kHalfSizedBox,
+                    CategorySelector(
+                        onCategorySelected: (category){
+                          setState(() {
+                            selectedCategory = category;
+                          });
+                        },
+                      ),
                   ])),
         ),
       ),

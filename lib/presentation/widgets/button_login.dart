@@ -26,7 +26,7 @@ class CustomButtonLogin extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color:
-                Colors.black.withOpacity(0.5), //OPACIDAD DE LA SOMBRA Y COLOR
+                Colors.black.withValues(alpha: 0.5), //OPACIDAD DE LA SOMBRA Y COLOR
             offset: const Offset(0, 4),
             blurRadius: 4,
           ),

@@ -45,3 +45,19 @@ BoxDecoration whiteThing() {
           topLeft: Radius.circular(kDefaultPadding * 1.5),
           topRight: Radius.circular(kDefaultPadding * 1.5)));
 }
+
+BoxShadow defaultBoxShadow() {
+  return const BoxShadow(
+    color: Colors.black26,
+    blurRadius: 6,
+    offset: Offset(0, 3),
+  );
+}
+
+BoxShadow insideDefaultBoxShadow(){
+  return const BoxShadow(
+            color: Colors.black26,
+            offset: Offset(0, -2),
+            );
+}
+          
