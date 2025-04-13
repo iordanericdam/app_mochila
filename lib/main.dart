@@ -3,8 +3,8 @@ import 'package:app_mochila/presentation/screens/auth/register/register_screen1.
 import 'package:app_mochila/presentation/screens/auth/register/register_screen2.dart';
 import 'package:app_mochila/presentation/screens/auth/register/register_screen3.dart';
 import 'package:app_mochila/presentation/screens/stup_bp_trip_screen.dart';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() {
@@ -52,6 +52,18 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+
+      
+      supportedLocales: const [
+      Locale('es'), 
+      Locale('en'), 
+    ],
+    locale: const Locale('es'), 
+    localizationsDelegates: const [
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
       initialRoute: '/',
       routes: {
         '/': (context) => const LoginScreen(),

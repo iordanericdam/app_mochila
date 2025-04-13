@@ -38,6 +38,17 @@ class _SetupBpTripScreenState extends State<SetupBpTripScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     sizedBox,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CustomElevatedButton(
+                          text: "Siguiente",
+                          backgroundColor: AppColors.defaultButtonColor, 
+                          onPressed: (){
+                            
+                          }),
+                      ],
+                    ),
                     const Padding(
                       padding: kleftPadding,
                       child: Text(
@@ -46,6 +57,7 @@ class _SetupBpTripScreenState extends State<SetupBpTripScreen> {
                       ),
                     ),
                     kHalfSizedBox,
+                    
                     CustomInputTripTitle(
                       hintText: "Introduce un título...",
                       controller: _tituloController,
