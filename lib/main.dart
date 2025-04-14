@@ -52,18 +52,16 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-
-      
       supportedLocales: const [
-      Locale('es'), 
-      Locale('en'), 
-    ],
-    locale: const Locale('es'), 
-    localizationsDelegates: const [
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
-    ],
+        Locale('es'),
+        Locale('en'),
+      ],
+      locale: const Locale('es'),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       initialRoute: '/',
       routes: {
         '/': (context) => const LoginScreen(),

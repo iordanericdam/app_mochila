@@ -3,6 +3,7 @@ import 'package:app_mochila/presentation/screens/auth/recovery/forgot_password_s
 import 'package:app_mochila/presentation/widgets/button_login.dart';
 import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/password_custom_input.dart';
+import 'package:app_mochila/services/api/UserApi.dart';
 import 'package:app_mochila/services/form_validator.dart';
 import 'package:app_mochila/services/login.dart';
 import 'package:app_mochila/styles/app_colors.dart';
@@ -30,21 +31,35 @@ class _LoginScreenState extends State<LoginScreen> {
 //
   Future<void> _login(String email, String password) async {
     FocusScope.of(context).unfocus();
+
     //print('Email: $email, Password: $password');
     // Llamar al servicio de API para realizar el inicio de sesión
-    var response = await Login.login(email, password);
-
-    if (response != null) {
-      // print('Login : ${response.toString()}');
-      User user = User.fromJson(response);
-      print(user.toString());
-      // Mostrar un mensaje emergente con el resultado del inicio de sesión
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(user.user_name)));
-    } else {
+    var user = await UserApi().login({"email": email, "password": password});
+    if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Error en el inicio de sesión')));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(user.toString())));
+      // Navigator.pushNamed(
+      //   context,
+      //   '/inicio',
+      // );
     }
+
+    // var response = await Login.login(email, password);
+
+    // if (response != null) {
+    //   // print('Login : ${response.toString()}');
+    //   User user = User.fromJson(response);
+
+    //   // Mostrar un mensaje emergente con el resultado del inicio de sesión
+    //   ScaffoldMessenger.of(context)
+    //       .showSnackBar(SnackBar(content: Text(user.user_name)));
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //       const SnackBar(content: Text('Error en el inicio de sesión')));
+    // }
   }
 
   @override
@@ -188,17 +203,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                           ),
                         ),
-                         Center(
+                        Center(
                           child: TextButton(
-                            child: const Text(
-                              "SETUP VIAJE DIRECTO"
-                             ),
-                               onPressed: () {
+                            child: const Text("SETUP VIAJE DIRECTO"),
+                            onPressed: () {
                               Navigator.pushNamed(context, '/setupBpTrip');
                             },
-                            ),
-                          
                           ),
+                        ),
                       ],
                     ),
                   ),
