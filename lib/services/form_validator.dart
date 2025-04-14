@@ -80,3 +80,24 @@ String? validateConfirmPassword(
   }
   return null;
 }
+
+String? validateStartDate(DateTime? startDate) {
+  if (startDate == null) {
+    return 'La fecha de inicio es obligatoria';
+  }
+  return null;
+}
+
+String? validateSelectedWeather(String? weather) {
+  if (weather == null || weather.isEmpty) {
+    return 'Selecciona un tipo de clima';
+  }
+  return null;
+}
+
+String? validateCategories(List<String> categories) {
+  if (categories.isEmpty) {
+    return 'Selecciona al menos una categoría';
+  }
+  return null;
+}

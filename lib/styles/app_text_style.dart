@@ -50,6 +50,12 @@ class AppTextStyle {
     fontWeight: FontWeight.normal,
     color: AppColors.hintTextColor,
   );
+  static TextStyle normalGreyTitle = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+    color: AppColors.hintTextColor,
+  );
 
    static const TextStyle buttonTextPurpleBg = TextStyle(
     fontFamily: 'Montserrat',

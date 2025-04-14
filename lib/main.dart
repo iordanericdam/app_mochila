@@ -2,7 +2,7 @@ import 'package:app_mochila/presentation/screens/auth/login_screen.dart';
 import 'package:app_mochila/presentation/screens/auth/register/register_screen1.dart';
 import 'package:app_mochila/presentation/screens/auth/register/register_screen2.dart';
 import 'package:app_mochila/presentation/screens/auth/register/register_screen3.dart';
-import 'package:app_mochila/presentation/screens/stup_bp_trip_screen.dart';
+import 'package:app_mochila/presentation/screens/trip_form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -69,7 +69,7 @@ class _MyAppState extends State<MyApp> {
         '/registerPage2': (context) => const RegisterScreen2(),
         '/registerPage3': (context) => const RegisterScreen3(),
         '/login': (context) => const LoginScreen(),
-        '/setupBpTrip': (context) => const SetupBpTripScreen(),
+        '/tripForm': (context) => const TripFormScreen(),
       },
     );
   }

@@ -36,31 +36,28 @@ class _LoginScreenState extends State<LoginScreen> {
     // Llamar al servicio de API para realizar el inicio de sesión
     var user = await UserApi().login({"email": email, "password": password});
     if (user == null) {
+      if(!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error en el inicio de sesión')));
+          const SnackBar(content: Text('Error en el login. El mail o la contraseña no coinciden')));
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(user.toString())));
-      // Navigator.pushNamed(
-      //   context,
-      //   '/inicio',
-      // );
-    }
+      print("Usuario logueado: $user");
+      if(!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '¡Bienvenido, ${user.name}!',
+          style: const TextStyle(fontSize: 16),
+        ),
+        duration: const Duration(seconds: 2),
+      ),
+    );
 
-    // var response = await Login.login(email, password);
-
-    // if (response != null) {
-    //   // print('Login : ${response.toString()}');
-    //   User user = User.fromJson(response);
-
-    //   // Mostrar un mensaje emergente con el resultado del inicio de sesión
-    //   ScaffoldMessenger.of(context)
-    //       .showSnackBar(SnackBar(content: Text(user.user_name)));
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //       const SnackBar(content: Text('Error en el inicio de sesión')));
-    // }
+    await Future.delayed(const Duration(seconds: 2));
+    if(!mounted)return;
+    Navigator.pushNamed(context, '/tripForm');
   }
+}
+
 
   @override
   Widget build(BuildContext context) {

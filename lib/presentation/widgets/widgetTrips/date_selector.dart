@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 class DateSelector extends StatefulWidget {
   // Callback que devuelve las fechas seleccionadas al padre
-  final Function(DateTime? fechaInicio, DateTime? fechaFin)? onDatesChanged;
+  final Function(DateTime? startDate, DateTime? endDate)? onDatesChanged;
 
   const DateSelector({super.key, this.onDatesChanged});
 
@@ -18,7 +18,7 @@ class _DateSelectorState extends State<DateSelector> {
   DateTime? _fechaInicio;
   DateTime? _fechaFin;
 
-  // Función para mostrar el selector de fecha (showDatePicker)
+  // Muestra el selector de fecha (showDatePicker)
   Future<void> _selectDate({required bool isInicio}) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -107,7 +107,7 @@ class _DateSelectorState extends State<DateSelector> {
           // Icono con fondo gris redondeado
           Container(
             decoration: const BoxDecoration(
-              color: Color.fromARGB(136, 136, 135, 135),
+              color: AppColors.iconColor,
               shape: BoxShape.circle,
             ),
             padding: const EdgeInsets.all(8),

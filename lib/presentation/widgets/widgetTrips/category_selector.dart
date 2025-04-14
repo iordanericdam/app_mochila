@@ -1,4 +1,4 @@
-import 'package:app_mochila/styles/app_colors.dart';
+//import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
@@ -6,26 +6,29 @@ import 'package:app_mochila/data/category_data.dart';
 
 class CategorySelector extends StatefulWidget {
   // Callback que se ejecuta cuando se selecciona una categoría
-  final Function(String selectedCategory)? onCategorySelected;
+  final Function(List<String> selectedCategories)? onCategoriesChanged;
 
+  const CategorySelector({super.key, this.onCategoriesChanged});
 
-  const CategorySelector({super.key, this.onCategorySelected});
-  
   @override
   State<CategorySelector> createState() => _CategorySelectorState();
 }
 
 class _CategorySelectorState extends State<CategorySelector> {
-  //Guarda la categoría seleccionada
-  String? selectedCategory;
+  //Guarda la lista de categorías seleccionadas
+  List<String> selectedCategory = [];
 
   // Seejecuta al hacer tap sobre una categoroa
-  void _categoryTap(String name) {
+  void _categoryTaps(String name) {
     setState(() {
-      selectedCategory = name; // Actualiza la categoría seleccionada
+      if(selectedCategory.contains(name)) {
+        selectedCategory.remove(name); // Si ya está seleccionada, la deselecciona
+      } else {
+        selectedCategory.add(name); // Si no está seleccionada, la selecciona
+      }
     });
 
-    widget.onCategorySelected?.call(name);
+    widget.onCategoriesChanged?.call(selectedCategory);
   }
   // Deselecciona la categoría
   // void _deselectCategory() {
@@ -45,7 +48,7 @@ class _CategorySelectorState extends State<CategorySelector> {
         // CARDS
         for (var category in categories)
           GestureDetector(
-            onTap: () => _categoryTap(category.name),
+            onTap: () => _categoryTaps(category.name),
             child: Stack(
               children: [
                 // Imagen de fondo
@@ -66,7 +69,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                 ),
     
                 // Oscurecer la imagen si está seleccionada
-                if (selectedCategory == category.name)
+                if (selectedCategory.contains(category.name))
                   Container(
                     width: 150,
                     height: 150,
@@ -102,32 +105,68 @@ class _CategorySelectorState extends State<CategorySelector> {
           ),
     
         //TARJETA PARA AÑADIR NUEVA CATEGORÍA
-        GestureDetector(
-          onTap: () {
-            // FALTA AÑADIR EL MODAL 
+        // GestureDetector(
+        //   onTap: () {
+        //     // FALTA AÑADIR EL MODAL 
             
-          },
-          child: Container(
-            width: 150,
-            height: 150,
-            decoration: BoxDecoration(
-              color: AppColors.backGroundInputColor, 
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                defaultBoxShadow()
-              ],
-            ),
-            child: const Icon(
-              Icons.add, 
-              size: 70,
-              color: Colors.black54,
-              shadows: [
-               // LE PONEMOS SOMBRA?
-              ],
-            ),
-          ),
-        )
+        //   },
+        //   child: Container(
+        //     width: 150,
+        //     height: 150,
+        //     decoration: BoxDecoration(
+        //       color: AppColors.backGroundInputColor, 
+        //       borderRadius: BorderRadius.circular(16),
+        //       boxShadow: [
+        //         defaultBoxShadow()
+        //       ],
+        //     ),
+        //     child: const Icon(
+        //       Icons.add, 
+        //       size: 70,
+        //       color: Colors.black54,
+        //       shadows: [
+        //        // LE PONEMOS SOMBRA?
+        //       ],
+        //     ),
+        //   ),
+        // )
       ],
     );
   }
 }
+
+
+
+
+//VERSION UNA CATEGORIA SELECCIONADA
+//class CategorySelector extends StatefulWidget {
+  // Callback que se ejecuta cuando se selecciona una categoría
+//   final Function(String selectedCategory)? onCategorySelected;
+
+
+//   const CategorySelector({super.key, this.onCategorySelected});
+  
+//   @override
+//   State<CategorySelector> createState() => _CategorySelectorState();
+// }
+
+//class _CategorySelectorState extends State<CategorySelector> {
+  //Guarda la categoría seleccionada
+  //String? selectedCategory;
+
+  // Seejecuta al hacer tap sobre una categoroa
+  // void _categoryTap(String name) {
+  //   setState(() {
+  //     selectedCategory = name; // Actualiza la categoría seleccionada
+  //   });
+
+  //   widget.onCategorySelected?.call(name);
+  // }
+  // Deselecciona la categoría
+  // void _deselectCategory() {
+  //   if (selectedCategory != null) {
+  //     setState(() {
+  //       selectedCategory = null;
+  //     });
+  //   }
+  // }

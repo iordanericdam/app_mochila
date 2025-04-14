@@ -24,7 +24,6 @@ class Login {
         return null;
       }
     } catch (e) {
-      // Si ocurre un error de conexión o servidor, el catch captura la excepción y devuelve null.
       // print('Exception: $e');
       return null;
     }
