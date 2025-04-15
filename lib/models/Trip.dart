@@ -57,7 +57,7 @@ class Trip {
 
   @override
   String toString() {
-    // TODO: implement toString
+    
     return 'Trip{id: $id, userId: $userId, name: $name, description: $description, destination: $destination, temperature: $temperature,  startDate: $startDate, endDate: $endDate, urlPhoto: $urlPhoto}';
   }
 }
