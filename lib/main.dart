@@ -2,10 +2,12 @@ import 'package:app_mochila/presentation/screens/auth/login_screen.dart';
 import 'package:app_mochila/presentation/screens/auth/register/register_screen1.dart';
 import 'package:app_mochila/presentation/screens/auth/register/register_screen2.dart';
 import 'package:app_mochila/presentation/screens/auth/register/register_screen3.dart';
+import 'package:app_mochila/presentation/screens/trip/trips_list_screen.dart';
 import 'package:app_mochila/presentation/screens/trip_form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   //debugPaintSizeEnabled = true;
@@ -14,7 +16,8 @@ void main() {
       widgetsBinding:
           widgetsBinding); //PRESERVE EL SPLASHSCREEN HASTA QUE EL METODO REMOVE ES LLAMDO
   // runApp(const MyApp());
-  runApp(const MyApp());
+  //runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -62,7 +65,7 @@ class _MyAppState extends State<MyApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      initialRoute: '/',
+      initialRoute: '/tripList',
       routes: {
         '/': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen1(),
@@ -70,6 +73,7 @@ class _MyAppState extends State<MyApp> {
         '/registerPage3': (context) => const RegisterScreen3(),
         '/login': (context) => const LoginScreen(),
         '/tripForm': (context) => const TripFormScreen(),
+        '/tripList': (context) => const TripsListScreen()
       },
     );
   }

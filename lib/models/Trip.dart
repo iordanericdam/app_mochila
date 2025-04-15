@@ -5,7 +5,7 @@ class Trip {
   final String? description;
   final String destination;
   final String temperature;
-  final String activityType;
+  //final String activityType;
   final DateTime startDate;
   final DateTime endDate;
   final String? urlPhoto;
@@ -17,7 +17,7 @@ class Trip {
     this.description,
     required this.destination,
     required this.temperature,
-    required this.activityType,
+    //required this.activityType,
     required this.startDate,
     required this.endDate,
     this.urlPhoto,
@@ -32,7 +32,7 @@ class Trip {
       description: json['description'],
       destination: json['destination'],
       temperature: json['temperature'],
-      activityType: json['activity_type'],
+      //activityType: json['activity_type'],
       startDate: DateTime.parse(json['start_date']),
       endDate: DateTime.parse(json['end_date']),
       urlPhoto: json['url_photo'],
@@ -48,7 +48,7 @@ class Trip {
       'description': description,
       'destination': destination,
       'temperature': temperature,
-      'activity_type': activityType,
+      //'activity_type': activityType,
       'start_date': startDate.toIso8601String(),
       'end_date': endDate.toIso8601String(),
       'url_photo': urlPhoto,
@@ -58,6 +58,6 @@ class Trip {
   @override
   String toString() {
     // TODO: implement toString
-    return 'Trip{id: $id, userId: $userId, name: $name, description: $description, destination: $destination, temperature: $temperature, activityType: $activityType, startDate: $startDate, endDate: $endDate, urlPhoto: $urlPhoto}';
+    return 'Trip{id: $id, userId: $userId, name: $name, description: $description, destination: $destination, temperature: $temperature,  startDate: $startDate, endDate: $endDate, urlPhoto: $urlPhoto}';
   }
 }

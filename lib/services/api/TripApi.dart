@@ -20,6 +20,21 @@ class TripApi extends APIService {
     }
   }
 
+  // get trips by user
+  Future<List<Trip>> getTripsByUser() async {
+    // Logger logger = Logger();
+    try {
+      final response = await getRequest('trips/by-user');
+
+      List<dynamic> tripsJson = response.data;
+
+      return tripsJson.map((json) => Trip.fromJson(json)).toList();
+    } catch (e) {
+      //logger.e("Error: $e");
+      throw Exception('Failed to load trips');
+    }
+  }
+
   // get one trip
   Future<Trip> getTripById(int id) async {
     final response = await getRequest('trips/$id');
