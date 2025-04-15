@@ -1,10 +1,20 @@
 import 'package:app_mochila/models/Trip.dart';
+import 'package:app_mochila/providers/user_notifier.dart';
 import 'package:app_mochila/services/api/TripApi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Crear variable global para guardar un objeto "TripApi"
 final tripApiProvider = Provider<TripApi>((ref) {
-  return TripApi(token: '2|8yTPfrPeH2FCOfnZFWYEnOahFAZBDmPSGz7h2Gu6f072e40e');
+  final user = ref.watch(userNotifierProvider);
+  return user.when(
+    data: (user) {
+      return TripApi(token: user.token);
+    },
+    loading: () => throw Exception('User data is loading...'),
+    error: (error, stackTrace) => throw Exception('Failed to load user data'),
+  );
+
+  //return TripApi(token: '2|8yTPfrPeH2FCOfnZFWYEnOahFAZBDmPSGz7h2Gu6f072e40e');
 });
 
 // 1. Crear StateNotifier para Trips

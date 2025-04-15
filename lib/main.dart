@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      initialRoute: '/tripList',
+      initialRoute: '/',
       routes: {
         '/': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen1(),
