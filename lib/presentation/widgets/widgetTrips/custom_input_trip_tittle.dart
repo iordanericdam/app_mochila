@@ -14,7 +14,10 @@ class CustomInputTripTitle extends StatelessWidget {
     this.hintText,
     this.controller,
     this.validator,
-    this.keyboardType,
+    this.keyboardType, 
+    
+    
+  
   });
 
   @override

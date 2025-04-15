@@ -1,4 +1,7 @@
+import 'package:app_mochila/models/Trip.dart';
+import 'package:app_mochila/models/User.dart';
 import 'package:app_mochila/presentation/widgets/buttons.dart';
+import 'package:app_mochila/presentation/widgets/floating_button.dart';
 import 'package:app_mochila/presentation/widgets/widgetTrips/category_selector.dart';
 import 'package:app_mochila/presentation/widgets/widgetTrips/custom_input_description.dart';
 import 'package:app_mochila/presentation/widgets/widgetTrips/custom_input_trip_tittle.dart';
@@ -6,6 +9,8 @@ import 'package:app_mochila/presentation/widgets/widgetTrips/custom_input_trip_t
 import 'package:app_mochila/presentation/widgets/widgetTrips/switch_with_title.dart';
 import 'package:app_mochila/presentation/widgets/widgetTrips/date_selector.dart';
 import 'package:app_mochila/presentation/widgets/widgetTrips/weather_selector.dart';
+import 'package:app_mochila/services/api/TripApi.dart';
+import 'package:app_mochila/services/form_validator.dart';
 import 'package:app_mochila/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
@@ -24,162 +29,276 @@ class _SetupBpTripScreenState extends State<TripFormScreen> {
   final _keyTripForm = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-
-  DateTime? startDate;
-  DateTime? endDate;
-  //String? selectedCategory;
+  final TextEditingController _destinationController = TextEditingController();
+  DateTime? _startDate;
+  DateTime? _endDate;
   List<String> _selectedCategories = [];
   bool _visibilityOn = false;
   bool _suggestionsOn = true;
   String? _selectedWeather;
 
-  Future<void> _submitTripForm() async{
-    if(!_keyTripForm.currentState!.validate()) return;
+  ///-----------PARA RECUPERAR EL USUARIO ---->> ESTO HAY QUE REVISARLO Y AÑADIR RIVERPOD
+  bool _isInit = true;
+  late final User user; //
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isInit) {
+      user = ModalRoute.of(context)!.settings.arguments as User;
+      print("Usuario: ${user.name}");
+      _isInit = false;
+    }
+  }
+
+  ///-------------------------------------------///
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _destinationController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitTripForm() async {
+    if (!_keyTripForm.currentState!.validate()) {
+      return;
+    }
+    // Validación manual de otros campos
+    final startDateError = validateStartDate(_startDate);
+    final weatherError = validateSelectedWeather(_selectedWeather);
+    final categoriesError = validateCategories(_selectedCategories);
+
+    // Si hay algún error, lo mostramos en un SnackBar
+    if (startDateError != null ||
+        weatherError != null ||
+        categoriesError != null) {
+      final errorMessage = [
+        startDateError,
+        weatherError,
+        categoriesError,
+      ].where((e) => e != null).join('\n');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
+      return;
+    }
+
+    // Creamos el payload con los datos del formulario
+    //print(' Categorías seleccionadas: $_selectedCategories');
+
+    final tripData = {
+      'name': _titleController.text.trim(),
+      'destination': _destinationController.text.trim(),
+      'description': _descriptionController.text.trim(),
+      'start_date': _startDate!.toIso8601String(),
+      'end_date': _endDate?.toIso8601String() ?? _startDate!.toIso8601String(),
+      'temperature': _selectedWeather,
+      'use_suggestions': _suggestionsOn,
+      'category_ids': _selectedCategories.map(int.parse).toList(),
+    };
+    print('Enviando datos...: $tripData');
+
+    try {
+      // Instancia de la API con user y su token
+      final tripApi = TripApi(token: user.token);
+
+      // Enviamos los datos creando un objeto Trip
+      final createdTrip = await tripApi.createTrip(
+        Trip.fromJson({
+          ...tripData,
+          'activity_type': '',
+        }),
+      );
+
+      print('Viaje creado: ${createdTrip.toJson()}');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('¡Viaje creado con éxito!')),
+      );
+
+      // Limpiar el formulario y resetear estado
+      setState(() {
+        _keyTripForm.currentState?.reset(); // Reinicia los validadores
+        _titleController.clear();
+        _destinationController.clear();
+        _descriptionController.clear();
+        _startDate = null;
+        _endDate = null;
+        _selectedWeather = null;
+        _selectedCategories = [];
+        _visibilityOn = false;
+        _suggestionsOn = true;
+      });
+      Navigator.pushReplacementNamed(context, ModalRoute.of(context)!.settings.name!);
+      
+    } catch (e) {
+      print('Error al crear viaje: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al crear el viaje: $e')),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      body: WhiteBaseContainer(
-        child: SingleChildScrollView(
-          padding: kmedium,
-          child: Form(
-              key: _keyTripForm,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        CustomElevatedButton(
-                            text: "Siguiente",
-                            backgroundColor: AppColors.defaultButtonColor,
-                            onPressed: () {}),
-                      ],
-                    ),
-                    const Padding(
-                      padding: kleftPadding,
-                      child: Text(
-                        "Título del viaje",
-                        style: AppTextStyle.title,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: BaseScaffold(
+        body: Stack(
+          children: [
+            // Capa 1: contenido scrollable
+            WhiteBaseContainer(
+              child: SingleChildScrollView(
+                padding: kmedium,
+                child: Form(
+                  key: _keyTripForm,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      sizedBox,
+                      const Padding(
+                        padding: kleftPadding,
+                        child: Text(
+                          "Título del viaje",
+                          style: AppTextStyle.title,
+                        ),
                       ),
-                    ),
-                    kHalfSizedBox,
+                      kHalfSizedBox,
+                      CustomInputTripTitle(
+                        hintText: "Introduce un título...",
+                        controller: _titleController,
+                        keyboardType: TextInputType.text,
+                        validator: (value) {
+                          return genericValidator(value, 3);
+                        },
+                      ),
+                      sizedBox,
 
-                    CustomInputTripTitle(
-                      hintText: "Introduce un título...",
-                      controller: _titleController,
-                      keyboardType: TextInputType.text,
-                      // validator: (value) {
-                      //   if (value == null || value.isEmpty) {
-                      //     return 'Por favor, introduce un título';
-                      //   }
-                      //   return null;
-                      // },
-                    ),
-                    sizedBox,
-                    kHalfSizedBox,
-                    DateSelector(onDatesChanged: (start, end) {
-                      setState(() {
-                        startDate = start;
-                        endDate = end;
-                      });
-                    }),
-                    sizedBox,
-                    //TOOGLE
-                    Padding(
-                      padding: kleftPadding,
-                      child: Column(
-                        children: [
-                          SwitchWithTitle(
-                            titulo: "Visibilidad",
-                            activeText: "Pública",
-                            inactiveText: "Privada",
-                            isActive: _visibilityOn,
-                            onChanged: (value) {
-                              setState(() {
-                                _visibilityOn = value;
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 12),
-                          SwitchWithTitle(
-                            titulo: "Sugerencias",
-                            activeText: "Activadas",
-                            inactiveText: "Desactivadas",
-                            isActive: _suggestionsOn,
-                            onChanged: (value) {
-                              setState(() {
-                                _suggestionsOn = value;
-                              });
-                            },
-                          ),
-                        ],
+                      const Padding(
+                        padding: kleftPadding,
+                        child: Text(
+                          "Destino",
+                          style: AppTextStyle.title,
+                        ),
                       ),
-                    ),
-                    sizedBox,
-                    const Padding(
-                      padding: kleftPadding,
-                      child: Text(
-                        "Descripción",
-                        style: AppTextStyle.title,
+                      kHalfSizedBox,
+                      CustomInputTripTitle(
+                        hintText: "Introduce un destino...",
+                        controller: _destinationController,
+                        keyboardType: TextInputType.text,
+                        validator: validateDestino,
                       ),
-                    ),
-                    kHalfSizedBox,
-                    CustomInputDescription(
-                      hintText: "Añade una descripción...",
-                      controller: _descriptionController,
-                      maxLines: 2,
-                    ),
-                    sizedBox,
-                    // const Padding(
-                    //   padding: kleftPadding,
-                    //   child: Text(
-                    //     "¿Qué quieres hacer?",
-                    //     style: AppTextStyle.title,
-                    //   ),
-                    // ),
-                    // sizedBox,
-                    const Padding(
-                      padding: kleftPadding,
-                      child: Text(
-                        "¿Temperatura?",
-                        style: AppTextStyle.title,
-                      ),
-                    ),
-                    //  Center(
-                     
-                    //   child: Text(
-                    //     "Selecciona el clima",
-                    //     style: AppTextStyle.normalGreyTitle,
-                    //   ),
-                    // ),
-                    kHalfSizedBox,
-                    Center(child: WeatherSelector(
-                      onWeatherChanged: (selectedWeather) {
+                      sizedBox,
+
+                      DateSelector(onDatesChanged: (start, end) {
                         setState(() {
-                          _selectedWeather = selectedWeather;
+                          _startDate = start;
+                          _endDate = end;
                         });
-                      },
-                    )),
-                    sizedBox,
-                    sizedBox,
-                     const Padding(
-                      padding: kleftPadding,
-                      child: Text(
-                        "Categoria",
-                        style: AppTextStyle.title,
+                      }),
+                      sizedBox,
+
+                      Padding(
+                        padding: kleftPadding,
+                        child: Column(
+                          children: [
+                            SwitchWithTitle(
+                              titulo: "Visibilidad",
+                              activeText: "Pública",
+                              inactiveText: "Privada",
+                              isActive: _visibilityOn,
+                              onChanged: (value) {
+                                setState(() {
+                                  _visibilityOn = value;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            SwitchWithTitle(
+                              titulo: "Sugerencias",
+                              activeText: "Activadas",
+                              inactiveText: "Desactivadas",
+                              isActive: _suggestionsOn,
+                              onChanged: (value) {
+                                setState(() {
+                                  _suggestionsOn = value;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    kHalfSizedBox,
-                    CategorySelector(
-                      onCategoriesChanged: (categories) {
-                        setState(() {
-                          _selectedCategories = categories;
-                        });
-                      },
-                    ),
-                  ])),
+                      sizedBox,
+                      const Padding(
+                        padding: kleftPadding,
+                        child: Text(
+                          "Descripción",
+                          style: AppTextStyle.title,
+                        ),
+                      ),
+                      kHalfSizedBox,
+                      CustomInputDescription(
+                        hintText: "Añade una descripción...",
+                        controller: _descriptionController,
+                        maxLines: 2,
+                      ),
+                      sizedBox,
+                      const Padding(
+                        padding: kleftPadding,
+                        child: Text(
+                          "¿Temperatura?",
+                          style: AppTextStyle.title,
+                        ),
+                      ),
+                      kHalfSizedBox,
+                      Center(
+                        child: WeatherSelector(
+                          onWeatherChanged: (selectedWeather) {
+                            setState(() {
+                              _selectedWeather = selectedWeather;
+                            });
+                          },
+                        ),
+                      ),
+                      sizedBox,
+                      sizedBox,
+                      const Padding(
+                        padding: kleftPadding,
+                        child: Text(
+                          "Categoria",
+                          style: AppTextStyle.title,
+                        ),
+                      ),
+                      kHalfSizedBox,
+                      CategorySelector(
+                        onCategoriesChanged: (categories) {
+                          setState(() {
+                            _selectedCategories = categories;
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                          height:
+                              80), // espacio extra para que no tape el botón
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            // Capa 2: botón flotante fijo abajo a la izquierda
+            Positioned(
+              bottom: 60,
+              right: 30,
+              child: FloatingButton(
+                text: "Siguiente",
+                onPressed: _submitTripForm, 
+              ),
+            ),
+          ],
         ),
       ),
     );

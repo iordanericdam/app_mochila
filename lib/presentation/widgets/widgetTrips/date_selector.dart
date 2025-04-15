@@ -20,6 +20,7 @@ class _DateSelectorState extends State<DateSelector> {
 
   // Muestra el selector de fecha (showDatePicker)
   Future<void> _selectDate({required bool isInicio}) async {
+    FocusScope.of(context).requestFocus(FocusNode()); // No entiendo por qué este funciona y este no. FocusScope.of(context).unfocus();
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(), 
@@ -33,11 +34,19 @@ class _DateSelectorState extends State<DateSelector> {
         if (isInicio) {
           _fechaInicio = picked;
         } else {
+          if(_fechaInicio!=null && picked.isBefore(_fechaInicio!)){
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(" La fecha fin no puede ser anterior a la fecha inicio"))
+            );
+            return;
+          }
           _fechaFin = picked;
         }
 
         // Si el widget padre necesita las fechas, se las enviamos
         if (widget.onDatesChanged != null) {
+          //print("Fecha inicio $_fechaInicio");
+          //print("Fecha inicio $_fechaFin");
           widget.onDatesChanged!(_fechaInicio, _fechaFin);
         }
       });

@@ -101,3 +101,10 @@ String? validateCategories(List<String> categories) {
   }
   return null;
 }
+
+String? validateDestino(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'El destino es obligatorio';
+  }
+  return null;
+}
