@@ -75,3 +75,4 @@ Thumbs.db
 
 # Ignorar archivos de compilación de CMake/Ninja en Android
 android/app/.cxx/
+ios/Podfile.lock

@@ -60,7 +60,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
       await Future.delayed(const Duration(seconds: 2));
       if (!mounted) return;
-      Navigator.pushNamed(context, '/tripList');
+      Navigator.pushNamed(context, '/tripForm');
     }
   }
 
