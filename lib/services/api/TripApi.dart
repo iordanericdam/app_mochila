@@ -1,6 +1,5 @@
 import 'package:app_mochila/models/Trip.dart';
 import 'package:app_mochila/services/api/API_Serveice.dart';
-import 'package:logger/logger.dart';
 
 class TripApi extends APIService {
   TripApi({super.token, super.baseUrl});

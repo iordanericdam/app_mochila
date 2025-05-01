@@ -1,6 +1,5 @@
 import 'package:app_mochila/models/Trip.dart';
 import 'package:app_mochila/models/User.dart';
-import 'package:app_mochila/presentation/widgets/buttons.dart';
 import 'package:app_mochila/presentation/widgets/floating_button.dart';
 import 'package:app_mochila/presentation/widgets/widgetTrips/category_selector.dart';
 import 'package:app_mochila/presentation/widgets/widgetTrips/custom_input_description.dart';
@@ -11,7 +10,6 @@ import 'package:app_mochila/presentation/widgets/widgetTrips/date_selector.dart'
 import 'package:app_mochila/presentation/widgets/widgetTrips/weather_selector.dart';
 import 'package:app_mochila/services/api/TripApi.dart';
 import 'package:app_mochila/services/form_validator.dart';
-import 'package:app_mochila/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/styles/constants.dart';
@@ -131,8 +129,8 @@ class _SetupBpTripScreenState extends State<TripFormScreen> {
         _visibilityOn = false;
         _suggestionsOn = true;
       });
-      Navigator.pushReplacementNamed(context, ModalRoute.of(context)!.settings.name!);
-      
+      Navigator.pushReplacementNamed(
+          context, ModalRoute.of(context)!.settings.name!);
     } catch (e) {
       print('Error al crear viaje: $e');
       ScaffoldMessenger.of(context).showSnackBar(
@@ -295,7 +293,7 @@ class _SetupBpTripScreenState extends State<TripFormScreen> {
               right: 30,
               child: FloatingButton(
                 text: "Siguiente",
-                onPressed: _submitTripForm, 
+                onPressed: _submitTripForm,
               ),
             ),
           ],

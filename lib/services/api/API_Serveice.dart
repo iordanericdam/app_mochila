@@ -36,7 +36,6 @@ class APIService {
       final errorDetails = jsonResponse['error'] ?? 'No details';
       final errorCode = jsonResponse['code'] ?? response.statusCode;
 
-      print('Error stacktrace: ${StackTrace.current}');
       return ApiResult(
         success: false,
         message: 'Error $errorCode: $errorMessage - $errorDetails',

@@ -1,4 +1,5 @@
 import 'package:app_mochila/presentation/screens/auth/login_screen.dart';
+import 'package:app_mochila/presentation/screens/auth/register/register_screen4.dart';
 import 'package:app_mochila/presentation/widgets/button_login.dart';
 import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/password_custom_input.dart';
@@ -106,32 +107,26 @@ class _RegisterScreen3State extends State<RegisterScreen3> {
                             gradient: AppColors.loginButtonColor,
                             onPressed: () {
                               if (registerKey3.currentState!.validate()) {
-                                var response = Register.register(
-                                  args['email'],
-                                  passwordController.text,
-                                  args['usuario'],
-                                  args['nombre'],
-                                  args['telefono'],
-                                );
+                                // var response = Register.register(
+                                //   args['email'],
+                                //   passwordController.text,
+                                //   args['usuario'],
+                                //   args['nombre'],
+                                //   args['telefono'],
+                                // );
 
-                                if (response != null) {
-                                  print(response);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('Registro exitoso')),
-                                  );
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LoginScreen()),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('Error en el registro')),
-                                  );
-                                }
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RegisterScreen4(
+                                      email: args['email'],
+                                      password: passwordController.text,
+                                      usuario: args['usuario'],
+                                      nombre: args['nombre'],
+                                      telefono: args['telefono'],
+                                    ),
+                                  ),
+                                );
                               }
                             },
                           ),

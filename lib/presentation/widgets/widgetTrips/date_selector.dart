@@ -20,12 +20,13 @@ class _DateSelectorState extends State<DateSelector> {
 
   // Muestra el selector de fecha (showDatePicker)
   Future<void> _selectDate({required bool isInicio}) async {
-    FocusScope.of(context).requestFocus(FocusNode()); // No entiendo por qué este funciona y este no. FocusScope.of(context).unfocus();
+    FocusScope.of(context).requestFocus(
+        FocusNode()); // No entiendo por qué este funciona y este no. FocusScope.of(context).unfocus();
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(), 
-      firstDate: DateTime(2020),   
-      lastDate: DateTime(2100),    
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
     );
 
     if (picked != null) {
@@ -34,10 +35,10 @@ class _DateSelectorState extends State<DateSelector> {
         if (isInicio) {
           _fechaInicio = picked;
         } else {
-          if(_fechaInicio!=null && picked.isBefore(_fechaInicio!)){
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(" La fecha fin no puede ser anterior a la fecha inicio"))
-            );
+          if (_fechaInicio != null && picked.isBefore(_fechaInicio!)) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text(
+                    " La fecha fin no puede ser anterior a la fecha inicio")));
             return;
           }
           _fechaFin = picked;
@@ -64,13 +65,13 @@ class _DateSelectorState extends State<DateSelector> {
     return Container(
       //Contenedor principal del widget
       decoration: BoxDecoration(
-        color: AppColors.backGroundInputColor, 
-        borderRadius: BorderRadius.circular(20), 
+        color: AppColors.backGroundInputColor,
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           insideDefaultBoxShadow(),
         ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20), 
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
       child: Row(
         children: [
           //Parte izquierda

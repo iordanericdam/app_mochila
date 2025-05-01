@@ -11,8 +11,8 @@ class Backpackapi extends APIService {
     return backpacksJson.map((json) => Backpack.fromJson(json)).toList();
   }
 
-  Future<Backpack> getBackpackByid(int backpack_id) async {
-    final response = await getRequest('backpacks/$backpack_id');
+  Future<Backpack> getBackpackByid(int backpackId) async {
+    final response = await getRequest('backpacks/$backpackId');
     return Backpack.fromJson(response.data);
   }
 
@@ -22,8 +22,8 @@ class Backpackapi extends APIService {
     return backpacksJson.map((json) => Backpack.fromJson(json)).toList();
   }
 
-  Future<List<Backpack>> getBackpacksByTrip(int trip_id) async {
-    final response = await getRequest('backpacks/trip/$trip_id');
+  Future<List<Backpack>> getBackpacksByTrip(int tripId) async {
+    final response = await getRequest('backpacks/trip/$tripId');
     List<dynamic> backpacksJson = response.data;
     return backpacksJson.map((json) => Backpack.fromJson(json)).toList();
   }

@@ -10,9 +10,26 @@ class UserNotifier extends StateNotifier<AsyncValue<User>> {
       final user = await UserApi().login(userData);
       state = AsyncData(user!);
     } catch (e, st) {
-      // 处理请求失败的情况
       state = AsyncError(e, st);
     }
+  }
+
+  Future<bool> register(Map<String, dynamic> userData) async {
+    try {
+      return await UserApi().register(userData);
+    } catch (e, st) {
+      state = AsyncError(e, st);
+      return false;
+    }
+  }
+
+  Future<bool> sendRegisterCode(Map<String, dynamic> data) async {
+    return await UserApi().sendRegisterCode(data);
+  }
+
+  Future<bool> vertifierRegisterCode(String email, String code) async {
+    return await UserApi()
+        .vertifierRegisterCode({"email": email, "code": code});
   }
 }
 

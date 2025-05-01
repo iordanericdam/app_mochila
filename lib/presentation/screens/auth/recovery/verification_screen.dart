@@ -12,7 +12,7 @@ import 'package:pinput/pinput.dart';
 
 class VerificationScreen extends StatefulWidget {
   final String email;
-  VerificationScreen({super.key, required this.email});
+  const VerificationScreen({super.key, required this.email});
 
   @override
   State<VerificationScreen> createState() => _VerificationScreenState();

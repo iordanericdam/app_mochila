@@ -8,7 +8,7 @@ class Register {
       String name, String username, String phone) async {
     var url = Uri.parse('${Common.baseUrl}/register');
     var headers = Common.headers;
-    var userData;
+    Map<String, String> userData;
     if (phone == '') {
       userData = {
         "email": email,

@@ -1,4 +1,3 @@
-import 'package:app_mochila/models/Backpack.dart';
 import 'package:app_mochila/models/Item.dart';
 import 'package:app_mochila/services/api/API_Serveice.dart';
 
