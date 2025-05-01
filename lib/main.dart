@@ -2,6 +2,7 @@ import 'package:app_mochila/presentation/screens/auth/login_screen.dart';
 import 'package:app_mochila/presentation/screens/auth/register/register_screen1.dart';
 import 'package:app_mochila/presentation/screens/auth/register/register_screen2.dart';
 import 'package:app_mochila/presentation/screens/auth/register/register_screen3.dart';
+import 'package:app_mochila/presentation/screens/home_screen.dart';
 import 'package:app_mochila/presentation/screens/trip/trips_list_screen.dart';
 import 'package:app_mochila/presentation/screens/trip_form_screen.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,8 @@ class _MyAppState extends State<MyApp> {
         '/registerPage3': (context) => const RegisterScreen3(),
         '/login': (context) => const LoginScreen(),
         '/tripForm': (context) => const TripFormScreen(),
-        '/tripList': (context) => const TripsListScreen()
+        '/tripList': (context) => const TripsListScreen(),
+        '/home': (context) => const HomeScreen(),
       },
     );
   }

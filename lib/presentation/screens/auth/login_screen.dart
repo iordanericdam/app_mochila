@@ -4,6 +4,7 @@ import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/password_custom_input.dart';
 import 'package:app_mochila/providers/trip_notifier.dart';
 import 'package:app_mochila/providers/user_notifier.dart';
+import 'package:app_mochila/services/api/TripApi.dart';
 import 'package:app_mochila/services/api/UserApi.dart';
 import 'package:app_mochila/services/form_validator.dart';
 import 'package:app_mochila/styles/app_colors.dart';
@@ -60,7 +61,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
       await Future.delayed(const Duration(seconds: 2));
       if (!mounted) return;
-      Navigator.pushNamed(context, '/tripForm');
+
+      // Comprobamos si el usuario tiene algún viaje
+      try {
+        final tripApi = TripApi(token: user.token);
+        final trips = await tripApi.getTripsByUser();
+
+        if (!mounted) return;
+
+        if (trips.isNotEmpty) {
+          Navigator.pushReplacementNamed(context, '/home');
+        } else {
+          Navigator.pushReplacementNamed(context, '/tripForm');
+        }
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al comprobar los viajes: $e')),
+        );
+      }
     }
   }
 

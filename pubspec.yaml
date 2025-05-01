@@ -71,6 +71,8 @@ flutter:
     - assets/images/logo_splash.png
     - assets/images/branding.png
     - assets/images/category_images/
+    - assets/images/default_home_images/demo_mochila.jpg
+    - assets/images/default_home_images/avatar_default.jpeg
 
     
     

@@ -76,7 +76,6 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
 
     // Creamos el payload con los datos del formulario
     //print(' Categorías seleccionadas: $_selectedCategories');
-
     final trip = Trip.fromJson({
       'name': _titleController.text.trim(),
       'destination': _destinationController.text.trim(),
@@ -91,13 +90,12 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
     //print('Enviando datos...: $tripData');
 
     try {
-      // Enviamos el formulario al servidor
+      // Enviamos el formulario
       //Usamos el notifier para obtener el usuario
       print('Intentando crear viaje con: ${trip.toJson()}');
       await ref.read(tripNotifierProvider.notifier).createTrip(trip);
       print('Viaje enviado correctamente.');
 
-      //print('Viaje creado: ${createdTrip.toJson()}');
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('¡Viaje creado con éxito!')),

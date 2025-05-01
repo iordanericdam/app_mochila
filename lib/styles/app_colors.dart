@@ -37,4 +37,6 @@ class AppColors {
 
 //Colores para iconos
   static const iconColor= Color.fromARGB(136, 136, 135, 135);
+
+//Colores para home
 }
