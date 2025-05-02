@@ -114,8 +114,7 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
         _visibilityOn = false;
         _suggestionsOn = true;
       });
-      Navigator.pushReplacementNamed(
-          context, ModalRoute.of(context)!.settings.name!);
+      Navigator.pushReplacementNamed(context,'/home'); //Navega a la pantalla home cuando se crea el viaje
     } catch (e) {
       print('Error al crear viaje: $e');
       ScaffoldMessenger.of(context).showSnackBar(

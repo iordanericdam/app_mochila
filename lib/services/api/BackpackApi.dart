@@ -1,5 +1,6 @@
 import 'package:app_mochila/models/Backpack.dart';
 import 'package:app_mochila/services/api/API_Serveice.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 class Backpackapi extends APIService {
@@ -24,6 +25,11 @@ class Backpackapi extends APIService {
 
   Future<List<Backpack>> getBackpacksByTrip(int tripId) async {
     final response = await getRequest('backpacks/trip/$tripId');
+    // Verifica si la respuesta es nula o no es una lista
+    if (response.data == null || response.data is! List) {
+      //debugPrint("Respuesta : ${response.data.runtimeType}");
+      return [];
+    }
     List<dynamic> backpacksJson = response.data;
     return backpacksJson.map((json) => Backpack.fromJson(json)).toList();
   }
