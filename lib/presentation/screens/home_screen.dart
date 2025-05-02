@@ -6,7 +6,7 @@ import 'package:app_mochila/presentation/widgets/widgetsHome/trip_backpack_card.
 import 'package:app_mochila/presentation/widgets/floating_button.dart';
 import 'package:app_mochila/providers/trip_notifier.dart';
 import 'package:app_mochila/providers/user_notifier.dart';
-import 'package:app_mochila/services/api/Backpackapi.dart';
+import 'package:app_mochila/services/backpack_service.dart'; // <-- Servicio refactorizado
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,12 +23,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     // Escuchamos el estado del provider de viajes (puede estar cargando, con error o con datos)
     final tripsState = ref.watch(tripNotifierProvider);
+    final user = ref.watch(userNotifierProvider).value;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       body: Column(
         children: [
-          // AppBar personalizado en la parte superior
           const CustomHomeAppbar(),
           // Contenido de la pantalla (lista de viajes)
           Expanded(
@@ -44,9 +44,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   return const Center(child: Text('No hay viajes creados'));
                 }
 
+                // Verificamos que el usuario esté disponible
+                if (user == null) {
+                  return const Center(child: Text('Usuario no disponible'));
+                }
+
                 // Usamos un FutureBuilder para esperar a que se carguen las mochilas asociadas
                 return FutureBuilder<Map<int, Backpack?>>(
-                  future: _loadBackpacks(trips),
+                  future: BackpackService.loadBackpacks(
+                    trips: trips,
+                    token: user.token,
+                  ),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
@@ -54,8 +62,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                     if (snapshot.hasError) {
                       return Center(
-                        child:
-                            Text('Error al cargar mochilas: ${snapshot.error}'),
+                        child: Text('Error al cargar mochilas: ${snapshot.error}'),
                       );
                     }
 
@@ -76,8 +83,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             if (backpack != null) {
                               debugPrint('Trip ID: ${backpack.tripId}');
                               debugPrint('Backpack ID: ${backpack.id}');
-                                                                               // FALTA LA NAVEGACION A LA PANTALLA DE MOCHILA
-                                                                              // Navigator.pushNamed    
+
+                              // FALTA LA NAVEGACION A LA PANTALLA DE MOCHILA
+                              // Navigator.pushNamed(context, '/backpackDetail', arguments: backpack);
+
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
@@ -85,13 +94,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   ),
                                 ),
                               );
-
-                              // No hay Navigator.pushNamed, se queda en la misma pantalla
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text(
-                                      "Este viaje no tiene mochila asociada."),
+                                  content: Text("Este viaje no tiene mochila asociada."),
                                 ),
                               );
                             }
@@ -115,30 +121,5 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         },
       ),
     );
-  }
-
-  // Función para obtener la primera mochila asociada a cada viaje del usuario
-  Future<Map<int, Backpack?>> _loadBackpacks(List<Trip> trips) async {
-    // Obtenemos el usuario actual desde el provider
-    final user = ref.read(userNotifierProvider).value;
-
-    if (user == null) {
-      debugPrint("ERROR: Usuario no cargado");
-      throw Exception("User not loaded");
-    }
-
-    // Instanciamos la API de mochilas con el token del usuario
-    final backpackApi = Backpackapi(token: user.token);
-    Map<int, Backpack?> map = {};
-
-    // Recorremos todos los viajes y buscamos su primera mochila asociada
-    for (var trip in trips) {
-      if (trip.id == null) continue;
-      final tripBackpacks = await backpackApi.getBackpacksByTrip(trip.id!);
-      debugPrint("Respuesta de API para Trip ID ${trip.id}: $tripBackpacks");
-      map[trip.id!] = tripBackpacks.isNotEmpty ? tripBackpacks.first : null;
-    }
-
-    return map;
   }
 }
