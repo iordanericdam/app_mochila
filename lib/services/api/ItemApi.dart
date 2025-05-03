@@ -16,9 +16,37 @@ class ItemApi extends APIService {
   }
 
   Future<List<Item>> getItemsByBackpack(int backpackId) async {
-    final response = await getRequest('items/backpacks/$backpackId');
-    List<dynamic> itemsJson = response.data;
-    return itemsJson.map((json) => Item.fromJson(json)).toList();
+    try {
+      // Realizar la solicitud a la API
+      final response = await getRequest('items/backpacks/$backpackId');
+      final data = response.data;
+
+      // Verificar si la respuesta contiene datos válidos
+      if (data == null || data['item_categories'] == null) {
+        print('No data or no item categories found');
+        return [];
+      }
+
+      // Extraer y mapear los items de todas las categorías
+      List<Item> allItems = [];
+      for (var category in data['item_categories']) {
+        for (var item in category['items'] ?? []) {
+          print(category['id']);
+          allItems.add(Item.fromJson({
+            ...item, // Propiedades del item
+            'category_id':
+                category['id'] ?? 0, // Asignamos un valor predeterminado
+            'category_name': category['name'] ??
+                'Unknown', // Asignamos 'Unknown' si no existe el nombre
+          }));
+        }
+      }
+
+      return allItems;
+    } catch (e) {
+      print('Error fetching items: $e');
+      return [];
+    }
   }
 
   Future<Item> createItem(Item item) async {
@@ -35,4 +63,6 @@ class ItemApi extends APIService {
     final response = await deleteRequest('backpacks/$itemId');
     return Item.fromJson(response.data);
   }
+
+  addItem(int backpackId, Item item) {}
 }

@@ -34,6 +34,17 @@ class Backpackapi extends APIService {
     return backpacksJson.map((json) => Backpack.fromJson(json)).toList();
   }
 
+  Future<List<Backpack>> getBackpackByTrip(int tripId) async {
+    final response = await getRequest('backpacks/trip/backpack/$tripId');
+    // Verifica si la respuesta es nula o no es una lista
+    if (response.data == null || response.data is! List) {
+      //debugPrint("Respuesta : ${response.data.runtimeType}");
+      return [];
+    }
+    List<dynamic> backpacksJson = response.data;
+    return backpacksJson.map((json) => Backpack.fromJson(json)).toList();
+  }
+
   Future<Backpack> createBackpack(Backpack backpack) async {
     final response = await postRequest('backpacks', backpack.toJson());
     return Backpack.fromJson(response.data);

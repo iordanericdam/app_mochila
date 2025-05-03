@@ -20,6 +20,14 @@ class AppColors {
     backGroundLoginColor1,
   ], begin: Alignment.topCenter, end: Alignment.bottomCenter);
 
+  static const inversedBackGroundLoginColor = LinearGradient(colors: [
+    backGroundLoginColor1,
+    Color.fromARGB(255, 76, 42, 120),
+    Color.fromARGB(255, 76, 42, 120),
+    backGroundLoginColor1,
+    // Color.fromARGB(255, 133, 182, 208),
+  ], begin: Alignment.topCenter, end: Alignment.bottomCenter);
+
   static const loginButtonColor = LinearGradient(
     colors: [
       backGroundLoginColor1,
@@ -29,14 +37,13 @@ class AppColors {
     end: Alignment.centerRight,
   );
 
-
 //Colors para TeXto
 
   static const textColor = Color(0xFF000000);
   static const hintTextColor = const Color.fromARGB(255, 103, 101, 101);
 
 //Colores para iconos
-  static const iconColor= Color.fromARGB(136, 136, 135, 135);
+  static const iconColor = Color.fromARGB(136, 136, 135, 135);
 
 //Colores para home
 }
