@@ -38,7 +38,7 @@ class Trip {
       startDate: DateTime.parse(json['start_date']),
       endDate: DateTime.parse(json['end_date']),
       urlPhoto: json['url_photo'],
-       useSuggestions: json['use_suggestions'] ?? true,
+      useSuggestions: json['use_suggestions'] ?? true,
     );
   }
 

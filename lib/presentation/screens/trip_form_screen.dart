@@ -1,4 +1,4 @@
-import 'package:app_mochila/models/Trip.dart';
+ import 'package:app_mochila/models/Trip.dart';
 import 'package:app_mochila/models/User.dart';
 import 'package:app_mochila/presentation/widgets/buttons.dart';
 import 'package:app_mochila/presentation/widgets/floating_button.dart';
@@ -74,18 +74,19 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
       return;
     }
 
-    // Creamos el payload con los datos del formulario
+    // Creamos el Objeto con los datos del formulario
     //print(' Categorías seleccionadas: $_selectedCategories');
-    final trip = Trip.fromJson({
-      'name': _titleController.text.trim(),
-      'destination': _destinationController.text.trim(),
-      'description': _descriptionController.text.trim(),
-      'start_date': _startDate!.toIso8601String(),
-      'end_date': _endDate?.toIso8601String() ?? _startDate!.toIso8601String(),
-      'temperature': _selectedWeather,
-      'use_suggestions': _suggestionsOn,
-      'category_ids': _selectedCategories.map(int.parse).toList(),
-    });
+      final trip = Trip(
+        name: _titleController.text.trim(),
+        destination: _destinationController.text.trim(),
+        description: _descriptionController.text.trim(),
+        startDate: _startDate!,
+        endDate: _endDate ?? _startDate!,
+        temperature: _selectedWeather!,
+        useSuggestions: _suggestionsOn,
+      );
+    final tripData = trip.toJson();
+    tripData['category_ids'] = _selectedCategories.map(int.parse).toList();
 
     debugPrint('Datos que se van a enviar al backend:');
     debugPrint(trip.toJson().toString());

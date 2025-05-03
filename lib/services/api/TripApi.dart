@@ -40,19 +40,31 @@ class TripApi extends APIService {
     return Trip.fromJson(response.data);
   }
 
-  // create a trip
-  Future<Trip> createTrip(Trip trip) async {
-    try {
-      final response = await postRequest('trips', trip.toJson());
-      if (response.data == null) {
-      throw Exception('Failed to create trip: No data received');
+// create a trip
+Future<Trip> createTrip(Trip trip) async {
+  try {
+    final response = await postRequest('trips', trip.toJson());
+
+    if (response.data != null) {
+      return Trip.fromJson(response.data);
     }
 
-    return Trip.fromJson(response.data);
-    } catch (e) {
-      throw Exception('Failed to create trip: $e');
-    }
+    // ⚠️ Fallback si el backend no devuelve datos pero sí lo ha creado en BD
+    final userTrips = await getTripsByUser();
+    final matchedTrip = userTrips.firstWhere(
+      (t) =>
+          t.name == trip.name &&
+          t.destination == trip.destination &&
+          t.startDate == trip.startDate &&
+          t.endDate == trip.endDate,
+      orElse: () => throw Exception('Trip created but not found in list'),
+    );
+
+    return matchedTrip;
+  } catch (e) {
+    throw Exception('Failed to create trip: $e');
   }
+}
 
   // update trip
   Future<Trip> updateTrip(int tripId, Map<String, dynamic> updateData) async {
