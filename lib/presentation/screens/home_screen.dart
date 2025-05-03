@@ -62,7 +62,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                     if (snapshot.hasError) {
                       return Center(
-                        child: Text('Error al cargar mochilas: ${snapshot.error}'),
+                        child:
+                            Text('Error al cargar mochilas: ${snapshot.error}'),
                       );
                     }
 
@@ -85,7 +86,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               debugPrint('Backpack ID: ${backpack.id}');
 
                               // FALTA LA NAVEGACION A LA PANTALLA DE MOCHILA
-                              // Navigator.pushNamed(context, '/backpackDetail', arguments: backpack);
+                              Navigator.pushNamed(context, '/backpack',
+                                  arguments: backpack);
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -97,7 +99,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text("Este viaje no tiene mochila asociada."),
+                                  content: Text(
+                                      "Este viaje no tiene mochila asociada."),
                                 ),
                               );
                             }

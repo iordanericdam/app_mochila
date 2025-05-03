@@ -52,8 +52,8 @@ class CustomInput extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide:
-              const BorderSide(color: AppColors.startButtonColor, width: 2),
+          borderSide: const BorderSide(
+              color: Color.fromARGB(255, 0, 103, 159), width: 2),
         ),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 20, vertical: 16),

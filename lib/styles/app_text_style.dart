@@ -1,4 +1,5 @@
 import 'package:app_mochila/styles/app_colors.dart';
+import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
 
 class AppTextStyle {
@@ -44,6 +45,13 @@ class AppTextStyle {
     color: Color.fromARGB(255, 255, 255, 255),
   );
 
+  static const TextStyle bigBoldWhite = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: kdefaultPadding,
+    fontWeight: FontWeight.bold,
+    color: Color.fromARGB(255, 255, 255, 255),
+  );
+
   static TextStyle normalGrey = TextStyle(
     fontFamily: 'Montserrat',
     fontSize: 16,
@@ -57,7 +65,7 @@ class AppTextStyle {
     color: AppColors.hintTextColor,
   );
 
-   static const TextStyle buttonTextPurpleBg = TextStyle(
+  static const TextStyle buttonTextPurpleBg = TextStyle(
     fontFamily: 'Montserrat',
     fontSize: 12,
     fontWeight: FontWeight.bold,

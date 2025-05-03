@@ -114,7 +114,8 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
         _visibilityOn = false;
         _suggestionsOn = true;
       });
-      Navigator.pushReplacementNamed(context,'/home'); //Navega a la pantalla home cuando se crea el viaje
+      Navigator.pushReplacementNamed(
+          context, '/home'); //Navega a la pantalla home cuando se crea el viaje
     } catch (e) {
       print('Error al crear viaje: $e');
       ScaffoldMessenger.of(context).showSnackBar(
@@ -125,7 +126,8 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userState = ref.watch(userNotifierProvider); // Usamos el provider para obtener el usuario y pintar la pantalla
+    final userState = ref.watch(
+        userNotifierProvider); // Usamos el provider para obtener el usuario y pintar la pantalla
     return userState.when(
         loading: () => const Scaffold(
               body: Center(child: CircularProgressIndicator()),
