@@ -9,6 +9,13 @@ class AppTextStyle {
     color: AppColors.textColor,
   );
 
+  static const TextStyle heroTitleHomeWhite = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: AppColors.backGroundInputColor,
+  );
+
   static const TextStyle title = TextStyle(
     fontFamily: 'Montserrat',
     fontSize: 20,

@@ -33,7 +33,7 @@ class AppColors {
 //Colors para TeXto
 
   static const textColor = Color(0xFF000000);
-  static var hintTextColor = const Color.fromARGB(255, 103, 101, 101);
+  static const hintTextColor = const Color.fromARGB(255, 103, 101, 101);
 
 //Colores para iconos
   static const iconColor= Color.fromARGB(136, 136, 135, 135);

@@ -87,14 +87,15 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
       'category_ids': _selectedCategories.map(int.parse).toList(),
     });
 
-    //print('Enviando datos...: $tripData');
+    debugPrint('Datos que se van a enviar al backend:');
+    debugPrint(trip.toJson().toString());
 
     try {
       // Enviamos el formulario
       //Usamos el notifier para obtener el usuario
-      print('Intentando crear viaje con: ${trip.toJson()}');
+      debugPrint('Intentando crear viaje con: ${trip.toJson()}');
       await ref.read(tripNotifierProvider.notifier).createTrip(trip);
-      print('Viaje enviado correctamente.');
+      debugPrint('Viaje enviado correctamente.');
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -116,7 +117,7 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
       });
       Navigator.pushReplacementNamed(context,'/home'); //Navega a la pantalla home cuando se crea el viaje
     } catch (e) {
-      print('Error al crear viaje: $e');
+      debugPrint('Error al crear viaje: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al crear el viaje: $e')),
       );

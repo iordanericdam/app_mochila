@@ -13,7 +13,7 @@ class WeatherIconData {
 
  List<WeatherIconData> weatherIcons = [
   const WeatherIconData(
-    name: 'Soleado',
+    name: 'Calor',
     icon: Icon(Icons.sunny, size: 36,),
   ),
   const WeatherIconData(

@@ -1,5 +1,6 @@
 import 'package:app_mochila/presentation/widgets/widgetsHome/user_avatar.dart';
 import 'package:app_mochila/styles/app_colors.dart';
+import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:flutter/material.dart';
 
 class CustomHomeAppbar extends StatelessWidget {
@@ -8,22 +9,21 @@ class CustomHomeAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 160,
+      height: 120,
       decoration: const BoxDecoration(
         gradient: AppColors.backGroundLoginColor,
       ),
-      padding: const EdgeInsets.only(top: 40, left: 25, right: 25),
+      padding: const EdgeInsets.only(top: 50, left: 25, right: 25),
       child: Stack(
         alignment: Alignment.center,
         children: [
           // Texto centrado
           const Center(
-            child: Text(
-              "Mis mochilas",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            child: Padding(
+              padding: EdgeInsets.only(top: 40.0),
+              child: Text(
+                "APP MOCHILA",
+                style: AppTextStyle.heroTitleHomeWhite, 
               ),
             ),
           ),
@@ -34,11 +34,11 @@ class CustomHomeAppbar extends StatelessWidget {
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Menú pulsado'), 
+                    content: Text('Menú pulsado'),
                   ),
                 );
               },
-              child: const Icon(Icons.menu, color: Colors.white, size: 38),
+              child: const Icon(Icons.menu, color: Colors.white, size: 40),
             ),
           ),
           // Avatar a la derecha
@@ -48,12 +48,12 @@ class CustomHomeAppbar extends StatelessWidget {
               imageUrl: "assets/images/default_home_images/avatar_default.jpeg",
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                 const SnackBar(
+                  const SnackBar(
                     content: Text(
                       'Avatar pulsado',
                       textAlign: TextAlign.center,
                     ),
-                 ),
+                  ),
                 );
               },
             ),

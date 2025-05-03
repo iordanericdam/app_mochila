@@ -1,5 +1,4 @@
-// Importaciones necesarias: modelos, widgets personalizados, Riverpod, servicios y Flutter
-import 'package:app_mochila/models/Trip.dart';
+//import 'package:app_mochila/models/Trip.dart';
 import 'package:app_mochila/models/Backpack.dart';
 import 'package:app_mochila/presentation/widgets/widgetsHome/custom_home_appbar.dart';
 import 'package:app_mochila/presentation/widgets/widgetsHome/trip_backpack_card.dart';
@@ -7,8 +6,12 @@ import 'package:app_mochila/presentation/widgets/floating_button.dart';
 import 'package:app_mochila/providers/trip_notifier.dart';
 import 'package:app_mochila/providers/user_notifier.dart';
 import 'package:app_mochila/services/backpack_service.dart'; // <-- Servicio refactorizado
+import 'package:app_mochila/styles/constants.dart';
+import 'package:app_mochila/styles/home_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:app_mochila/presentation/widgets/widgetsHome/custom_search_bar.dart';
+
 
 // Pantalla principal con acceso a Riverpod usando ConsumerStatefulWidget
 class HomeScreen extends ConsumerStatefulWidget {
@@ -19,24 +22,53 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  String _searchText = '';
+  String _selectedFilter = 'Título';
+  bool _isSearching = false; // Controla si el usuario ha empezado a escribir
+
   @override
   Widget build(BuildContext context) {
     // Escuchamos el estado del provider de viajes (puede estar cargando, con error o con datos)
     final tripsState = ref.watch(tripNotifierProvider);
     final user = ref.watch(userNotifierProvider).value;
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+    return HomeScaffold(
+      floatingActionButton: FloatingButton(
+        text: "Crear viaje",
+        onPressed: () {
+          // Navegamos a la pantalla de formulario
+          Navigator.pushNamed(context, '/tripForm');
+        },
+      ),
       body: Column(
         children: [
-          const CustomHomeAppbar(),
-          // Contenido de la pantalla (lista de viajes)
+          sizedBox,
+          // Barra de búsqueda
+          CustomSearchBar(
+            onSearchChanged: (value) {
+              setState(() {
+                _searchText = value;
+                _isSearching = value.isNotEmpty;
+              });
+            },
+            onFilterChanged: (value) {
+              setState(() {
+                _selectedFilter = value;
+                // NO tocamos _isSearching aquí
+              });
+            },
+          ),
+         
+
+          // Contenido de la pantalla
           Expanded(
             child: tripsState.when(
               // Si está cargando, mostramos un indicador
               loading: () => const Center(child: CircularProgressIndicator()),
+
               // Si hay un error al cargar los viajes
               error: (err, stack) => Center(child: Text('Error: $err')),
+
               // Si se cargaron los viajes correctamente
               data: (trips) {
                 if (trips.isEmpty) {
@@ -49,10 +81,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   return const Center(child: Text('Usuario no disponible'));
                 }
 
+                // Filtrado de viajes solo si _isSearching es true
+                final filteredTrips = _isSearching
+                    ? trips.where((trip) {
+                        final search = _searchText.toLowerCase();
+                        switch (_selectedFilter) {
+                          case 'Título':
+                            return trip.name.toLowerCase().contains(search);
+                          case 'Destino':
+                            return trip.destination.toLowerCase().contains(search);
+                          case 'Categoría':
+                            final categories = trip.toJson()['categories'];
+                            if (categories is List) {
+                              return categories.any((cat) =>
+                                  (cat['name'] as String)
+                                      .toLowerCase()
+                                      .contains(search));
+                            }
+                            return false;
+                          default:
+                            return true;
+                        }
+                      }).toList()
+                    : trips;
+
                 // Usamos un FutureBuilder para esperar a que se carguen las mochilas asociadas
                 return FutureBuilder<Map<int, Backpack?>>(
                   future: BackpackService.loadBackpacks(
-                    trips: trips,
+                    trips: filteredTrips, // Solo pasamos los viajes filtrados
                     token: user.token,
                   ),
                   builder: (context, snapshot) {
@@ -69,11 +125,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     // Si los datos están listos, accedemos al mapa de mochilas
                     final backpackMap = snapshot.data ?? {};
 
-                    // Mostramos una lista de tarjetas, una por cada viaje
+                    // Mostramos una lista de tarjetas, una por cada viaje filtrado
                     return ListView.builder(
-                      itemCount: trips.length,
+                      itemCount: filteredTrips.length,
                       itemBuilder: (context, index) {
-                        final trip = trips[index];
+                        final trip = filteredTrips[index];
                         final backpack = backpackMap[trip.id];
 
                         return TripBackpackCard(
@@ -83,9 +139,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             if (backpack != null) {
                               debugPrint('Trip ID: ${backpack.tripId}');
                               debugPrint('Backpack ID: ${backpack.id}');
-
-                              // FALTA LA NAVEGACION A LA PANTALLA DE MOCHILA
-                              // Navigator.pushNamed(context, '/backpackDetail', arguments: backpack);
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -97,7 +150,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text("Este viaje no tiene mochila asociada."),
+                                  content:
+                                      Text("Este viaje no tiene mochila asociada."),
                                 ),
                               );
                             }
@@ -110,15 +164,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
             ),
           ),
+          
         ],
-      ),
-      // Botón flotante para crear nuevo viaje
-      floatingActionButton: FloatingButton(
-        text: "Crear viaje",
-        onPressed: () {
-          // Navegamos a la pantalla de formulario
-          Navigator.pushNamed(context, '/tripForm');
-        },
       ),
     );
   }

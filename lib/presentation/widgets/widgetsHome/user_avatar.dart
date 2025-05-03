@@ -1,3 +1,4 @@
+import 'package:app_mochila/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {
@@ -8,19 +9,29 @@ class UserAvatar extends StatelessWidget {
   const UserAvatar({
     super.key,
     this.imageUrl,
-    this.size = 40,
+    this.size = 65,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    const defaultAsset = 'assets/images/default_home_images/avatar_default.jpeg';
-   return GestureDetector(
+    const defaultAvatar = 'assets/images/default_home_images/avatar_default.jpeg';
+  return GestureDetector(
       onTap: onTap,
-      child: CircleAvatar(
-        radius: size / 1.3,
-        backgroundColor: Colors.white.withValues(alpha: 0.3),
-        backgroundImage: const AssetImage(defaultAsset),
+      child: Container(
+         width: size, // Tamaño del contenedor exterior
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: const Color.fromARGB(255, 196, 174, 226), // Color del borde
+            width: 2.5, // Grosor del borde
+          ),
+        ),
+        child: const CircleAvatar(
+          backgroundImage:  AssetImage(defaultAvatar),
+          backgroundColor: Colors.transparent,
+        ),
       ),
     );
   }

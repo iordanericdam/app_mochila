@@ -44,7 +44,11 @@ class TripApi extends APIService {
   Future<Trip> createTrip(Trip trip) async {
     try {
       final response = await postRequest('trips', trip.toJson());
-      return Trip.fromJson(response.data);
+      if (response.data == null) {
+      throw Exception('Failed to create trip: No data received');
+    }
+
+    return Trip.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to create trip: $e');
     }

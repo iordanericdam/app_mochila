@@ -9,6 +9,7 @@ class Trip {
   final DateTime startDate;
   final DateTime endDate;
   final String? urlPhoto;
+  final bool useSuggestions;
 
   Trip({
     this.id,
@@ -21,6 +22,7 @@ class Trip {
     required this.startDate,
     required this.endDate,
     this.urlPhoto,
+    this.useSuggestions=true,
   });
 
   // Convertir desde JSON hasta Trip dataModel
@@ -36,6 +38,7 @@ class Trip {
       startDate: DateTime.parse(json['start_date']),
       endDate: DateTime.parse(json['end_date']),
       urlPhoto: json['url_photo'],
+       useSuggestions: json['use_suggestions'] ?? true,
     );
   }
 
@@ -52,12 +55,13 @@ class Trip {
       'start_date': startDate.toIso8601String(),
       'end_date': endDate.toIso8601String(),
       'url_photo': urlPhoto,
+      'use_suggestions': useSuggestions,
     };
   }
 
   @override
   String toString() {
     
-    return 'Trip{id: $id, userId: $userId, name: $name, description: $description, destination: $destination, temperature: $temperature,  startDate: $startDate, endDate: $endDate, urlPhoto: $urlPhoto}';
+    return 'Trip{id: $id, userId: $userId, name: $name, description: $description, destination: $destination, temperature: $temperature,  startDate: $startDate, endDate: $endDate, urlPhoto: $urlPhoto, useSuggestions: $useSuggestions}';
   }
 }
