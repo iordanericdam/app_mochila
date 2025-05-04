@@ -190,6 +190,7 @@ class _RegisterScreen4State extends ConsumerState<RegisterScreen4> {
         "phone": phone,
         "name": name
       }, widget.imagen);
+      Navigator.pushReplacementNamed(context, '/login');
     } else {
       setState(() {
         hasPinError = true;

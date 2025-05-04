@@ -183,7 +183,7 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                               if (registerKey1.currentState!.validate()) {
                                 Navigator.pushNamed(
                                   context,
-                                  '/registerPage2',
+                                  '/registerPage3',
                                   arguments: {
                                     'nombre': nombreController.text,
                                     'usuario': usuarioController.text,

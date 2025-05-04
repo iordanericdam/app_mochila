@@ -107,27 +107,30 @@ class _RegisterScreen3State extends State<RegisterScreen3> {
                             gradient: AppColors.loginButtonColor,
                             onPressed: () {
                               if (registerKey3.currentState!.validate()) {
-                                // var response = Register.register(
-                                //   args['email'],
-                                //   passwordController.text,
-                                //   args['usuario'],
-                                //   args['nombre'],
-                                //   args['telefono'],
-                                // );
-
-                                Navigator.push(
+                                Navigator.pushNamed(
                                   context,
-                                  MaterialPageRoute(
-                                    builder: (context) => RegisterScreen4(
-                                      email: args['email'],
-                                      password: passwordController.text,
-                                      usuario: args['usuario'],
-                                      nombre: args['nombre'],
-                                      telefono: args['telefono'],
-                                      imagen: args['imagen'],
-                                    ),
-                                  ),
+                                  '/registerPage2',
+                                  arguments: {
+                                    'nombre': args['nombre'],
+                                    'usuario': args['usuario'],
+                                    'imagen': args['imagen'],
+                                    'password': passwordController.text,
+                                  },
                                 );
+
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => RegisterScreen4(
+                                //       email: args['email'],
+                                //       password: passwordController.text,
+                                //       usuario: args['usuario'],
+                                //       nombre: args['nombre'],
+                                //       telefono: args['telefono'],
+                                //       imagen: args['imagen'],
+                                //     ),
+                                //   ),
+                                // );
                               }
                             },
                           ),

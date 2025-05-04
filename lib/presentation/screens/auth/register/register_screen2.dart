@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_mochila/presentation/screens/auth/register/register_screen4.dart';
 import 'package:app_mochila/presentation/widgets/button_login.dart';
 import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
@@ -142,17 +143,33 @@ class _RegisterScreen2State extends State<RegisterScreen2> {
                             gradient: AppColors.loginButtonColor,
                             onPressed: () async {
                               if (registerKey2.currentState!.validate()) {
-                                Navigator.pushNamed(
+                                Navigator.push(
                                   context,
-                                  '/registerPage3',
-                                  arguments: {
-                                    'nombre': args['nombre'],
-                                    'usuario': args['usuario'],
-                                    'imagen': args['imagen'],
-                                    'email': emailController.text,
-                                    'telefono': telefonoController.text
-                                  },
+                                  MaterialPageRoute(
+                                    builder: (context) => RegisterScreen4(
+                                      //                                       final emailController = TextEditingController();
+                                      // final telefonoController = TextEditingController();
+                                      email: emailController.text,
+                                      password: args['password'],
+                                      usuario: args['usuario'],
+                                      nombre: args['nombre'],
+                                      telefono: telefonoController.text,
+                                      imagen: args['imagen'],
+                                    ),
+                                  ),
                                 );
+
+                                // Navigator.pushNamed(
+                                //   context,
+                                //   '/registerPage3',
+                                //   arguments: {
+                                //     'nombre': args['nombre'],
+                                //     'usuario': args['usuario'],
+                                //     'imagen': args['imagen'],
+                                //     'email': emailController.text,
+                                //     'telefono': telefonoController.text
+                                //   },
+                                // );
                               }
                             },
                           ),
