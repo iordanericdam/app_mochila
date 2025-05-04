@@ -106,12 +106,11 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
 
                             return Column(
                               children: [
-                                buildCategoryCard(
-                                  context,
+                                CategoryCard(
                                   title: categoryName,
                                   items: categoryItems,
                                 ),
-                                sizedBox, // Asegúrate de que esta variable esté definida
+                                sizedBox,
                               ],
                             );
                           },
