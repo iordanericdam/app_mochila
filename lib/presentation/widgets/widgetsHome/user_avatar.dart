@@ -15,11 +15,12 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const defaultAvatar = 'assets/images/default_home_images/avatar_default.jpeg';
-  return GestureDetector(
+    const defaultAvatar =
+        'assets/images/default_home_images/avatar_default.jpeg';
+    return GestureDetector(
       onTap: onTap,
       child: Container(
-         width: size, // Tamaño del contenedor exterior
+        width: size, // Tamaño del contenedor exterior
         height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -28,8 +29,10 @@ class UserAvatar extends StatelessWidget {
             width: 2.5, // Grosor del borde
           ),
         ),
-        child: const CircleAvatar(
-          backgroundImage:  AssetImage(defaultAvatar),
+        child: CircleAvatar(
+          backgroundImage: imageUrl != null && imageUrl!.startsWith('http')
+              ? NetworkImage(imageUrl!)
+              : AssetImage(defaultAvatar),
           backgroundColor: Colors.transparent,
         ),
       ),
