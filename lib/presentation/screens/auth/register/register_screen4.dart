@@ -157,7 +157,13 @@ class _RegisterScreen4State extends ConsumerState<RegisterScreen4> {
                           style: AppTextStyle.normalBold,
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              // 实现重新发送验证码的逻辑
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Reenviado.')),
+                              );
+
+                              ref
+                                  .read(userNotifierProvider.notifier)
+                                  .sendRegisterCode({"email": widget.email});
                             },
                         ),
                       ],
