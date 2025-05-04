@@ -1,5 +1,5 @@
+import 'package:app_mochila/styles/menu_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:app_mochila/styles/constants.dart';
 import 'package:app_mochila/presentation/widgets/widgetsHome/custom_home_appbar.dart';
 
 class HomeScaffold extends StatelessWidget {
@@ -20,16 +20,17 @@ class HomeScaffold extends StatelessWidget {
       // Oculta el teclado al tocar fuera de los campos
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: Colors.white, // Fondo blanco como se desea
+        backgroundColor: Colors.white,
         appBar: showAppBar
             ? const PreferredSize(
-                preferredSize:  Size.fromHeight(160),
-                child: CustomHomeAppbar(), // Appbar con menú, título y avatar
+                preferredSize: Size.fromHeight(160),
+                child: CustomHomeAppbar(),
               )
             : null,
+        drawer: const MenuDrawer(),
         body: body,
         floatingActionButton: floatingActionButton,
       ),
     );
   }
-} 
+}

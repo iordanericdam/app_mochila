@@ -19,27 +19,25 @@ class CustomHomeAppbar extends StatelessWidget {
         children: [
           // Texto centrado
           const Center(
-             
-              child: Text(
-                "APP MOCHILA",
-                style: AppTextStyle.heroTitleHomeWhite, 
-              ),
-            ),
-          
-          // Menú a la derecha con GestureDetector
-          Align(
-            alignment: Alignment.centerRight,
-            child: GestureDetector(
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Menú pulsado'),
-                  ),
-                );
-              },
-              child: const Icon(Icons.menu, color: Colors.white, size: 40),
+            child: Text(
+              "APP MOCHILA",
+              style: AppTextStyle.heroTitleHomeWhite,
             ),
           ),
+
+          // Botón del menú que abre el Drawer
+          Align(
+            alignment: Alignment.centerRight,
+            child: Builder(
+              builder: (context) => GestureDetector(
+                onTap: () {
+                  Scaffold.of(context).openDrawer(); // <<--- Abre el Drawer
+                },
+                child: const Icon(Icons.menu, color: Colors.white, size: 40),
+              ),
+            ),
+          ),
+
           // Avatar a la izquierda
           const Align(
             alignment: Alignment.centerLeft,

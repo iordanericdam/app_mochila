@@ -13,7 +13,7 @@ import 'package:app_mochila/providers/trip_notifier.dart';
 import 'package:app_mochila/providers/user_notifier.dart';
 import 'package:app_mochila/services/api/TripApi.dart';
 import 'package:app_mochila/services/form_validator.dart';
-import 'package:app_mochila/styles/app_colors.dart';
+
 import 'package:flutter/material.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/styles/constants.dart';
