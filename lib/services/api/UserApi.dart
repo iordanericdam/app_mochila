@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:app_mochila/models/User.dart';
 import 'package:app_mochila/services/api/API_Serveice.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 class UserApi extends APIService {
   UserApi({super.token, super.baseUrl});
@@ -27,5 +32,51 @@ class UserApi extends APIService {
     final response = await postRequest("verify-register-code", data);
     // print(response.message);
     return response.success;
+  }
+
+  // ✅ 新增：带头像的注册方法
+  Future<User?> registerWithPhoto({
+    required Map<String, dynamic> userData,
+    required File? imageFile,
+  }) async {
+    try {
+      var uri = Uri.parse('$baseUrl/register');
+      var request = http.MultipartRequest('POST', uri);
+
+      userData.forEach((key, value) {
+        request.fields[key] = value;
+      });
+
+      if (imageFile != null) {
+        var stream = http.ByteStream(imageFile.openRead());
+        var length = await imageFile.length();
+
+        var multipartFile = http.MultipartFile(
+          'url_photo',
+          stream,
+          length,
+          filename: basename(imageFile.path),
+        );
+        request.files.add(multipartFile);
+      }
+
+      request.headers['Accept'] = 'application/json';
+
+      var response = await request.send();
+      var respStr = await response.stream.bytesToString();
+
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(respStr);
+        if (decoded['data'] != null) {
+          return User.fromJson(decoded['data']); // 使用 fromJson 方法构造 User 对象
+        }
+      } else {
+        print('Error: ${respStr}');
+        return null;
+      }
+    } catch (e) {
+      print('Exception: $e');
+      return null;
+    }
   }
 }

@@ -56,7 +56,7 @@ class _RegisterScreen2State extends State<RegisterScreen2> {
   @override
   Widget build(BuildContext context) {
     final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     return BaseScaffold(
       body: WhiteBaseContainer(
@@ -148,6 +148,7 @@ class _RegisterScreen2State extends State<RegisterScreen2> {
                                   arguments: {
                                     'nombre': args['nombre'],
                                     'usuario': args['usuario'],
+                                    'imagen': args['imagen'],
                                     'email': emailController.text,
                                     'telefono': telefonoController.text
                                   },

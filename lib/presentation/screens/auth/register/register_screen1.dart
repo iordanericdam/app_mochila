@@ -9,6 +9,8 @@ import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class RegisterScreen1 extends StatefulWidget {
   const RegisterScreen1({super.key});
@@ -22,7 +24,18 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
   final usuarioController = TextEditingController();
   final registerKey1 = GlobalKey<FormState>();
   bool _usuarioExiste = false;
+  File? _pickedImage;
   Timer? _debounce;
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _pickedImage = File(image.path);
+      });
+    }
+  }
 
   void _verificarUsuario(String username) async {
     var response = await Register.checkUserName(username);
@@ -128,7 +141,39 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                               : null,
                         ),
                         sizedBox,
-                        kDoubleSizedBox,
+                        const Padding(
+                          padding: kleftPadding,
+                          child: Text(
+                            'Icono del usuario',
+                            textAlign: TextAlign.left,
+                            style: AppTextStyle.title,
+                          ),
+                        ),
+                        kHalfSizedBox,
+                        GestureDetector(
+                          onTap: _pickImage,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              child: _pickedImage != null
+                                  ? Image.file(
+                                      _pickedImage!,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      'assets/images/placeholder.jpg',
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                          ),
+                        ),
+                        kHalfSizedBox,
                         SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: CustomButtonLogin(
@@ -142,6 +187,7 @@ class _RegisterScreen1State extends State<RegisterScreen1> {
                                   arguments: {
                                     'nombre': nombreController.text,
                                     'usuario': usuarioController.text,
+                                    'imagen': _pickedImage,
                                   },
                                 );
                               }

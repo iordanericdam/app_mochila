@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_mochila/models/User.dart';
 import 'package:app_mochila/services/api/UserApi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,6 +21,17 @@ class UserNotifier extends StateNotifier<AsyncValue<User>> {
       return await UserApi().register(userData);
     } catch (e, st) {
       state = AsyncError(e, st);
+      return false;
+    }
+  }
+
+  Future<bool> registerWithPhoto(
+      Map<String, dynamic> userData, File? imageFile) async {
+    final user = await UserApi()
+        .registerWithPhoto(userData: userData, imageFile: imageFile);
+    if (user != null) {
+      return true;
+    } else {
       return false;
     }
   }

@@ -124,6 +124,7 @@ class _RegisterScreen3State extends State<RegisterScreen3> {
                                       usuario: args['usuario'],
                                       nombre: args['nombre'],
                                       telefono: args['telefono'],
+                                      imagen: args['imagen'],
                                     ),
                                   ),
                                 );
