@@ -2,6 +2,7 @@ import 'package:app_mochila/models/Backpack.dart';
 import 'package:app_mochila/models/Trip.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
+import 'package:app_mochila/utils/date_utils.dart';
 
 class TripBackpackCard extends StatelessWidget {
   final Trip trip;
@@ -20,6 +21,8 @@ class TripBackpackCard extends StatelessWidget {
     final String imageUrl = trip.urlPhoto?.isNotEmpty == true
         ? trip.urlPhoto!
         : "assets/images/default_home_images/demo_mochila.jpg";
+    
+    final String countdownText = getCountdownText(trip.startDate);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 20.0),
@@ -67,6 +70,17 @@ class TripBackpackCard extends StatelessWidget {
                       color: Colors.white,
                       fontSize: 40,
                     ),
+                  ),
+                ),
+                 // Contador de días abajo centrado
+                Positioned(
+                  bottom: 16,
+                  left: 0,
+                  right: 0,
+                  child: Text(
+                    countdownText,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyle.heroTitleHomeWhite,
                   ),
                 ),
               ],

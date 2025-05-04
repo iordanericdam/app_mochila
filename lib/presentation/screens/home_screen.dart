@@ -1,11 +1,9 @@
-//import 'package:app_mochila/models/Trip.dart';
 import 'package:app_mochila/models/Backpack.dart';
-import 'package:app_mochila/presentation/widgets/widgetsHome/custom_home_appbar.dart';
 import 'package:app_mochila/presentation/widgets/widgetsHome/trip_backpack_card.dart';
 import 'package:app_mochila/presentation/widgets/floating_button.dart';
 import 'package:app_mochila/providers/trip_notifier.dart';
 import 'package:app_mochila/providers/user_notifier.dart';
-import 'package:app_mochila/services/backpack_service.dart'; // <-- Servicio refactorizado
+import 'package:app_mochila/services/backpack_service.dart'; 
 import 'package:app_mochila/styles/constants.dart';
 import 'package:app_mochila/styles/home_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -104,6 +102,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         }
                       }).toList()
                     : trips;
+                //Ordenamos por fecha más próxima a su inicio del viaje
+                filteredTrips.sort((a, b) {
+                  return a.startDate.compareTo(b.startDate);
+                });
+                
 
                 // Usamos un FutureBuilder para esperar a que se carguen las mochilas asociadas
                 return FutureBuilder<Map<int, Backpack?>>(
