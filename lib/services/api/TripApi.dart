@@ -1,5 +1,6 @@
 import 'package:app_mochila/models/Trip.dart';
 import 'package:app_mochila/services/api/API_Serveice.dart';
+import 'package:flutter/material.dart';
 
 class TripApi extends APIService {
   TripApi({super.token, super.baseUrl});
@@ -20,19 +21,23 @@ class TripApi extends APIService {
   }
 
   // get trips by user
-  Future<List<Trip>> getTripsByUser() async {
-    // Logger logger = Logger();
-    try {
-      final response = await getRequest('trips/by-user');
+Future<List<Trip>> getTripsByUser() async {
+  try {
+    final response = await getRequest('trips/by-user');
 
-      List<dynamic> tripsJson = response.data;
+    // 🧪 DEBUG: Muestra la respuesta completa que viene del backend
+    debugPrint('🔍 JSON recibido del backend: ${response.data}');
 
-      return tripsJson.map((json) => Trip.fromJson(json)).toList();
-    } catch (e) {
-      //logger.e("Error: $e");
-      throw Exception('Failed to load trips');
-    }
+    List<dynamic> tripsJson = response.data;
+
+    return tripsJson.map((json) {
+      debugPrint('📦 Trip individual: ${json.toString()}'); // Aquí también verás si hay 'categories'
+      return Trip.fromJson(json);
+    }).toList();
+  } catch (e) {
+    throw Exception('Failed to load trips');
   }
+}
 
   // get one trip
   Future<Trip> getTripById(int id) async {

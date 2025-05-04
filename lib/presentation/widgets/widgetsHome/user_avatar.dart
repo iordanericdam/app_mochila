@@ -9,7 +9,7 @@ class UserAvatar extends StatelessWidget {
   const UserAvatar({
     super.key,
     this.imageUrl,
-    this.size = 65,
+    this.size = 50,
     this.onTap,
   });
 

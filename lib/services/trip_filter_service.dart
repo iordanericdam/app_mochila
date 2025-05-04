@@ -11,32 +11,30 @@ class TripFilterService {
     final now = DateTime.now();
     List<Trip> result = trips;
 
-    // Filtrar por viajes completados o activos
-    if (selectedFilter == 'Completados' || showCompletedTrips) {
-      result = result.where((trip) => trip.endDate.isBefore(now)).toList();
-    } else {
-      result = result.where((trip) => trip.endDate.isAfter(now) || trip.endDate.isAtSameMomentAs(now)).toList();
+     // Filtrar por tipo de estado del viaje
+    if (selectedFilter == 'Completados') {
+      result = trips.where((trip) => trip.endDate.isBefore(now)).toList();
+    } else if (selectedFilter == 'En curso') {
+      result = trips.where((trip) =>
+        trip.startDate.isBefore(now) &&
+        trip.endDate.isAfter(now)).toList();
+    } else {  //Devuelve todos los viajes en curso
+      result = trips.where((trip) =>
+        trip.endDate.isAfter(now) || trip.endDate.isAtSameMomentAs(now)).toList();
     }
 
-    // Aplicar búsqueda si hay texto
-    if (isSearching && selectedFilter != 'Todos' && selectedFilter != 'Completados') {
+    // Aplicar búsqueda si escribe algo en la barra de búsqueda
+    if (isSearching) {
       final search = searchText.toLowerCase();
       result = result.where((trip) {
-        switch (selectedFilter) {
-          case 'Título':
-            return trip.name.toLowerCase().contains(search);
-          case 'Destino':
-            return trip.destination.toLowerCase().contains(search);
-          case 'Categoría':
-            final categories = trip.toJson()['categories'];
-            if (categories is List) {
-              return categories.any((cat) =>
-                  (cat['name'] as String).toLowerCase().contains(search));
-            }
-            return false;
-          default:
-            return true;
-        }
+        final inTitle = trip.name.toLowerCase().contains(search);
+        final inDestination = trip.destination.toLowerCase().contains(search);
+        final categories = trip.toJson()['categories'];
+        final inCategory = categories is List
+            ? categories.any((cat) =>
+                (cat['name'] as String).toLowerCase().contains(search))
+            : false;
+        return inTitle || inDestination || inCategory;
       }).toList();
     }
 

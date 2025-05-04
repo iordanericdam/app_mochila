@@ -18,8 +18,8 @@ class CustomSearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<CustomSearchBar> {
-  String selectedFilter = 'Título';
-  final List<String> filterOptions = ['Título', 'Destino', 'Categoría','Completados', 'Ver todos'];
+  String selectedFilter = 'Todos';
+  final List<String> filterOptions = ['Todos', 'Completados', 'En curso'];
   final TextEditingController controller = TextEditingController();
 
   @override

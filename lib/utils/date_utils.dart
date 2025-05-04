@@ -13,6 +13,6 @@ String getCountdownText(DateTime startDate, DateTime endDate) {
   } else if (daysLeft == 0) {
     return '¡Es hoy!';
   } else {
-    return 'Ya comenzó';
+    return 'Disfrutando del viaje';
   }
 }

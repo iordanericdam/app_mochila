@@ -1,32 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:app_mochila/styles/app_colors.dart';
-import 'package:app_mochila/styles/app_text_style.dart';
 
 class FloatingButton extends StatelessWidget {
-  final String text;
   final VoidCallback onPressed;
+  final double size;
   final double borderRadius;
-  final double height;
 
   const FloatingButton({
     super.key,
-    required this.text,
     required this.onPressed,
-    this.borderRadius = 40,
-    this.height = 40,
+    this.size = 80,
+    this.borderRadius = 16,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
+      height: size,
+      width: size,
       decoration: BoxDecoration(
-        gradient: AppColors.loginButtonColor, // AQUÍ USAMOS EL GRADIENTE
+        gradient: AppColors.loginButtonColor,
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha:0.5),
-            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.25),
+            offset: const Offset(0, 2),
             blurRadius: 4,
           ),
         ],
@@ -36,13 +34,15 @@ class FloatingButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
+          padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
-        child: Text(
-          text,
-          style: AppTextStyle.buttonsWhite,
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 50,
         ),
       ),
     );

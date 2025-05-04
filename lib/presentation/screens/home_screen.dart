@@ -1,5 +1,5 @@
 import 'package:app_mochila/models/Backpack.dart';
-import 'package:app_mochila/models/Trip.dart';
+//import 'package:app_mochila/models/Trip.dart';
 import 'package:app_mochila/presentation/widgets/widgetsHome/trip_backpack_card.dart';
 import 'package:app_mochila/presentation/widgets/floating_button.dart';
 import 'package:app_mochila/providers/trip_notifier.dart';
@@ -35,7 +35,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return HomeScaffold(
       floatingActionButton: FloatingButton(
-        text: "Crear viaje",
         onPressed: () {
           // Navegamos a la pantalla de formulario
           Navigator.pushNamed(context, '/tripForm');

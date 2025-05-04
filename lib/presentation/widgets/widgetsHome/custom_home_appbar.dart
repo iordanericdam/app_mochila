@@ -19,17 +19,16 @@ class CustomHomeAppbar extends StatelessWidget {
         children: [
           // Texto centrado
           const Center(
-            child: Padding(
-              padding: EdgeInsets.only(top: 40.0),
+             
               child: Text(
                 "APP MOCHILA",
                 style: AppTextStyle.heroTitleHomeWhite, 
               ),
             ),
-          ),
-          // Menú a la izquierda con GestureDetector
+          
+          // Menú a la derecha con GestureDetector
           Align(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.centerRight,
             child: GestureDetector(
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -41,21 +40,11 @@ class CustomHomeAppbar extends StatelessWidget {
               child: const Icon(Icons.menu, color: Colors.white, size: 40),
             ),
           ),
-          // Avatar a la derecha
-          Align(
-            alignment: Alignment.centerRight,
+          // Avatar a la izquierda
+          const Align(
+            alignment: Alignment.centerLeft,
             child: UserAvatar(
               imageUrl: "assets/images/default_home_images/avatar_default.jpeg",
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Avatar pulsado',
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                );
-              },
             ),
           ),
         ],

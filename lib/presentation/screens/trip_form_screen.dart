@@ -85,7 +85,7 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
         temperature: _selectedWeather!,
         useSuggestions: _suggestionsOn,
       );
-      
+
     debugPrint('Datos que se van a enviar al backend:');
     debugPrint(trip.toJson().toString());
 
@@ -287,7 +287,6 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
                     bottom: 60,
                     right: 30,
                     child: FloatingButton(
-                      text: "Siguiente",
                       onPressed: () =>
                           _submitTripForm(user), //Pasamos el usuario al submit
                     ),
