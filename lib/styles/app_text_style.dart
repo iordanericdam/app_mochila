@@ -59,13 +59,13 @@ class AppTextStyle {
     color: Color.fromARGB(255, 255, 255, 255),
   );
 
-  static TextStyle normalGrey = TextStyle(
+  static const TextStyle normalGrey = TextStyle(
     fontFamily: 'Montserrat',
     fontSize: 16,
     fontWeight: FontWeight.normal,
     color: AppColors.hintTextColor,
   );
-  static TextStyle normalGreyTitle = TextStyle(
+  static const TextStyle normalGreyTitle = TextStyle(
     fontFamily: 'Montserrat',
     fontSize: 16,
     fontWeight: FontWeight.normal,
@@ -90,5 +90,11 @@ class AppTextStyle {
     fontSize: 12,
     fontWeight: FontWeight.bold,
     color: AppColors.textColor,
+  );
+   static const TextStyle textFranja = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: 24,
+    fontWeight: FontWeight.normal,
+    color: Color.fromARGB(255, 225, 225, 225),
   );
 }

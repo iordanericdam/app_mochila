@@ -19,7 +19,7 @@ class CustomSearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<CustomSearchBar> {
   String selectedFilter = 'Título';
-  final List<String> filterOptions = ['Título', 'Destino', 'Categoría'];
+  final List<String> filterOptions = ['Título', 'Destino', 'Categoría','Completados', 'Ver todos'];
   final TextEditingController controller = TextEditingController();
 
   @override
@@ -42,7 +42,7 @@ class _SearchBarState extends State<CustomSearchBar> {
                 controller: controller,
                 onChanged: widget.onSearchChanged,
                 style: AppTextStyle.normal,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Buscar...',
                   hintStyle: AppTextStyle.normalGrey,
                   border: InputBorder.none,

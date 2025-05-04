@@ -85,9 +85,7 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
         temperature: _selectedWeather!,
         useSuggestions: _suggestionsOn,
       );
-    final tripData = trip.toJson();
-    tripData['category_ids'] = _selectedCategories.map(int.parse).toList();
-
+      
     debugPrint('Datos que se van a enviar al backend:');
     debugPrint(trip.toJson().toString());
 

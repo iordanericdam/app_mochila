@@ -1,5 +1,6 @@
 import 'package:app_mochila/models/Backpack.dart';
 import 'package:app_mochila/models/Trip.dart';
+import 'package:app_mochila/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/utils/date_utils.dart';
@@ -22,7 +23,7 @@ class TripBackpackCard extends StatelessWidget {
         ? trip.urlPhoto!
         : "assets/images/default_home_images/demo_mochila.jpg";
     
-    final String countdownText = getCountdownText(trip.startDate);
+    final String countdownText = getCountdownText(trip.startDate, trip.endDate);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 20.0),
@@ -72,15 +73,24 @@ class TripBackpackCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                 // Contador de días abajo centrado
+                // Franja de abajo
                 Positioned(
                   bottom: 16,
                   left: 0,
                   right: 0,
-                  child: Text(
-                    countdownText,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.heroTitleHomeWhite,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    color: AppColors.backgroundLogoColor.withValues(alpha: 0.7), 
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          countdownText,
+                          style: AppTextStyle.textFranja,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

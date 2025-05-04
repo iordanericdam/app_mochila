@@ -1,8 +1,12 @@
+//Toma una fecha de inicio y fin, y devuelve un texto que indica el estado del viaje.
+String getCountdownText(DateTime startDate, DateTime endDate) {
+  final now = DateTime.now();
 
+  if (now.isAfter(endDate)) {
+    return 'Viaje terminado';
+  }
 
-// Toma una fecha de inicio y devuelve un texto que indica cuántos días faltan para esa fecha
-String getCountdownText(DateTime startDate) {
-  final int daysLeft = startDate.difference(DateTime.now()).inDays;
+  final int daysLeft = startDate.difference(now).inDays;
 
   if (daysLeft > 0) {
     return 'Faltan $daysLeft días';

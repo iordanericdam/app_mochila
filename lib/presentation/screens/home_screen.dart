@@ -1,4 +1,5 @@
 import 'package:app_mochila/models/Backpack.dart';
+import 'package:app_mochila/models/Trip.dart';
 import 'package:app_mochila/presentation/widgets/widgetsHome/trip_backpack_card.dart';
 import 'package:app_mochila/presentation/widgets/floating_button.dart';
 import 'package:app_mochila/providers/trip_notifier.dart';
@@ -9,9 +10,10 @@ import 'package:app_mochila/styles/home_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_mochila/presentation/widgets/widgetsHome/custom_search_bar.dart';
+import 'package:app_mochila/services/trip_filter_service.dart';
 
 
-// Pantalla principal con acceso a Riverpod usando ConsumerStatefulWidget
+
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -23,6 +25,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   String _searchText = '';
   String _selectedFilter = 'Título';
   bool _isSearching = false; // Controla si el usuario ha empezado a escribir
+  bool _showCompletedTrips = false; // Controla si se deben mostrar los viajes completados
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +55,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             onFilterChanged: (value) {
               setState(() {
                 _selectedFilter = value;
-                // NO tocamos _isSearching aquí
+                _showCompletedTrips = value == 'Completados';
               });
             },
           ),
          
-
           // Contenido de la pantalla
           Expanded(
             child: tripsState.when(
@@ -78,36 +80,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 if (user == null) {
                   return const Center(child: Text('Usuario no disponible'));
                 }
-
-                // Filtrado de viajes solo si _isSearching es true
-                final filteredTrips = _isSearching
-                    ? trips.where((trip) {
-                        final search = _searchText.toLowerCase();
-                        switch (_selectedFilter) {
-                          case 'Título':
-                            return trip.name.toLowerCase().contains(search);
-                          case 'Destino':
-                            return trip.destination.toLowerCase().contains(search);
-                          case 'Categoría':
-                            final categories = trip.toJson()['categories'];
-                            if (categories is List) {
-                              return categories.any((cat) =>
-                                  (cat['name'] as String)
-                                      .toLowerCase()
-                                      .contains(search));
-                            }
-                            return false;
-                          default:
-                            return true;
-                        }
-                      }).toList()
-                    : trips;
-                //Ordenamos por fecha más próxima a su inicio del viaje
-                filteredTrips.sort((a, b) {
-                  return a.startDate.compareTo(b.startDate);
-                });
                 
-
+                // Filtramos los viajes
+                final filteredTrips = TripFilterService.filterTrips(
+                  trips: trips,
+                  searchText: _searchText,
+                  selectedFilter: _selectedFilter,
+                  isSearching: _isSearching,
+                  showCompletedTrips: _showCompletedTrips,
+                );
+                
                 // Usamos un FutureBuilder para esperar a que se carguen las mochilas asociadas
                 return FutureBuilder<Map<int, Backpack?>>(
                   future: BackpackService.loadBackpacks(
