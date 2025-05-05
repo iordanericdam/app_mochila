@@ -6,7 +6,7 @@ import 'package:app_mochila/data/category_data.dart';
 
 class CategorySelector extends StatefulWidget {
   // Callback que se ejecuta cuando se selecciona una categoría
-  final Function(List<String> selectedCategories)? onCategoriesChanged;
+  final Function(List<int> selectedCategories)? onCategoriesChanged;
 
   const CategorySelector({super.key, this.onCategoriesChanged});
 
@@ -16,16 +16,16 @@ class CategorySelector extends StatefulWidget {
 
 class _CategorySelectorState extends State<CategorySelector> {
   // Guarda la lista de IDs de categorías seleccionadas
-  List<String> selectedCategoryIds = [];
+  List<int> selectedCategoryIds = [];
 
   // Se ejecuta al hacer tap sobre una categoría
   void _categoryTaps(int id) {
-    final idStr = id.toString();
+  
     setState(() {
-      if (selectedCategoryIds.contains(idStr)) {
-        selectedCategoryIds.remove(idStr); // Si ya está seleccionada, la deselecciona
+      if (selectedCategoryIds.contains(id)) {
+        selectedCategoryIds.remove(id); // Si ya está seleccionada, la deselecciona
       } else {
-        selectedCategoryIds.add(idStr); // Si no está seleccionada, la selecciona
+        selectedCategoryIds.add(id); // Si no está seleccionada, la selecciona
       }
     });
 
@@ -63,7 +63,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                 ),
 
                 // Oscurecer la imagen si está seleccionada
-                if (selectedCategoryIds.contains(category.id.toString()))
+                if (selectedCategoryIds.contains(category.id))
                   Container(
                     width: 150,
                     height: 150,

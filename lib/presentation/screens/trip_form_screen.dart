@@ -1,4 +1,4 @@
- import 'package:app_mochila/models/Trip.dart';
+import 'package:app_mochila/models/Trip.dart';
 import 'package:app_mochila/models/User.dart';
 import 'package:app_mochila/presentation/widgets/buttons.dart';
 import 'package:app_mochila/presentation/widgets/floating_button.dart';
@@ -33,11 +33,15 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _destinationController = TextEditingController();
+  final FocusNode _titleFocus = FocusNode();
+  final FocusNode _destinationFocus = FocusNode();
   DateTime? _startDate;
   DateTime? _endDate;
-  List<String> _selectedCategories = [];
+  List<int> _selectedCategories = [];
   bool _visibilityOn = false;
   bool _suggestionsOn = true;
+  bool _showStartDateError = false;
+  bool _showWeatherError = false;
   String? _selectedWeather;
 
   @override
@@ -48,43 +52,53 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
     super.dispose();
   }
 
+  // Función auxiliar que enfoca el primer campo obligatorio vacío
+  void _focusInvalidField() {
+    if (_titleController.text.trim().isEmpty) {
+      FocusScope.of(context).requestFocus(_titleFocus);
+    } else if (_destinationController.text.trim().isEmpty) {
+      FocusScope.of(context).requestFocus(_destinationFocus);
+    }
+  }
+
   // El método _submitTripForm se encarga de validar el formulario y enviar los datos al servidor, el parametro user se obtiene del provider llega desde ref.watch(userNotifierProvider)
   Future<void> _submitTripForm(User user) async {
-    if (!_keyTripForm.currentState!.validate()) {
+    final isValidForm = _keyTripForm.currentState!.validate();
+    final dateError = validateStartDate(_startDate) != null;
+    final weatherError = validateSelectedWeather(_selectedWeather);
+
+    // Si algo no está bien, lo marcamos y salimos
+    if (!isValidForm || dateError) {
+      _focusInvalidField();
+      setState(() {
+        _showStartDateError = dateError;
+        _showWeatherError = weatherError != null;
+      });
       return;
     }
-    // Validación manual de otros campos
-    final startDateError = validateStartDate(_startDate);
-    final weatherError = validateSelectedWeather(_selectedWeather);
-    final categoriesError = validateCategories(_selectedCategories);
-
-    // Si hay algún error, lo mostramos en un SnackBar
-    if (startDateError != null ||
-        weatherError != null ||
-        categoriesError != null) {
-      final errorMessage = [
-        startDateError,
-        weatherError,
-        categoriesError,
-      ].where((e) => e != null).join('\n');
-
+    // Validar categorías seleccionadas
+    if (_selectedCategories.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(errorMessage)),
+        const SnackBar(
+          content: Text('Selecciona al menos una categoría'),
+          backgroundColor: Colors.redAccent,
+        ),
       );
       return;
     }
 
     // Creamos el Objeto con los datos del formulario
     //print(' Categorías seleccionadas: $_selectedCategories');
-      final trip = Trip(
-        name: _titleController.text.trim(),
-        destination: _destinationController.text.trim(),
-        description: _descriptionController.text.trim(),
-        startDate: _startDate!,
-        endDate: _endDate ?? _startDate!,
-        temperature: _selectedWeather!,
-        useSuggestions: _suggestionsOn,
-      );
+    final trip = Trip(
+      name: _titleController.text.trim(),
+      destination: _destinationController.text.trim(),
+      description: _descriptionController.text.trim(),
+      startDate: _startDate!,
+      endDate: _endDate ?? _startDate!,
+      temperature: _selectedWeather!,
+      useSuggestions: _suggestionsOn,
+      categories: _selectedCategories,
+    );
 
     debugPrint('Datos que se van a enviar al backend:');
     debugPrint(trip.toJson().toString());
@@ -168,6 +182,7 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
                               validator: (value) {
                                 return genericValidator(value, 3);
                               },
+                              focusNode: _titleFocus,
                             ),
                             sizedBox,
 
@@ -184,15 +199,26 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
                               controller: _destinationController,
                               keyboardType: TextInputType.text,
                               validator: validateDestino,
+                              focusNode: _destinationFocus,
                             ),
                             sizedBox,
-
-                            DateSelector(onDatesChanged: (start, end) {
-                              setState(() {
-                                _startDate = start;
-                                _endDate = end;
-                              });
-                            }),
+                            DateSelector(
+                              startDate: _startDate,
+                              endDate: _endDate,
+                              showError:
+                                  _showStartDateError, // <- debe ser true cuando hay error
+                              errorText: _showStartDateError
+                                  ? validateStartDate(_startDate)
+                                  : null,
+                              onDatesChanged: (start, end) {
+                                setState(() {
+                                  _startDate = start;
+                                  _endDate = end;
+                                  _showStartDateError =
+                                      false; // esto limpia el error al cambiar
+                                });
+                              },
+                            ),
                             sizedBox,
 
                             Padding(
@@ -250,9 +276,14 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
                             kHalfSizedBox,
                             Center(
                               child: WeatherSelector(
-                                onWeatherChanged: (selectedWeather) {
+                                showError: _showWeatherError,
+                                errorText:
+                                    validateSelectedWeather(_selectedWeather),
+                                onWeatherChanged: (weather) {
                                   setState(() {
-                                    _selectedWeather = selectedWeather;
+                                    _selectedWeather = weather;
+                                    _showWeatherError =
+                                        false; // Borra el error al seleccionar
                                   });
                                 },
                               ),
@@ -274,9 +305,7 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
                                 });
                               },
                             ),
-                            const SizedBox(
-                                height:
-                                    80), // espacio extra para que no tape el botón
+                            // const SizedBox(height:80), // espacio extra para que no tape el botón
                           ],
                         ),
                       ),

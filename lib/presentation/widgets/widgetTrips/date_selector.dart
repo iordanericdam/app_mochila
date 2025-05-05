@@ -3,26 +3,31 @@ import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class DateSelector extends StatefulWidget {
-  // Callback que devuelve las fechas seleccionadas al padre
+class DateSelector extends StatelessWidget {
+  final DateTime? startDate;
+  final DateTime? endDate;
   final Function(DateTime? startDate, DateTime? endDate)? onDatesChanged;
+  final bool showError;
+  final String? errorText;
 
-  const DateSelector({super.key, this.onDatesChanged});
+  const DateSelector({
+    super.key,
+    this.startDate,
+    this.endDate,
+    this.onDatesChanged,
+    this.errorText,
+    this.showError = false,
+  });
 
-  @override
-  State<DateSelector> createState() => _DateSelectorState();
-}
+  // Formatea la fecha a dd/MM/yyyy
+  String _formatDate(DateTime? date) {
+    if (date == null) return '';
+    return DateFormat('dd/MM/yyyy').format(date);
+  }
 
-class _DateSelectorState extends State<DateSelector> {
-  // Variables para guardar las fechas seleccionadas
-  DateTime? _fechaInicio;
-  DateTime? _fechaFin;
-
-  // Muestra el selector de fecha (showDatePicker)
-  Future<void> _selectDate({required bool isInicio}) async {
-    FocusScope.of(context).requestFocus(
-        FocusNode()); // No entiendo por qué este funciona y este no. FocusScope.of(context).unfocus();
-    final DateTime? picked = await showDatePicker(
+  // Muestra el selector de fecha y actualiza las fechas seleccionadas
+  Future<void> _selectDate(BuildContext context, bool isStart) async {
+    final picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2020),
@@ -30,91 +35,121 @@ class _DateSelectorState extends State<DateSelector> {
     );
 
     if (picked != null) {
-      setState(() {
-        // Asignamos la fecha seleccionada según si es inicio o fin
-        if (isInicio) {
-          _fechaInicio = picked;
-        } else {
-          if (_fechaInicio != null && picked.isBefore(_fechaInicio!)) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text(
-                    " La fecha fin no puede ser anterior a la fecha inicio")));
-            return;
-          }
-          _fechaFin = picked;
-        }
+      final newStart = isStart ? picked : startDate;
+      final newEnd = isStart ? endDate : picked;
 
-        // Si el widget padre necesita las fechas, se las enviamos
-        if (widget.onDatesChanged != null) {
-          //print("Fecha inicio $_fechaInicio");
-          //print("Fecha inicio $_fechaFin");
-          widget.onDatesChanged!(_fechaInicio, _fechaFin);
-        }
-      });
+      // Valida que la fecha de fin no sea anterior a la de inicio
+      if (newStart != null && newEnd != null && newEnd.isBefore(newStart)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("La fecha fin no puede ser anterior a la fecha inicio"),
+          ),
+        );
+        return;
+      }
+
+      // Notifica al widget padre que las fechas han cambiado
+      onDatesChanged?.call(newStart, newEnd);
     }
-  }
-
-  // Formatear fecha  dd/MM/yyyy
-  String _formatDate(DateTime? date) {
-    if (date == null) return ''; // Si no hay fecha no muestra nada
-    return DateFormat('dd/MM/yyyy').format(date);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      //Contenedor principal del widget
-      decoration: BoxDecoration(
-        color: AppColors.backGroundInputColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          insideDefaultBoxShadow(),
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
-      child: Row(
-        children: [
-          //Parte izquierda
-          Expanded(
-            child: _buildFechaItem(
-              label: 'Fecha Inicio',
-              fecha: _fechaInicio,
-              onTap: () => _selectDate(isInicio: true),
+    final bool hasError = showError && errorText != null;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Stack para superponer un borde rojo si hay error, sin afectar el diseño
+        Stack(
+          children: [
+            // Contenedor principal con estilo visual
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.backGroundInputColor,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [insideDefaultBoxShadow()],
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+              child: Row(
+                children: [
+                  // Fecha de inicio
+                  Expanded(
+                    child: _buildFechaItem(
+                      context,
+                      label: 'Fecha Inicio',
+                      fecha: startDate,
+                      isStart: true,
+                    ),
+                  ),
+                  // Separador vertical
+                  const SizedBox(
+                    height: 40,
+                    child: VerticalDivider(
+                      thickness: 1,
+                      width: 35,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  // Fecha de fin
+                  Expanded(
+                    child: _buildFechaItem(
+                      context,
+                      label: 'Fecha Fin',
+                      fecha: endDate,
+                      isStart: false,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // borde rojo superpuesto si hay error
+            if (hasError)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.red, width: 1.5),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+
+        // Espacio del error y el contenedor
+        if (hasError)
+          const SizedBox(height: 6),
+        if (hasError)
+          Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: Text(
+              errorText!,
+              style: const TextStyle(
+                color: Colors.red,
+                fontSize: 13,
+                fontFamily: 'Montserrat',
+              ),
             ),
           ),
-          // Separador
-          const SizedBox(
-            height: 40,
-            child: VerticalDivider(
-              thickness: 1,
-              width: 35,
-              color: Colors.grey,
-            ),
-          ),
-          //Parte derecha
-          Expanded(
-            child: _buildFechaItem(
-              label: 'Fecha Fin',
-              fecha: _fechaFin,
-              onTap: () => _selectDate(isInicio: false),
-            ),
-          ),
-        ],
-      ),
+      ],
     );
   }
 
-  // Widget que construye cada uno de los selectores de fecha (Inicio y Fin)
-  Widget _buildFechaItem({
+  // Construye el botón de selección de fecha con su etiqueta y valor actual
+  Widget _buildFechaItem(
+    BuildContext context, {
     required String label,
     required DateTime? fecha,
-    required VoidCallback onTap,
+    required bool isStart,
   }) {
     return InkWell(
-      onTap: onTap, // Llama al selector de fecha al tocar
+      onTap: () => _selectDate(context, isStart),
       child: Row(
         children: [
-          // Icono con fondo gris redondeado
+          // Icono circular
           Container(
             decoration: const BoxDecoration(
               color: AppColors.iconColor,
@@ -127,11 +162,11 @@ class _DateSelectorState extends State<DateSelector> {
               color: Colors.black87,
             ),
           ),
-          const SizedBox(width: 8), // Espacio entre icono y texto
+          const SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Etiqueta para la fecha (Inicio o Fin)
+              // Etiqueta del campo
               Text(
                 label,
                 style: const TextStyle(
@@ -140,10 +175,10 @@ class _DateSelectorState extends State<DateSelector> {
                   fontFamily: 'Montserrat',
                 ),
               ),
-              // Si hay una fecha seleccionada, se muestra
+              // Fecha seleccionada, si la hay
               if (fecha != null)
                 Text(
-                  _formatDate(fecha), // Muestra fecha en formato corto
+                  _formatDate(fecha),
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -152,7 +187,7 @@ class _DateSelectorState extends State<DateSelector> {
                   ),
                 ),
             ],
-          )
+          ),
         ],
       ),
     );

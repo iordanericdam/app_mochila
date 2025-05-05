@@ -94,7 +94,7 @@ String? validateSelectedWeather(String? weather) {
   return null;
 }
 
-String? validateCategories(List<String> categories) {
+String? validateCategories(List<int> categories) {
   if (categories.isEmpty) {
     return 'Selecciona al menos una categoría';
   }
@@ -106,4 +106,19 @@ String? validateDestino(String? value) {
     return 'El destino es obligatorio';
   }
   return null;
+}
+
+// Función autofocus.
+void focusInvalidField({
+  required BuildContext context,
+  required TextEditingController titleController,
+  required TextEditingController destinationController,
+  required FocusNode titleFocus,
+  required FocusNode destinationFocus,
+}) {
+  if (titleController.text.trim().isEmpty) {
+    FocusScope.of(context).requestFocus(titleFocus);
+  } else if (destinationController.text.trim().isEmpty) {
+    FocusScope.of(context).requestFocus(destinationFocus);
+  }
 }

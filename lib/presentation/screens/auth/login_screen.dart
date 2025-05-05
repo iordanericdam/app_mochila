@@ -46,7 +46,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           content:
               Text('Error en el login. El mail o la contraseña no coinciden')));
     } else {
-      print("Usuario logueado: $user");
+      debugPrint("Usuario logueado: $user");
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -228,7 +228,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           child: TextButton(
                             child: const Text("SETUP VIAJE DIRECTO"),
                             onPressed: () {
-                              Navigator.pushNamed(context, '/setupBpTrip');
+                              Navigator.pushNamed(context, '/setupBpTrip', );
                             },
                           ),
                         ),

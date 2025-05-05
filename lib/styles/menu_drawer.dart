@@ -1,9 +1,10 @@
-import 'package:app_mochila/providers/user_notifier.dart';
-import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
+import 'package:app_mochila/styles/constants.dart';
+import 'package:app_mochila/providers/user_notifier.dart';
+import 'package:app_mochila/presentation/widgets/widgetsHome/user_avatar.dart';
 
 class MenuDrawer extends ConsumerWidget {
   const MenuDrawer({super.key});
@@ -11,90 +12,82 @@ class MenuDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userState = ref.watch(userNotifierProvider);
-    final userName = userState.maybeWhen(
-      data: (user) => user.name,
-      orElse: () => 'usuario',
-    );
-
+    final userName = userState.value!.name; 
     return Drawer(
-      child: Container(
-        color: Colors.white.withOpacity(0.9),
-        child: Column(
-          children: [
-            // Cabecera
-            Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                gradient: AppColors.backGroundLoginColor,
+      backgroundColor: const Color.fromARGB(232, 54, 53, 53),
+      child: Column(
+        children: [
+          // Cabecera
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25), 
+            decoration: const BoxDecoration(
+              gradient: AppColors.backGroundLoginColor,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 70.0), //parte superior de la pantalla
+              child: Row(
                 children: [
-                  const SizedBox(height: 90), // Espacio superior
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  const UserAvatar(size: 60), 
+                  const SizedBox(width: 30), //separacion entre el avatar y el texto
+                  Expanded(
                     child: Text(
-                      'Hola, $userName',
-                      style: AppTextStyle.bigBoldWhite,
+                      'Hola $userName',
+                      style: AppTextStyle.heroTitleHomeWhite,
                     ),
                   ),
-                  sizedBox // Espacio entre el texto y el avatar
                 ],
               ),
             ),
-            sizedBox,
-            // Opciones
-            ListTile(
-              leading: const Icon(Icons.settings, color: AppColors.iconColor),
-              title: const Text('Ajustes', style: AppTextStyle.normal),
-              onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Funcionalidad no implementada")),
-                );
-              },
+          ),
+          sizedBox,
+          // Menú
+          Expanded(
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.settings, color: Colors.white, size: 35),
+                  title: const Text('Ajustes', style: AppTextStyle.heroTitleHomeWhite),
+                  onTap: () => Navigator.pop(context),
+                ),
+                sizedBox,
+                ListTile(
+                  leading: const Icon(Icons.person, color: Colors.white, size: 35),
+                  title: const Text('Cuenta', style: AppTextStyle.heroTitleHomeWhite),
+                  onTap: () => Navigator.pop(context),
+                ),
+                sizedBox,
+                ListTile(
+                  leading: const Icon(Icons.calendar_today, color: Colors.white,size: 35),
+                  title: const Text('Calendario', style: AppTextStyle.heroTitleHomeWhite),
+                  onTap: () => Navigator.pop(context),
+                ),
+                sizedBox,
+                ListTile(
+                  leading: const Icon(Icons.notifications, color: Colors.white, size: 35),
+                  title: const Text('Notificaciones', style: AppTextStyle.heroTitleHomeWhite),
+                  onTap: () => Navigator.pop(context),
+                ),
+              ],
             ),
-            ListTile(
-              leading: const Icon(Icons.person, color: AppColors.iconColor),
-              title: const Text('Cuenta', style: AppTextStyle.normal),
-              onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Funcionalidad no implementada")),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.calendar_month, color: AppColors.iconColor),
-              title: const Text('Calendario', style: AppTextStyle.normal),
-              onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Funcionalidad no implementada")),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.notification_important, color: AppColors.iconColor),
-              title: const Text('Notificaciones', style: AppTextStyle.normal),
-              onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Funcionalidad no implementada")),
-                );
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.logout, color: AppColors.iconColor),
-              title: const Text('Cerrar sesión', style: AppTextStyle.normal),
+          ),
+
+          // Cerrar sesión abajo del todo
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 40),
+            child: ListTile(
+              leading: const Icon(Icons.power_settings_new, color: Colors.white, size: 35),
+              title: const Text('Cerrar sesión', style: AppTextStyle.heroTitleHomeWhite),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/login');
               },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
