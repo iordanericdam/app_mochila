@@ -1,3 +1,4 @@
+import 'package:app_mochila/data/category_data.dart';
 import 'package:app_mochila/models/TripCategory.dart';
 import 'package:app_mochila/services/api/API_Serveice.dart';
 
@@ -33,5 +34,11 @@ class TripCategoryApi extends APIService {
   Future<TripCategory> deleteCategoryByid(int tripCategoryId) async {
     final response = await deleteRequest('trip_categories/$tripCategoryId');
     return TripCategory.fromJson(response.data);
+  }
+
+  Future<List<CategoryData>> getCategoryDataList() async {
+    final response = await getRequest('trip_categories');
+    List<dynamic> data = response.data;
+    return data.map((json) => CategoryData.fromJson(json)).toList();
   }
 }
