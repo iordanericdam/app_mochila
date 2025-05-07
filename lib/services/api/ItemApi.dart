@@ -47,13 +47,13 @@ class ItemApi extends APIService {
   }
 
   Future<Item> updateItem(Item item) async {
-    final response = await putRequest('items/${item.id}', item.toJson());
     print(item.toJson());
+    final response = await putRequest('items/${item.id}', item.toJson());
     return Item.fromJson(response.data);
   }
 
-  Future<Item> deleteItem(int itemId) async {
-    final response = await deleteRequest('backpacks/$itemId');
+  Future<Item> deleteItem(int? itemId) async {
+    final response = await deleteRequest('items/$itemId');
     return Item.fromJson(response.data);
   }
 }

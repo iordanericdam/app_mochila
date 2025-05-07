@@ -73,6 +73,8 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
                   // Nombre de la mochila
                   Positioned(
                     bottom: 10,
+                    left: 0,
+                    right: 0,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 16),
@@ -98,14 +100,13 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
                   builder: (context, ref, _) {
                     final itemsAsync =
                         ref.watch(itemNotifierProvider(backpack.id));
+
                     return itemsAsync.when(
                       data: (items) {
                         final List<Category> categories = [];
-
                         for (var item in items) {
                           final existingIndex = categories
                               .indexWhere((cat) => cat.id == item.category_id);
-
                           if (existingIndex != -1) {
                             categories[existingIndex].items.add(item);
                           } else {

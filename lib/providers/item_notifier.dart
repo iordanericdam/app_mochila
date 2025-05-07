@@ -62,7 +62,7 @@ class ItemNotifier extends StateNotifier<AsyncValue<List<Item>>> {
   }
 
   // Eliminar un ítem de la mochila
-  Future<void> deleteItem(int itemId) async {
+  Future<void> deleteItem(int? itemId) async {
     try {
       await ref.read(itemApiProvider).deleteItem(itemId);
       final newList =

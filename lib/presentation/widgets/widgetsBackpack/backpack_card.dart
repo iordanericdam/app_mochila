@@ -43,7 +43,7 @@ class CategoryCardState extends State<CategoryCard> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Añadir ítem'),
+          title: Text(itemToEdit != null ? 'Editar ítem' : 'Añadir ítem'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -73,6 +73,23 @@ class CategoryCardState extends State<CategoryCard> {
             ),
           ),
           actions: [
+            if (itemToEdit != null)
+              TextButton(
+                onPressed: () {
+                  widget.ref
+                      .read(itemNotifierProvider(widget.categoryId).notifier)
+                      .deleteItem(itemToEdit.id);
+                  setState(() {
+                    nameController.text = "";
+                    counterValue = 1;
+                  });
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Eliminar',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
             TextButton(
               onPressed: () {
                 setState(() {
@@ -100,19 +117,17 @@ class CategoryCardState extends State<CategoryCard> {
                     name: name,
                     quantity: quantity.toInt(),
                     category_id: widget.categoryId,
-                    isChecked: itemToEdit.isChecked, // mantiene el estado check
+                    isChecked: itemToEdit.isChecked,
                   );
                   widget.ref
                       .read(itemNotifierProvider(widget.categoryId).notifier)
                       .updateItem(updatedItem);
                 } else {
-                  // NUEVO
                   final newItem = Item(
                     name: name,
                     quantity: quantity.toInt(),
                     category_id: widget.categoryId,
                   );
-
                   widget.ref
                       .read(itemNotifierProvider(widget.categoryId).notifier)
                       .addItem(newItem);
@@ -125,7 +140,7 @@ class CategoryCardState extends State<CategoryCard> {
 
                 Navigator.of(context).pop();
               },
-              child: const Text('Añadir'),
+              child: Text(itemToEdit != null ? 'Actualizar' : 'Añadir'),
             ),
           ],
         );
