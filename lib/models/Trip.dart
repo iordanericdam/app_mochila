@@ -11,7 +11,7 @@ class Trip {
   final String? urlPhoto;
   final bool useSuggestions;
   final List<int> categories;
-
+ 
   Trip({
     this.id,
     this.userId,
@@ -42,6 +42,7 @@ class Trip {
       urlPhoto: json['url_photo'],
       useSuggestions: json['use_suggestions'] ?? true,
       categories: List<int>.from(json['categories'] ?? []),
+      
     );
   }
 

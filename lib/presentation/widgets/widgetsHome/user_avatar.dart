@@ -22,12 +22,9 @@ class UserAvatar extends StatelessWidget {
       child: Container(
         width: size, // Tamaño del contenedor exterior
         height: size,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(
-            color: const Color.fromARGB(255, 196, 174, 226), // Color del borde
-            width: 2.5, // Grosor del borde
-          ),
+      
         ),
         child: CircleAvatar(
           backgroundImage: imageUrl != null && imageUrl!.startsWith('http')
