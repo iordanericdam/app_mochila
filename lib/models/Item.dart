@@ -1,44 +1,31 @@
 // ignore_for_file: non_constant_identifier_names, file_names
 
 class Item {
-  int id;
+  int? id;
   int category_id;
   String name;
-  String? description;
-  DateTime? createdAt;
-  DateTime? updatedAt;
   String categoryName;
   int quantity;
   bool isChecked;
 
   Item({
-    required this.id,
     required this.quantity,
     required this.category_id,
     required this.name,
-    this.description,
-    this.createdAt,
-    this.updatedAt,
-    required this.categoryName,
+    this.categoryName = "",
     this.isChecked = false,
+    this.id,
   });
 
   // Getters
-  int get getId => id;
-  int get getCategoryId => category_id;
+  int? get getId => id;
+  int? get getCategoryId => category_id;
   String get getName => name;
-  String? get getDescription => description;
-  DateTime? get getCreatedAt => createdAt;
-  DateTime? get getUpdatedAt => updatedAt;
   String? get getCategoryName => categoryName;
 
   // Setters
-  set setId(int value) => id = value;
   set setCategoryId(int value) => category_id = value;
   set setName(String value) => name = value;
-  set setDescription(String? value) => description = value;
-  set setCreatedAt(DateTime? value) => createdAt = value;
-  set setUpdatedAt(DateTime? value) => updatedAt = value;
   set setCategoryName(String value) => categoryName = value;
 
   factory Item.fromJson(Map<String, dynamic> json) {
@@ -54,12 +41,25 @@ class Item {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'category_id': category_id,
+      'item_category_id': category_id,
       'name': name,
-      'description': description,
-      'created_at': createdAt?.toIso8601String(),
-      'updated_at': updatedAt?.toIso8601String(),
-      'category_name': categoryName,
+      'quantity': quantity,
     };
+  }
+
+  Item copyWith({
+    int? id,
+    String? name,
+    int? quantity,
+    int? category_id,
+    bool? isChecked,
+  }) {
+    return Item(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      quantity: quantity ?? this.quantity,
+      category_id: category_id ?? this.category_id,
+      isChecked: isChecked ?? this.isChecked,
+    );
   }
 }

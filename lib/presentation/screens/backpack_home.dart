@@ -1,7 +1,10 @@
+import 'package:app_mochila/data/category_name_to_id.dart';
 import 'package:app_mochila/models/Backpack.dart';
+import 'package:app_mochila/models/Category.dart';
 import 'package:app_mochila/models/Item.dart';
 import 'package:app_mochila/presentation/widgets/widgetsBackpack/backpack_card.dart';
 import 'package:app_mochila/providers/item_notifier.dart';
+import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
@@ -70,14 +73,21 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
                   // Nombre de la mochila
                   Positioned(
                     bottom: 10,
-                    left: kdefaultPadding,
-                    child: Row(
-                      children: [
-                        Text(
-                          backpack.name,
-                          style: AppTextStyle.bigBoldWhite,
-                        ),
-                      ],
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 16),
+                      color:
+                          AppColors.backgroundLogoColor.withValues(alpha: 0.7),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            backpack.name,
+                            style: AppTextStyle.textFranja,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -90,25 +100,38 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
                         ref.watch(itemNotifierProvider(backpack.id));
                     return itemsAsync.when(
                       data: (items) {
-                        final categories = <String, List<Item>>{};
+                        final List<Category> categories = [];
+
                         for (var item in items) {
-                          categories
-                              .putIfAbsent(item.categoryName, () => [])
-                              .add(item);
+                          final existingIndex = categories
+                              .indexWhere((cat) => cat.id == item.category_id);
+
+                          if (existingIndex != -1) {
+                            categories[existingIndex].items.add(item);
+                          } else {
+                            categories.add(
+                              Category(
+                                id: item.category_id,
+                                name: item.categoryName,
+                                items: [item],
+                              ),
+                            );
+                          }
                         }
+
                         return ListView.builder(
                           padding: const EdgeInsets.all(16),
                           itemCount: categories.length,
                           itemBuilder: (context, index) {
-                            final categoryName =
-                                categories.keys.elementAt(index);
-                            final categoryItems = categories[categoryName]!;
+                            final category = categories[index];
 
                             return Column(
                               children: [
                                 CategoryCard(
-                                  title: categoryName,
-                                  items: categoryItems,
+                                  categoryId: category.id,
+                                  ref: ref,
+                                  title: category.name,
+                                  items: category.items,
                                 ),
                                 sizedBox,
                               ],

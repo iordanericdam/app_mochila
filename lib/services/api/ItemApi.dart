@@ -17,34 +17,26 @@ class ItemApi extends APIService {
 
   Future<List<Item>> getItemsByBackpack(int backpackId) async {
     try {
-      // Realizar la solicitud a la API
       final response = await getRequest('items/backpacks/$backpackId');
       final data = response.data;
 
-      // Verificar si la respuesta contiene datos válidos
       if (data == null || data['item_categories'] == null) {
-        print('No data or no item categories found');
         return [];
       }
 
-      // Extraer y mapear los items de todas las categorías
       List<Item> allItems = [];
       for (var category in data['item_categories']) {
         for (var item in category['items'] ?? []) {
-          print(category['id']);
           allItems.add(Item.fromJson({
-            ...item, // Propiedades del item
-            'category_id':
-                category['id'] ?? 0, // Asignamos un valor predeterminado
-            'category_name': category['name'] ??
-                'Unknown', // Asignamos 'Unknown' si no existe el nombre
+            ...item,
+            'category_id': category['id'] ?? 0,
+            'category_name': category['name'] ?? 'Unknown',
           }));
         }
       }
 
       return allItems;
     } catch (e) {
-      print('Error fetching items: $e');
       return [];
     }
   }
@@ -54,8 +46,9 @@ class ItemApi extends APIService {
     return Item.fromJson(response.data);
   }
 
-  Future<Item> updateItem(int itemId, Map<String, dynamic> updateData) async {
-    final response = await putRequest('items/$itemId', updateData);
+  Future<Item> updateItem(Item item) async {
+    final response = await putRequest('items/${item.id}', item.toJson());
+    print(item.toJson());
     return Item.fromJson(response.data);
   }
 
@@ -63,6 +56,4 @@ class ItemApi extends APIService {
     final response = await deleteRequest('backpacks/$itemId');
     return Item.fromJson(response.data);
   }
-
-  addItem(int backpackId, Item item) {}
 }

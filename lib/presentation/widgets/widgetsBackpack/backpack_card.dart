@@ -3,15 +3,21 @@ import 'package:app_mochila/services/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mochila/models/Item.dart';
 import 'package:counter/counter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:app_mochila/providers/item_notifier.dart';
 
 class CategoryCard extends StatefulWidget {
   final String title;
   final List<Item> items;
+  final int categoryId;
+  final WidgetRef ref;
 
   const CategoryCard({
     super.key,
     required this.title,
     required this.items,
+    required this.categoryId,
+    required this.ref,
   });
 
   @override
@@ -20,7 +26,7 @@ class CategoryCard extends StatefulWidget {
 
 class CategoryCardState extends State<CategoryCard> {
   final TextEditingController nameController = TextEditingController();
-  num counterValue = 1; // Guardar el valor del contador
+  num counterValue = 1;
 
   @override
   void dispose() {
@@ -28,7 +34,11 @@ class CategoryCardState extends State<CategoryCard> {
     super.dispose();
   }
 
-  void showAddItemDialog() {
+  void itemDialog({Item? itemToEdit}) {
+    if (itemToEdit != null) {
+      nameController.text = itemToEdit.name;
+      counterValue = itemToEdit.quantity;
+    }
     showDialog(
       context: context,
       builder: (context) {
@@ -77,16 +87,41 @@ class CategoryCardState extends State<CategoryCard> {
               onPressed: () {
                 String name = nameController.text;
                 num quantity = counterValue;
+                if (name.isEmpty || quantity < 1) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Rellena el nombre y cantidad válida')),
+                  );
+                  return;
+                }
+                if (itemToEdit != null) {
+                  final updatedItem = Item(
+                    id: itemToEdit.id,
+                    name: name,
+                    quantity: quantity.toInt(),
+                    category_id: widget.categoryId,
+                    isChecked: itemToEdit.isChecked, // mantiene el estado check
+                  );
+                  widget.ref
+                      .read(itemNotifierProvider(widget.categoryId).notifier)
+                      .updateItem(updatedItem);
+                } else {
+                  // NUEVO
+                  final newItem = Item(
+                    name: name,
+                    quantity: quantity.toInt(),
+                    category_id: widget.categoryId,
+                  );
 
-                print('Nombre: $name');
-                print('Cantidad: $quantity');
+                  widget.ref
+                      .read(itemNotifierProvider(widget.categoryId).notifier)
+                      .addItem(newItem);
+                }
 
                 setState(() {
                   nameController.text = "";
                   counterValue = 1;
                 });
-
-                // TODO: añadir la lógica para guardar el nuevo ítem
 
                 Navigator.of(context).pop();
               },
@@ -122,20 +157,37 @@ class CategoryCardState extends State<CategoryCard> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.add, color: Colors.blue),
-                  onPressed: showAddItemDialog,
+                  onPressed: itemDialog,
                 ),
               ],
             ),
             const SizedBox(height: 10),
             ...widget.items.map(
-              (item) => CheckboxListTile(
-                title: Text(item.name),
-                value: item.isChecked,
-                onChanged: (val) {
-                  // Aquí deberías manejar el estado si es necesario
-                },
-                controlAffinity: ListTileControlAffinity.leading,
+              (item) => ListTile(
+                leading: Checkbox(
+                  value: item.isChecked,
+                  onChanged: (val) {
+                    final updatedItem = Item(
+                      id: item.id,
+                      name: item.name,
+                      quantity: item.quantity,
+                      category_id: item.category_id,
+                      isChecked: val ?? false,
+                    );
+                    widget.ref
+                        .read(itemNotifierProvider(widget.categoryId).notifier)
+                        .updateItem(updatedItem);
+                  },
+                ),
+                title: Text(
+                  item.quantity > 1
+                      ? '${item.name} (x${item.quantity})'
+                      : item.name,
+                ),
                 contentPadding: EdgeInsets.zero,
+                onLongPress: () {
+                  itemDialog(itemToEdit: item);
+                },
               ),
             ),
           ],

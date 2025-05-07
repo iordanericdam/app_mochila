@@ -15,7 +15,6 @@ final itemApiProvider = Provider<ItemApi>((ref) {
   );
 });
 
-// ItemNotifier para manejar la lista de ítems en una mochila
 class ItemNotifier extends StateNotifier<AsyncValue<List<Item>>> {
   ItemNotifier(this.ref, {required this.backpackId})
       : super(const AsyncLoading()) {
@@ -25,7 +24,6 @@ class ItemNotifier extends StateNotifier<AsyncValue<List<Item>>> {
   final Ref ref;
   final int backpackId;
 
-  // Cargar los ítems de la mochila
   Future<void> loadItems() async {
     try {
       final items =
@@ -39,7 +37,7 @@ class ItemNotifier extends StateNotifier<AsyncValue<List<Item>>> {
   // Añadir un nuevo ítem a la mochila
   Future<void> addItem(Item item) async {
     try {
-      final newItem = await ref.read(itemApiProvider).addItem(backpackId, item);
+      final newItem = await ref.read(itemApiProvider).createItem(item);
       state = AsyncData([...state.value ?? [], newItem]);
     } catch (e, st) {
       state = AsyncError(e, st);
@@ -47,15 +45,18 @@ class ItemNotifier extends StateNotifier<AsyncValue<List<Item>>> {
   }
 
   // Actualizar un ítem existente
-  Future<void> updateItem(int itemId, Map<String, dynamic> data) async {
+  Future<void> updateItem(Item item) async {
     try {
-      final updatedItem =
-          await ref.read(itemApiProvider).updateItem(itemId, data);
+      final updatedItem = await ref.read(itemApiProvider).updateItem(item);
+
       final updatedList = (state.value ?? [])
-          .map((item) => item.id == itemId ? updatedItem : item)
+          .map((existingItem) =>
+              existingItem.id == item.id ? updatedItem : existingItem)
           .toList();
+
       state = AsyncData(updatedList);
     } catch (e, st) {
+      print("Error al actualizar el ítem: $e");
       state = AsyncError(e, st);
     }
   }

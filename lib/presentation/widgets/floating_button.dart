@@ -9,7 +9,7 @@ class FloatingButton extends StatelessWidget {
   const FloatingButton({
     super.key,
     required this.onPressed,
-    this.size = 80,
+    this.size = 60,
     this.borderRadius = 16,
   });
 

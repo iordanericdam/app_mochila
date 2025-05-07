@@ -13,7 +13,6 @@ class ItemCategory {
     this.updatedAt,
   });
 
-  // Crear una instancia de ItemCategory desde JSON
   factory ItemCategory.fromJson(Map<String, dynamic> json) {
     return ItemCategory(
       id: json['id'],
@@ -28,7 +27,6 @@ class ItemCategory {
     );
   }
 
-  // Convertir la instancia en un mapa JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
