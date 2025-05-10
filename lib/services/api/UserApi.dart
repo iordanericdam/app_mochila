@@ -34,7 +34,6 @@ class UserApi extends APIService {
     return response.success;
   }
 
-  // ✅ 新增：带头像的注册方法
   Future<User?> registerWithPhoto({
     required Map<String, dynamic> userData,
     required File? imageFile,
@@ -68,7 +67,7 @@ class UserApi extends APIService {
       if (response.statusCode == 200) {
         final decoded = jsonDecode(respStr);
         if (decoded['data'] != null) {
-          return User.fromJson(decoded['data']); // 使用 fromJson 方法构造 User 对象
+          return User.fromJson(decoded['data']);
         }
       } else {
         print('Error: ${respStr}');

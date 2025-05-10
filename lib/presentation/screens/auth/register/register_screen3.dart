@@ -1,11 +1,9 @@
-import 'package:app_mochila/presentation/screens/auth/login_screen.dart';
-import 'package:app_mochila/presentation/screens/auth/register/register_screen4.dart';
 import 'package:app_mochila/presentation/widgets/button_login.dart';
-import 'package:app_mochila/presentation/widgets/custom_input.dart';
+
 import 'package:app_mochila/presentation/widgets/password_custom_input.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
 import 'package:app_mochila/services/form_validator.dart';
-import 'package:app_mochila/services/register.dart';
+
 import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
@@ -113,24 +111,9 @@ class _RegisterScreen3State extends State<RegisterScreen3> {
                                   arguments: {
                                     'nombre': args['nombre'],
                                     'usuario': args['usuario'],
-                                    'imagen': args['imagen'],
                                     'password': passwordController.text,
                                   },
                                 );
-
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) => RegisterScreen4(
-                                //       email: args['email'],
-                                //       password: passwordController.text,
-                                //       usuario: args['usuario'],
-                                //       nombre: args['nombre'],
-                                //       telefono: args['telefono'],
-                                //       imagen: args['imagen'],
-                                //     ),
-                                //   ),
-                                // );
                               }
                             },
                           ),

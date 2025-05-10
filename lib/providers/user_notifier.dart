@@ -27,6 +27,7 @@ class UserNotifier extends StateNotifier<AsyncValue<User>> {
 
   Future<bool> registerWithPhoto(
       Map<String, dynamic> userData, File? imageFile) async {
+    print(userData);
     final user = await UserApi()
         .registerWithPhoto(userData: userData, imageFile: imageFile);
     if (user != null) {

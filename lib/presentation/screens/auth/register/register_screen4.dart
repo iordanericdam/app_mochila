@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_mochila/presentation/screens/auth/register/register_screen5.dart';
 import 'package:app_mochila/presentation/widgets/buttons.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
 import 'package:app_mochila/providers/user_notifier.dart';
@@ -9,7 +10,7 @@ import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // 引入 Riverpod
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pinput/pinput.dart';
 
 class RegisterScreen4 extends ConsumerStatefulWidget {
@@ -18,16 +19,15 @@ class RegisterScreen4 extends ConsumerStatefulWidget {
   final String usuario;
   final String nombre;
   final String telefono;
-  final File? imagen;
 
-  const RegisterScreen4(
-      {super.key,
-      required this.email,
-      required this.password,
-      required this.usuario,
-      required this.nombre,
-      required this.telefono,
-      this.imagen});
+  const RegisterScreen4({
+    super.key,
+    required this.email,
+    required this.password,
+    required this.usuario,
+    required this.nombre,
+    required this.telefono,
+  });
 
   @override
   ConsumerState<RegisterScreen4> createState() => _RegisterScreen4State();
@@ -185,18 +185,30 @@ class _RegisterScreen4State extends ConsumerState<RegisterScreen4> {
         .vertifierRegisterCode(email, pin);
 
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Correcto.')),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text('Correcto.')),
+      // );
 
-      await ref.read(userNotifierProvider.notifier).registerWithPhoto({
-        "email": email,
-        "username": username,
-        "password": password,
-        "phone": phone,
-        "name": name
-      }, widget.imagen);
-      Navigator.pushReplacementNamed(context, '/login');
+      // await ref.read(userNotifierProvider.notifier).registerWithPhoto({
+      //   "email": email,
+      //   "username": username,
+      //   "password": password,
+      //   "phone": phone,
+      //   "name": name
+      // }, widget.imagen);
+      // Navigator.pushReplacementNamed(context, '/login');
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RegisterScreen5(
+            email: widget.email,
+            password: widget.password,
+            usuario: widget.usuario,
+            nombre: widget.nombre,
+            telefono: widget.telefono,
+          ),
+        ),
+      );
     } else {
       setState(() {
         hasPinError = true;

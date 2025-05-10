@@ -147,14 +147,11 @@ class _RegisterScreen2State extends State<RegisterScreen2> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => RegisterScreen4(
-                                      //                                       final emailController = TextEditingController();
-                                      // final telefonoController = TextEditingController();
                                       email: emailController.text,
                                       password: args['password'],
                                       usuario: args['usuario'],
                                       nombre: args['nombre'],
                                       telefono: telefonoController.text,
-                                      imagen: args['imagen'],
                                     ),
                                   ),
                                 );
