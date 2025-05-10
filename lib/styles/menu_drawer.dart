@@ -12,7 +12,7 @@ class MenuDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userState = ref.watch(userNotifierProvider);
-    final userName = userState.value!.name; 
+    final userName = userState.value!.name;
     return Drawer(
       backgroundColor: const Color.fromARGB(232, 54, 53, 53),
       child: Column(
@@ -20,7 +20,7 @@ class MenuDrawer extends ConsumerWidget {
           // Cabecera
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25), 
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
             decoration: const BoxDecoration(
               gradient: AppColors.backGroundLoginColor,
               borderRadius: BorderRadius.only(
@@ -28,11 +28,17 @@ class MenuDrawer extends ConsumerWidget {
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.only(top: 70.0), //parte superior de la pantalla
+              padding: const EdgeInsets.only(
+                  top: 70.0), //parte superior de la pantalla
               child: Row(
                 children: [
-                  const UserAvatar(size: 60), 
-                  const SizedBox(width: 30), //separacion entre el avatar y el texto
+                  // const UserAvatar(size: 60),
+                  UserAvatar(
+                    imageUrl: userState.value!.url_photo ??
+                        "assets/images/default_home_images/avatar_default.jpeg",
+                  ),
+                  const SizedBox(
+                      width: 30), //separacion entre el avatar y el texto
                   Expanded(
                     child: Text(
                       'Hola $userName',
@@ -49,26 +55,34 @@ class MenuDrawer extends ConsumerWidget {
             child: Column(
               children: [
                 ListTile(
-                  leading: const Icon(Icons.settings, color: Colors.white, size: 35),
-                  title: const Text('Ajustes', style: AppTextStyle.heroTitleHomeWhite),
+                  leading:
+                      const Icon(Icons.settings, color: Colors.white, size: 35),
+                  title: const Text('Ajustes',
+                      style: AppTextStyle.heroTitleHomeWhite),
                   onTap: () => Navigator.pop(context),
                 ),
                 sizedBox,
                 ListTile(
-                  leading: const Icon(Icons.person, color: Colors.white, size: 35),
-                  title: const Text('Cuenta', style: AppTextStyle.heroTitleHomeWhite),
+                  leading:
+                      const Icon(Icons.person, color: Colors.white, size: 35),
+                  title: const Text('Cuenta',
+                      style: AppTextStyle.heroTitleHomeWhite),
                   onTap: () => Navigator.pop(context),
                 ),
                 sizedBox,
                 ListTile(
-                  leading: const Icon(Icons.calendar_today, color: Colors.white,size: 35),
-                  title: const Text('Calendario', style: AppTextStyle.heroTitleHomeWhite),
+                  leading: const Icon(Icons.calendar_today,
+                      color: Colors.white, size: 35),
+                  title: const Text('Calendario',
+                      style: AppTextStyle.heroTitleHomeWhite),
                   onTap: () => Navigator.pop(context),
                 ),
                 sizedBox,
                 ListTile(
-                  leading: const Icon(Icons.notifications, color: Colors.white, size: 35),
-                  title: const Text('Notificaciones', style: AppTextStyle.heroTitleHomeWhite),
+                  leading: const Icon(Icons.notifications,
+                      color: Colors.white, size: 35),
+                  title: const Text('Notificaciones',
+                      style: AppTextStyle.heroTitleHomeWhite),
                   onTap: () => Navigator.pop(context),
                 ),
               ],
@@ -79,8 +93,10 @@ class MenuDrawer extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 40),
             child: ListTile(
-              leading: const Icon(Icons.power_settings_new, color: Colors.white, size: 35),
-              title: const Text('Cerrar sesión', style: AppTextStyle.heroTitleHomeWhite),
+              leading: const Icon(Icons.power_settings_new,
+                  color: Colors.white, size: 35),
+              title: const Text('Cerrar sesión',
+                  style: AppTextStyle.heroTitleHomeWhite),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/login');
