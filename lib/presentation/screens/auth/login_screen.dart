@@ -99,6 +99,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               child: Center(
                 child: Image.asset('assets/images/logo.png',
                     height: MediaQuery.of(context).size.height / 5),
+
               ),
             ),
             // PARTE INFERIOR CON EL FORMU. POSITIONED
@@ -224,14 +225,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             },
                           ),
                         ),
-                        Center(
-                          child: TextButton(
-                            child: const Text("SETUP VIAJE DIRECTO"),
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/setupBpTrip', );
-                            },
-                          ),
-                        ),
+                        // Center(
+                        //   child: TextButton(
+                        //     child: const Text("SETUP VIAJE DIRECTO"),
+                        //     onPressed: () {
+                        //       Navigator.pushNamed(context, '/setupBpTrip', );
+                        //     },
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

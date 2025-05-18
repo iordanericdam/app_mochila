@@ -11,7 +11,7 @@ class CustomHomeAppbar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userNotifierProvider).value;
-    print(user?.url_photo);
+   // debugPrint(user?.url_photo);
     return Container(
       height: 120,
       decoration: const BoxDecoration(
@@ -33,11 +33,11 @@ class CustomHomeAppbar extends ConsumerWidget {
           Align(
             alignment: Alignment.centerRight,
             child: Builder(
-              builder: (context) => GestureDetector(
-                onTap: () {
-                  Scaffold.of(context).openDrawer(); // <<--- Abre el Drawer
+              builder: (context) => IconButton( // <--- Le pasamos el context al Builder
+                icon: const Icon(Icons.menu, color: Colors.white, size: 40),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer(); // <--- Abre el Drawer
                 },
-                child: const Icon(Icons.menu, color: Colors.white, size: 40),
               ),
             ),
           ),

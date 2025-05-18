@@ -17,8 +17,7 @@ class HomeScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // Oculta el teclado al tocar fuera de los campos
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () => FocusScope.of(context).unfocus(),    // Oculta el teclado al tocar fuera de los campos
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: showAppBar

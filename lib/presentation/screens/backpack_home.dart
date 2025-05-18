@@ -7,6 +7,7 @@ import 'package:app_mochila/providers/item_notifier.dart';
 import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/constants.dart';
+import 'package:app_mochila/styles/menu_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,6 +35,7 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
     const String fallbackAsset =
         "assets/images/default_home_images/demo_mochila.jpg"; // Verificar si es una URL o un asset/imagen local
     return Scaffold(
+      drawer: const MenuDrawer(), // Le decimos al Scaffold que use el Drawer
       body: Stack(
         children: [
           Positioned.fill(
@@ -77,12 +79,14 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
                   Positioned(
                     top: kdefaultPadding * 2,
                     right: kdefaultPadding,
-                    child: IconButton(
-                      icon:
-                          const Icon(Icons.menu, color: Colors.white, size: 30),
-                      onPressed: () {
-                        // Abre el Drawer de Manu
-                      },
+                    child: Builder(
+                      builder: (context) => IconButton(  //<-- Usamos Builder para obtener el contexto correcto
+                        icon: const Icon(Icons.menu,color: Colors.white, size: 40),
+                        onPressed: () {
+                          Scaffold.of(context)
+                              .openDrawer(); // <--- Abre el Drawer
+                        },
+                      ),
                     ),
                   ),
                   // Nombre de la mochila
