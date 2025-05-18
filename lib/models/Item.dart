@@ -13,7 +13,7 @@ class Item {
     required this.category_id,
     required this.name,
     this.categoryName = "",
-    this.isChecked = false,
+    required this.isChecked,
     this.id,
   });
 
@@ -29,18 +29,25 @@ class Item {
   set setCategoryName(String value) => categoryName = value;
 
   factory Item.fromJson(Map<String, dynamic> json) {
+    print("DEBUG Item.fromJson: $json");
+
     return Item(
       id: json['id'],
-      category_id: json['category_id'],
-      categoryName: json['category_name'],
-      name: json['name'],
-      quantity: json['quantity'],
+      category_id: json['category_id'] ?? json['item_category_id'] ?? 0,
+      categoryName:
+          (json.containsKey('category_name') && json['category_name'] != null)
+              ? json['category_name'].toString()
+              : '',
+      name: json['name']?.toString() ?? '',
+      isChecked: (json['is_checked'] == 1 || json['is_checked'] == true),
+      quantity: (json['quantity'] ?? 1) as int,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'is_checked': isChecked ? 1 : 0,
       'item_category_id': category_id,
       'name': name,
       'quantity': quantity,

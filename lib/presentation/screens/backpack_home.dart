@@ -30,15 +30,24 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
 
   @override
   Widget build(BuildContext context) {
+    final String? imageUrl = backpack.urlPhoto;
+    const String fallbackAsset =
+        "assets/images/default_home_images/demo_mochila.jpg"; // Verificar si es una URL o un asset/imagen local
     return Scaffold(
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
-              "assets/images/category_images/mountain.jpg",
-              fit: BoxFit.cover,
-            ),
-          ),
+              child: Image.network(
+            imageUrl!,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              // Si la imagen de red falla, usar imagen local por defecto
+              return Image.asset(
+                fallbackAsset,
+                fit: BoxFit.cover,
+              );
+            },
+          )),
           Column(
             children: [
               // AppBar + botones
@@ -65,10 +74,16 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
                     ),
                   ),
                   // Botón de menú
-                  const Positioned(
+                  Positioned(
                     top: kdefaultPadding * 2,
                     right: kdefaultPadding,
-                    child: Icon(Icons.menu, color: Colors.white, size: 30),
+                    child: IconButton(
+                      icon:
+                          const Icon(Icons.menu, color: Colors.white, size: 30),
+                      onPressed: () {
+                        // Abre el Drawer de Manu
+                      },
+                    ),
                   ),
                   // Nombre de la mochila
                   Positioned(
@@ -103,6 +118,15 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
 
                     return itemsAsync.when(
                       data: (items) {
+                        print("Items: $items");
+                        if (items.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              "No hay items en esta mochila",
+                              style: AppTextStyle.textFranja,
+                            ),
+                          );
+                        }
                         final List<Category> categories = [];
                         for (var item in items) {
                           final existingIndex = categories
@@ -125,14 +149,12 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
                           itemCount: categories.length,
                           itemBuilder: (context, index) {
                             final category = categories[index];
-
                             return Column(
                               children: [
                                 CategoryCard(
+                                  backpackId: backpack.id,
                                   categoryId: category.id,
-                                  ref: ref,
                                   title: category.name,
-                                  items: category.items,
                                 ),
                                 sizedBox,
                               ],

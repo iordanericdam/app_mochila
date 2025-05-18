@@ -56,7 +56,30 @@ class ItemNotifier extends StateNotifier<AsyncValue<List<Item>>> {
 
       state = AsyncData(updatedList);
     } catch (e, st) {
-      print("Error al actualizar el ítem: $e");
+      state = AsyncError(e, st);
+    }
+  }
+
+  // Cambiar el estado isChecked de un ítem
+  Future<void> toggleChecked(Item item) async {
+    try {
+      // 1. Crear una copia local con isChecked cambiado, sin perder categoryName
+      final updatedItem = item.copyWith(
+        isChecked: !item.isChecked,
+      );
+
+      // 2. Enviar al backend
+      final result = await ref.read(itemApiProvider).updateItem(updatedItem);
+
+      // 3. Reconstruir la lista con el nuevo ítem actualizado
+      final updatedList = (state.value ?? []).map((existingItem) {
+        return existingItem.id == result.id ? result : existingItem;
+      }).toList();
+
+      // 4. Actualizar el estado
+      state = AsyncData(updatedList);
+    } catch (e, st) {
+      print("Error en toggleChecked: $e");
       state = AsyncError(e, st);
     }
   }

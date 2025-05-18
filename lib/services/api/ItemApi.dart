@@ -31,10 +31,10 @@ class ItemApi extends APIService {
             ...item,
             'category_id': category['id'] ?? 0,
             'category_name': category['name'] ?? 'Unknown',
+            'is_checked': item['is_checked'] ?? false,
           }));
         }
       }
-
       return allItems;
     } catch (e) {
       return [];
@@ -47,7 +47,6 @@ class ItemApi extends APIService {
   }
 
   Future<Item> updateItem(Item item) async {
-    print(item.toJson());
     final response = await putRequest('items/${item.id}', item.toJson());
     return Item.fromJson(response.data);
   }

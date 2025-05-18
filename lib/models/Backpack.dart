@@ -2,7 +2,7 @@ class Backpack {
   final int id;
   final int tripId;
   final int colorId;
-  final String urlPhoto;
+  final String? urlPhoto;
   final String name;
   final String? description;
   final DateTime? createdAt;
@@ -13,7 +13,7 @@ class Backpack {
     required this.tripId,
     required this.colorId,
     required this.name,
-    this.urlPhoto = "mountain",
+    this.urlPhoto,
     this.description,
     this.createdAt,
     this.updatedAt,
@@ -25,7 +25,7 @@ class Backpack {
       tripId: json['trip_id'],
       colorId: json['color_id'] ?? 1,
       name: json['name'],
-      // urlPhoto: json['urlPhoto'],s
+      urlPhoto: json['url_photo'],
       description: json['description'],
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])

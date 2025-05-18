@@ -1,109 +1,144 @@
 import 'package:app_mochila/presentation/widgets/widgetTrips/custom_input_trip_tittle.dart';
 import 'package:app_mochila/services/form_validator.dart';
+import 'package:counter/r.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mochila/models/Item.dart';
 import 'package:counter/counter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_mochila/providers/item_notifier.dart';
 
-class CategoryCard extends StatefulWidget {
+class CategoryCard extends ConsumerWidget {
   final String title;
-  final List<Item> items;
   final int categoryId;
-  final WidgetRef ref;
+  final int backpackId;
 
   const CategoryCard({
     super.key,
     required this.title,
-    required this.items,
     required this.categoryId,
-    required this.ref,
+    required this.backpackId,
   });
 
   @override
-  CategoryCardState createState() => CategoryCardState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final itemsAsync = ref.watch(itemNotifierProvider(backpackId));
 
-class CategoryCardState extends State<CategoryCard> {
-  final TextEditingController nameController = TextEditingController();
-  num counterValue = 1;
+    return itemsAsync.when(
+      data: (allItems) {
+        final items =
+            allItems.where((i) => i.category_id == categoryId).toList();
 
-  @override
-  void dispose() {
-    nameController.dispose();
-    super.dispose();
-  }
-
-  void itemDialog({Item? itemToEdit}) {
-    if (itemToEdit != null) {
-      nameController.text = itemToEdit.name;
-      counterValue = itemToEdit.quantity;
-    }
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(itemToEdit != null ? 'Editar ítem' : 'Añadir ítem'),
-          content: SingleChildScrollView(
+        return Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          elevation: 5,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomInputTripTitle(
-                  hintText: "Nombre",
-                  controller: nameController,
-                  keyboardType: TextInputType.text,
-                  validator: (value) {
-                    return genericValidator(value, 3);
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(title,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
+                    IconButton(
+                      icon: const Icon(Icons.add, color: Colors.blue),
+                      onPressed: () => _openItemDialog(context, ref),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                const Text("Cantidad"),
-                Counter(
-                  min: 0,
-                  max: 99,
-                  initial: counterValue,
-                  step: 1,
-                  configuration: DefaultConfiguration(),
-                  onValueChanged: (value) {
-                    counterValue = value;
-                  },
+                const SizedBox(height: 10),
+                ...items.map(
+                  (item) => ListTile(
+                    key: ValueKey(item.id),
+                    leading: Checkbox(
+                      value: item.isChecked,
+                      onChanged: (_) {
+                        ref
+                            .read(itemNotifierProvider(backpackId).notifier)
+                            .toggleChecked(item);
+                      },
+                    ),
+                    title: Text(
+                      item.quantity > 1
+                          ? '${item.name} (x${item.quantity})'
+                          : item.name,
+                    ),
+                    onTap: () {
+                      ref
+                          .read(itemNotifierProvider(backpackId).notifier)
+                          .toggleChecked(item);
+                    },
+                    onLongPress: () {
+                      _openItemDialog(context, ref, itemToEdit: item);
+                    },
+                  ),
                 ),
               ],
             ),
+          ),
+        );
+      },
+      loading: () => const CircularProgressIndicator(),
+      error: (e, _) => Text('Error: $e'),
+    );
+  }
+
+  void _openItemDialog(BuildContext context, WidgetRef ref,
+      {Item? itemToEdit}) {
+    final nameController =
+        TextEditingController(text: itemToEdit != null ? itemToEdit.name : '');
+    num counterValue = itemToEdit?.quantity ?? 1;
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(itemToEdit != null ? 'Editar ítem' : 'Añadir ítem'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomInputTripTitle(
+                hintText: "Nombre",
+                controller: nameController,
+                keyboardType: TextInputType.text,
+                validator: (value) => genericValidator(value, 3),
+              ),
+              const SizedBox(height: 16),
+              const Text("Cantidad"),
+              Counter(
+                min: 1,
+                max: 99,
+                initial: counterValue,
+                step: 1,
+                configuration: DefaultConfiguration(),
+                onValueChanged: (value) => counterValue = value,
+              ),
+            ],
           ),
           actions: [
             if (itemToEdit != null)
               TextButton(
                 onPressed: () {
-                  widget.ref
-                      .read(itemNotifierProvider(widget.categoryId).notifier)
+                  ref
+                      .read(itemNotifierProvider(backpackId).notifier)
                       .deleteItem(itemToEdit.id);
-                  setState(() {
-                    nameController.text = "";
-                    counterValue = 1;
-                  });
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
-                child: const Text(
-                  'Eliminar',
-                  style: TextStyle(color: Colors.red),
-                ),
+                child:
+                    const Text('Eliminar', style: TextStyle(color: Colors.red)),
               ),
             TextButton(
-              onPressed: () {
-                setState(() {
-                  nameController.text = "";
-                  counterValue = 1;
-                });
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.pop(context),
               child: const Text('Cancelar'),
             ),
             ElevatedButton(
               onPressed: () {
-                String name = nameController.text;
-                num quantity = counterValue;
+                final name = nameController.text;
+                final quantity = counterValue.toInt();
+
                 if (name.isEmpty || quantity < 1) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -111,103 +146,31 @@ class CategoryCardState extends State<CategoryCard> {
                   );
                   return;
                 }
+
+                final provider =
+                    ref.read(itemNotifierProvider(backpackId).notifier);
+
                 if (itemToEdit != null) {
-                  final updatedItem = Item(
-                    id: itemToEdit.id,
+                  provider.updateItem(itemToEdit.copyWith(
                     name: name,
-                    quantity: quantity.toInt(),
-                    category_id: widget.categoryId,
-                    isChecked: itemToEdit.isChecked,
-                  );
-                  widget.ref
-                      .read(itemNotifierProvider(widget.categoryId).notifier)
-                      .updateItem(updatedItem);
+                    quantity: quantity,
+                  ));
                 } else {
-                  final newItem = Item(
+                  provider.addItem(Item(
                     name: name,
-                    quantity: quantity.toInt(),
-                    category_id: widget.categoryId,
-                  );
-                  widget.ref
-                      .read(itemNotifierProvider(widget.categoryId).notifier)
-                      .addItem(newItem);
+                    quantity: quantity,
+                    isChecked: false,
+                    category_id: categoryId,
+                  ));
                 }
 
-                setState(() {
-                  nameController.text = "";
-                  counterValue = 1;
-                });
-
-                Navigator.of(context).pop();
+                Navigator.pop(context);
               },
               child: Text(itemToEdit != null ? 'Actualizar' : 'Añadir'),
             ),
           ],
         );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  widget.title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add, color: Colors.blue),
-                  onPressed: itemDialog,
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            ...widget.items.map(
-              (item) => ListTile(
-                leading: Checkbox(
-                  value: item.isChecked,
-                  onChanged: (val) {
-                    final updatedItem = Item(
-                      id: item.id,
-                      name: item.name,
-                      quantity: item.quantity,
-                      category_id: item.category_id,
-                      isChecked: val ?? false,
-                    );
-                    widget.ref
-                        .read(itemNotifierProvider(widget.categoryId).notifier)
-                        .updateItem(updatedItem);
-                  },
-                ),
-                title: Text(
-                  item.quantity > 1
-                      ? '${item.name} (x${item.quantity})'
-                      : item.name,
-                ),
-                contentPadding: EdgeInsets.zero,
-                onLongPress: () {
-                  itemDialog(itemToEdit: item);
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

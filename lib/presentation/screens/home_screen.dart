@@ -4,15 +4,13 @@ import 'package:app_mochila/presentation/widgets/widgetsHome/trip_backpack_card.
 import 'package:app_mochila/presentation/widgets/floating_button.dart';
 import 'package:app_mochila/providers/trip_notifier.dart';
 import 'package:app_mochila/providers/user_notifier.dart';
-import 'package:app_mochila/services/backpack_service.dart'; 
+import 'package:app_mochila/services/backpack_service.dart';
 import 'package:app_mochila/styles/constants.dart';
 import 'package:app_mochila/styles/home_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_mochila/presentation/widgets/widgetsHome/custom_search_bar.dart';
 import 'package:app_mochila/services/trip_filter_service.dart';
-
-
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -25,7 +23,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   String _searchText = '';
   String _selectedFilter = 'Título';
   bool _isSearching = false; // Controla si el usuario ha empezado a escribir
-  bool _showCompletedTrips = false; // Controla si se deben mostrar los viajes completados
+  bool _showCompletedTrips =
+      false; // Controla si se deben mostrar los viajes completados
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +57,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               });
             },
           ),
-         
           // Contenido de la pantalla
           Expanded(
             child: tripsState.when(
@@ -79,7 +77,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 if (user == null) {
                   return const Center(child: Text('Usuario no disponible'));
                 }
-                
+
                 // Filtramos los viajes
                 final filteredTrips = TripFilterService.filterTrips(
                   trips: trips,
@@ -88,7 +86,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   isSearching: _isSearching,
                   showCompletedTrips: _showCompletedTrips,
                 );
-                
+
                 // Usamos un FutureBuilder para esperar a que se carguen las mochilas asociadas
                 return FutureBuilder<Map<int, Backpack?>>(
                   future: BackpackService.loadBackpacks(
@@ -153,7 +151,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
             ),
           ),
-          
         ],
       ),
     );
