@@ -1,3 +1,4 @@
+import 'package:app_mochila/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_mochila/styles/app_colors.dart';
@@ -59,7 +60,7 @@ class MenuDrawer extends ConsumerWidget {
                       const Icon(Icons.settings, color: Colors.white, size: 35),
                   title: const Text('Ajustes',
                       style: AppTextStyle.heroTitleHomeWhite),
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => DialogUtils.mostrarDialogoNoDisponible(context, 'Ajustes'),
                 ),
                 sizedBox,
                 ListTile(
@@ -67,7 +68,7 @@ class MenuDrawer extends ConsumerWidget {
                       const Icon(Icons.person, color: Colors.white, size: 35),
                   title: const Text('Cuenta',
                       style: AppTextStyle.heroTitleHomeWhite),
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => DialogUtils.mostrarDialogoNoDisponible(context, 'Cuenta'),
                 ),
                 sizedBox,
                 ListTile(
@@ -75,7 +76,7 @@ class MenuDrawer extends ConsumerWidget {
                       color: Colors.white, size: 35),
                   title: const Text('Calendario',
                       style: AppTextStyle.heroTitleHomeWhite),
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => DialogUtils.mostrarDialogoNoDisponible(context, 'Calendario'),
                 ),
                 sizedBox,
                 ListTile(
@@ -83,7 +84,7 @@ class MenuDrawer extends ConsumerWidget {
                       color: Colors.white, size: 35),
                   title: const Text('Notificaciones',
                       style: AppTextStyle.heroTitleHomeWhite),
-                  onTap: () => Navigator.pop(context),
+                 onTap: () => DialogUtils.mostrarDialogoNoDisponible(context, 'Notificaciones'),
                 ),
               ],
             ),

@@ -30,7 +30,7 @@ class _WeatherSelectorState extends State<WeatherSelector> {
         selectedWeather = name; // Selecciona nueva
       }
     });
-    widget.onWeatherChanged?.call(selectedWeather ?? '');
+    widget.onWeatherChanged?.call(selectedWeather ?? ''); // Si el callback onWeatherChanged fue proporcionado, lo llamamos pasando el valor seleccionado. Y si lo deseleccionamos lo dejamos vacio "". 
   }
 
   @override

@@ -120,8 +120,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           backpack: backpack,
                           onTap: () {
                             if (backpack != null) {
-                              debugPrint('Trip ID: ${backpack.tripId}');
-                              debugPrint('Backpack ID: ${backpack.id}');
+                              //debugPrint('Trip ID: ${backpack.tripId}');
+                              //debugPrint('Backpack ID: ${backpack.id}');
 
                               // FALTA LA NAVEGACION A LA PANTALLA DE MOCHILA
                               Navigator.pushNamed(context, '/backpack',

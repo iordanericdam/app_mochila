@@ -24,7 +24,7 @@ class CustomHomeAppbar extends ConsumerWidget {
           // Texto centrado
           const Center(
             child: Text(
-              "APP MOCHILA",
+              "WONDERBAG",
               style: AppTextStyle.heroTitleHomeWhite,
             ),
           ),
