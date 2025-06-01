@@ -87,6 +87,16 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
       return;
     }
 
+    if (_selectedWeather == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Selecciona un tipo de clima'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+      return;
+    }
+
     // Creamos el Objeto con los datos del formulario
     //print(' Categorías seleccionadas: $_selectedCategories');
     final trip = Trip(
