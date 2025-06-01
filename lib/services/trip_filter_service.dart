@@ -20,7 +20,7 @@ class TripFilterService {
           .where((trip) =>
               trip.startDate.isBefore(now) && trip.endDate.isAfter(now))
           .toList();
-    } else if (selectedFilter == 'Título') {
+    } else if (selectedFilter == 'Título' || selectedFilter == 'Todos') {
       result = trips;
     } else {
       result = trips
