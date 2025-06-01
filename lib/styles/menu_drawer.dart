@@ -1,3 +1,4 @@
+import 'package:app_mochila/presentation/screens/auth/update_profile_screen.dart';
 import 'package:app_mochila/utils/dialog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,7 +61,8 @@ class MenuDrawer extends ConsumerWidget {
                       const Icon(Icons.settings, color: Colors.white, size: 35),
                   title: const Text('Ajustes',
                       style: AppTextStyle.heroTitleHomeWhite),
-                  onTap: () => DialogUtils.mostrarDialogoNoDisponible(context, 'Ajustes'),
+                  onTap: () => DialogUtils.mostrarDialogoNoDisponible(
+                      context, 'Ajustes'),
                 ),
                 sizedBox,
                 ListTile(
@@ -68,7 +70,13 @@ class MenuDrawer extends ConsumerWidget {
                       const Icon(Icons.person, color: Colors.white, size: 35),
                   title: const Text('Cuenta',
                       style: AppTextStyle.heroTitleHomeWhite),
-                  onTap: () => DialogUtils.mostrarDialogoNoDisponible(context, 'Cuenta'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const UpdateProfilePage()),
+                    );
+                  },
                 ),
                 sizedBox,
                 ListTile(
@@ -76,7 +84,8 @@ class MenuDrawer extends ConsumerWidget {
                       color: Colors.white, size: 35),
                   title: const Text('Calendario',
                       style: AppTextStyle.heroTitleHomeWhite),
-                  onTap: () => DialogUtils.mostrarDialogoNoDisponible(context, 'Calendario'),
+                  onTap: () => DialogUtils.mostrarDialogoNoDisponible(
+                      context, 'Calendario'),
                 ),
                 sizedBox,
                 ListTile(
@@ -84,7 +93,8 @@ class MenuDrawer extends ConsumerWidget {
                       color: Colors.white, size: 35),
                   title: const Text('Notificaciones',
                       style: AppTextStyle.heroTitleHomeWhite),
-                 onTap: () => DialogUtils.mostrarDialogoNoDisponible(context, 'Notificaciones'),
+                  onTap: () => DialogUtils.mostrarDialogoNoDisponible(
+                      context, 'Notificaciones'),
                 ),
               ],
             ),

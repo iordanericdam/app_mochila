@@ -78,4 +78,51 @@ class UserApi extends APIService {
       return null;
     }
   }
+
+  Future<User?> updateProfile({
+    required Map<String, dynamic> userData,
+    required File? imageFile,
+  }) async {
+    try {
+      var uri = Uri.parse('$baseUrl/update-profile');
+      var request = http.MultipartRequest('POST', uri);
+
+      userData.forEach((key, value) {
+        request.fields[key] = value;
+      });
+
+      if (imageFile != null) {
+        var stream = http.ByteStream(imageFile.openRead());
+        var length = await imageFile.length();
+
+        var multipartFile = http.MultipartFile(
+          'url_photo',
+          stream,
+          length,
+          filename: basename(imageFile.path),
+        );
+        request.files.add(multipartFile);
+      }
+
+      request.headers['Accept'] = 'application/json';
+      request.headers['Authorization'] = 'Bearer $token';
+
+      var response = await request.send();
+      var respStr = await response.stream.bytesToString();
+
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(respStr);
+        if (decoded['data'] != null) {
+          print(decoded['data']);
+          return User.fromJson(decoded['data']);
+        }
+      } else {
+        print('Error: ${respStr}');
+        return null;
+      }
+    } catch (e) {
+      print('Exception: $e');
+      return null;
+    }
+  }
 }

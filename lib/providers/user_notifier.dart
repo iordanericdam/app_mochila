@@ -37,6 +37,27 @@ class UserNotifier extends StateNotifier<AsyncValue<User>> {
     }
   }
 
+  Future<bool> updateProfile(
+      Map<String, dynamic> userData, File? imageFile) async {
+    final user = state.value;
+    if (user == null || user.token == null) {
+      return false;
+    }
+    final userApi = UserApi(token: user.token);
+
+    final updatedUser = await userApi.updateProfile(
+      userData: userData,
+      imageFile: imageFile,
+    );
+    print(updatedUser);
+    if (updatedUser != null) {
+      state = AsyncData(updatedUser);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<bool> sendRegisterCode(Map<String, dynamic> data) async {
     return await UserApi().sendRegisterCode(data);
   }
