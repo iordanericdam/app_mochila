@@ -22,8 +22,7 @@ class _CategorySelectorState extends ConsumerState<CategorySelector> {
   void _categoryTaps(int id) {
     setState(() {
       if (selectedCategoryIds.contains(id)) {
-        selectedCategoryIds
-            .remove(id); // Si ya está seleccionada, la deselecciona
+        selectedCategoryIds.remove(id); // Si ya está seleccionada, la deselecciona
       } else {
         selectedCategoryIds.add(id); // Si no está seleccionada, la selecciona
       }

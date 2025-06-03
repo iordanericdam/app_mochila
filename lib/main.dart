@@ -40,9 +40,7 @@ class _MyAppState extends State<MyApp> {
 
   void initialization() async {
     //CREAMOS EL METODO ASINCRONO, DÁNDOLE UN DELAY Y BORRAMOS EL SPLASH Y LO LLAMAMOS DESDE EL INITSATE
-    // print('cargando...');
     await Future.delayed(const Duration(seconds: 3));
-    //print('Entrando');
     FlutterNativeSplash.remove();
   }
 

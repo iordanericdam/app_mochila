@@ -19,7 +19,7 @@ class CustomSearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<CustomSearchBar> {
   String selectedFilter = 'Todos';
-  final List<String> filterOptions = ['Todos', 'Completados', 'En curso'];
+  final List<String> filterOptions = ['Todos','Planificados','Completados'];
   final TextEditingController controller = TextEditingController();
 
   @override
@@ -70,6 +70,7 @@ class _SearchBarState extends State<CustomSearchBar> {
                   }).toList(),
                   onChanged: (newValue) {
                     if (newValue != null) {
+                      FocusScope.of(context).unfocus();
                       setState(() => selectedFilter = newValue);
                       widget.onFilterChanged(newValue);
                     }

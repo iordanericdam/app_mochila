@@ -211,7 +211,7 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
                               validator: validateDestino,
                               focusNode: _destinationFocus,
                             ),
-                            sizedBox,
+                            kDoubleSizedBox,
                             DateSelector(
                               startDate: _startDate,
                               endDate: _endDate,
@@ -229,7 +229,7 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
                                 });
                               },
                             ),
-                            sizedBox,
+                            kDoubleSizedBox,
 
                             Padding(
                               padding: kleftPadding,
@@ -261,21 +261,21 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
                                 ],
                               ),
                             ),
-                            sizedBox,
-                            const Padding(
-                              padding: kleftPadding,
-                              child: Text(
-                                "Descripción",
-                                style: AppTextStyle.title,
-                              ),
-                            ),
-                            kHalfSizedBox,
-                            CustomInputDescription(
-                              hintText: "Añade una descripción...",
-                              controller: _descriptionController,
-                              maxLines: 2,
-                            ),
-                            sizedBox,
+                            // sizedBox,
+                            // const Padding(
+                            //   padding: kleftPadding,
+                            //   child: Text(
+                            //     "Descripción",
+                            //     style: AppTextStyle.title,
+                            //   ),
+                            // ),
+                            // kHalfSizedBox,
+                            // CustomInputDescription(
+                            //   hintText: "Añade una descripción...",
+                            //   controller: _descriptionController,
+                            //   maxLines: 2,
+                            // ),
+                            kDoubleSizedBox,
                             const Padding(
                               padding: kleftPadding,
                               child: Text(
@@ -298,8 +298,7 @@ class _SetupBpTripScreenState extends ConsumerState<TripFormScreen> {
                                 },
                               ),
                             ),
-                            sizedBox,
-                            sizedBox,
+                           kDoubleSizedBox,
                             const Padding(
                               padding: kleftPadding,
                               child: Text(

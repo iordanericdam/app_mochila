@@ -5,4 +5,5 @@ final Map<String, int> categoryNameToId = {
   'Montaña': 3,
   'Playa': 4,
   'Ciudad': 5,
+  'Camping': 12,
 };

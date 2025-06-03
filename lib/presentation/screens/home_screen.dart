@@ -23,12 +23,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   String _searchText = '';
   String _selectedFilter = 'Título';
   bool _isSearching = false; // Controla si el usuario ha empezado a escribir
-  bool _showCompletedTrips =
-      false; // Controla si se deben mostrar los viajes completados
+  //bool _showCompletedTrips = false; // Controla si se deben mostrar los viajes completados
 
   @override
   Widget build(BuildContext context) {
-    // Escuchamos el estado del provider de viajes (puede estar cargando, con error o con datos)
+    // Escuchamos el estado del provider de viajes y usuarios y pintamos la pantalla con el estado actual
     final tripsState = ref.watch(tripNotifierProvider);
     final user = ref.watch(userNotifierProvider).value;
 
@@ -53,11 +52,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             onFilterChanged: (value) {
               setState(() {
                 _selectedFilter = value;
-                _showCompletedTrips = value == 'Completados';
+                //_showCompletedTrips = value == 'Completados';
               });
             },
           ),
-          // Contenido de la pantalla
+          // Mostramos los viajes filtrados usando expanded para ocupar el espacio restante y un FutureBuilder para cargar las mochilas asociadas
           Expanded(
             child: tripsState.when(
               // Si está cargando, mostramos un indicador
@@ -84,7 +83,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   searchText: _searchText,
                   selectedFilter: _selectedFilter,
                   isSearching: _isSearching,
-                  showCompletedTrips: _showCompletedTrips,
+                  //showCompletedTrips: _showCompletedTrips,
                 );
 
                 // Usamos un FutureBuilder para esperar a que se carguen las mochilas asociadas
@@ -100,8 +99,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                     if (snapshot.hasError) {
                       return Center(
-                        child:
-                            Text('Error al cargar mochilas: ${snapshot.error}'),
+                        child: Text('Error al cargar mochilas: ${snapshot.error}'),
                       );
                     }
 
@@ -122,18 +120,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             if (backpack != null) {
                               //debugPrint('Trip ID: ${backpack.tripId}');
                               //debugPrint('Backpack ID: ${backpack.id}');
-
-                              // FALTA LA NAVEGACION A LA PANTALLA DE MOCHILA
+                              // Navegamos a la pantalla de mochila con los datos del viaje y la mochila
                               Navigator.pushNamed(context, '/backpack',
                                   arguments: backpack);
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'ID viaje: ${backpack.tripId}, ID mochila: ${backpack.id}',
-                                  ),
-                                ),
-                              );
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   SnackBar(
+                              //     content: Text(
+                              //       'ID viaje: ${backpack.tripId}, ID mochila: ${backpack.id}',
+                              //     ),
+                              //   ),
+                              // );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

@@ -6,30 +6,25 @@ class TripFilterService {
     required String searchText,
     required String selectedFilter,
     required bool isSearching,
-    required bool showCompletedTrips,
+    //required bool showCompletedTrips,
     Map<int, String>? categoryNameMap,
   }) {
     final now = DateTime.now();
     List<Trip> result = trips;
     print(selectedFilter);
-    // Filtrar por tipo de estado del viaje
+  // Filtrar por tipo de estado del viaje
     if (selectedFilter == 'Completados') {
       result = trips.where((trip) => trip.endDate.isBefore(now)).toList();
-    } else if (selectedFilter == 'En curso') {
-      result = trips
-          .where((trip) =>
-              trip.startDate.isBefore(now) && trip.endDate.isAfter(now))
-          .toList();
-    } else if (selectedFilter == 'Título' || selectedFilter == 'Todos') {
-      result = trips;
-    } else {
+    } else if (selectedFilter == 'Planificados') {
       result = trips
           .where((trip) =>
               trip.endDate.isAfter(now) || trip.endDate.isAtSameMomentAs(now))
           .toList();
-    }
+    } else if (selectedFilter == 'Título' || selectedFilter == 'Todos') {
+      result = List.from(trips);
+    } 
     print(result);
-    // Aplicar búsqueda si se está escribiendo
+  // Aplicar búsqueda si se está escribiendo
     if (isSearching) {
       final search = searchText.toLowerCase();
       result = result.where((trip) {
@@ -43,7 +38,7 @@ class TripFilterService {
       }).toList();
     }
 
-    // Ordenar por fecha de inicio más próxima
+// Ordenar por fecha de inicio más próxima
     result.sort((a, b) => a.startDate.compareTo(b.startDate));
 
     return result;

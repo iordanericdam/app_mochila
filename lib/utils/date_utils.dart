@@ -2,14 +2,17 @@
 String getCountdownText(DateTime startDate, DateTime endDate) {
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
+  
   if (today.isAfter(endDate)) {
     return 'Viaje terminado';
   }
 
   final int daysLeft = startDate.difference(today).inDays;
-  print(startDate);
-  print(today);
-  if (daysLeft > 0) {
+  //print(startDate);
+  //print(today);
+   if (daysLeft > 0 && daysLeft <= 1) {
+    return 'Falta $daysLeft día';
+  } else if (daysLeft > 0) {
     return 'Faltan $daysLeft días';
   } else if (daysLeft == 0) {
     return '¡Es hoy!';
@@ -17,3 +20,4 @@ String getCountdownText(DateTime startDate, DateTime endDate) {
     return 'Disfrutando del viaje';
   }
 }
+
