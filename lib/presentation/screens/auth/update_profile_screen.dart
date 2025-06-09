@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:app_mochila/presentation/widgets/button_login.dart';
 import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
+import 'package:app_mochila/presentation/widgets/button_login.dart';
 import 'package:app_mochila/providers/user_notifier.dart';
 import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
@@ -63,15 +63,13 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
       _loading = false;
     });
 
-    if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Actualización correcta')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Fallo de actualización')),
-      );
-    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          success ? 'Actualización correcta' : 'Fallo de actualización',
+        ),
+      ),
+    );
   }
 
   @override
@@ -107,7 +105,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
                         controller: _usernameController,
                       ),
                       kHalfSizedBox,
-                      Padding(
+                      const Padding(
                         padding: kleftPadding,
                         child: Align(
                           alignment: Alignment.centerLeft,
@@ -122,8 +120,17 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
                         hintText: 'Correo',
                         controller: _emailController,
                       ),
-                      kDoubleSizedBox,
-                      const SizedBox(height: 16),
+                      kHalfSizedBox,
+                      const Padding(
+                        padding: kleftPadding,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Icono',
+                            style: AppTextStyle.title,
+                          ),
+                        ),
+                      ),
                       Center(
                         child: _selectedImage != null
                             ? CircleAvatar(
@@ -148,12 +155,13 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
                       const SizedBox(height: 16),
                       kDoubleSizedBox,
                       Center(
-                        child: ElevatedButton(
-                          onPressed: _loading ? null : _updateProfile,
-                          child: _loading
-                              ? const CircularProgressIndicator()
-                              : const Text('Actualizar'),
-                        ),
+                        child: _loading
+                            ? const CircularProgressIndicator()
+                            : CustomButtonLogin(
+                                text: 'Actualizar',
+                                gradient: AppColors.loginButtonColor,
+                                onPressed: _updateProfile,
+                              ),
                       ),
                     ],
                   ),
