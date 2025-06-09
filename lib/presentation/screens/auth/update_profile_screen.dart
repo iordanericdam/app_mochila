@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:app_mochila/presentation/widgets/button_login.dart';
+import 'package:app_mochila/presentation/widgets/custom_input.dart';
 import 'package:app_mochila/presentation/widgets/white_base_container.dart';
 import 'package:app_mochila/providers/user_notifier.dart';
 import 'package:app_mochila/styles/app_colors.dart';
+import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/base_scaffold.dart';
 import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,7 @@ class UpdateProfilePage extends ConsumerStatefulWidget {
 
 class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   File? _selectedImage;
   bool _loading = false;
 
@@ -28,6 +31,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
     final user = ref.read(userNotifierProvider).value;
     if (user != null) {
       _usernameController.text = user.name;
+      _emailController.text = user.email;
     }
   }
 
@@ -48,6 +52,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
 
     final userData = {
       'name': _usernameController.text,
+      'email': _emailController.text,
     };
 
     final success = await ref
@@ -72,8 +77,6 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userNotifierProvider);
-// BaseScaffold(
-//       body: WhiteBaseContainer(
 
     return BaseScaffold(
       appBar: AppBar(title: const Text('Información actualizada')),
@@ -86,39 +89,71 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextField(
+                      Padding(
+                        padding: kleftPadding,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Nombre completo',
+                            style: AppTextStyle.title,
+                          ),
+                        ),
+                      ),
+                      kHalfSizedBox,
+                      CustomInput(
+                        hintText: 'Nombre',
                         controller: _usernameController,
-                        decoration: const InputDecoration(labelText: 'Nombre'),
+                      ),
+                      kHalfSizedBox,
+                      Padding(
+                        padding: kleftPadding,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Correo',
+                            style: AppTextStyle.title,
+                          ),
+                        ),
+                      ),
+                      kHalfSizedBox,
+                      CustomInput(
+                        hintText: 'Correo',
+                        controller: _emailController,
                       ),
                       kDoubleSizedBox,
-                      kDoubleSizedBox,
                       const SizedBox(height: 16),
-                      _selectedImage != null
-                          ? CircleAvatar(
-                              radius: 40,
-                              backgroundImage: FileImage(_selectedImage!),
-                            )
-                          : user.url_photo != null
-                              ? CircleAvatar(
-                                  radius: 40,
-                                  backgroundImage:
-                                      NetworkImage(user.url_photo!),
-                                )
-                              : const CircleAvatar(radius: 40),
-                      TextButton.icon(
-                        onPressed: _pickImage,
-                        icon: const Icon(Icons.image),
-                        label: const Text('Seleccionar imagen'),
+                      Center(
+                        child: _selectedImage != null
+                            ? CircleAvatar(
+                                radius: 40,
+                                backgroundImage: FileImage(_selectedImage!),
+                              )
+                            : user.url_photo != null
+                                ? CircleAvatar(
+                                    radius: 40,
+                                    backgroundImage:
+                                        NetworkImage(user.url_photo!),
+                                  )
+                                : const CircleAvatar(radius: 40),
+                      ),
+                      Center(
+                        child: TextButton.icon(
+                          onPressed: _pickImage,
+                          icon: const Icon(Icons.image),
+                          label: const Text('Seleccionar imagen'),
+                        ),
                       ),
                       const SizedBox(height: 16),
                       kDoubleSizedBox,
-                      ElevatedButton(
-                        onPressed: _loading ? null : _updateProfile,
-                        child: _loading
-                            ? const CircularProgressIndicator()
-                            : const Text('Actualizar'),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: _loading ? null : _updateProfile,
+                          child: _loading
+                              ? const CircularProgressIndicator()
+                              : const Text('Actualizar'),
+                        ),
                       ),
                     ],
                   ),
@@ -128,7 +163,8 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
           },
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (e, _) => Center(
-              child: Text('Error al cargar la información del usuario: $e')),
+            child: Text('Error al cargar la información del usuario: $e'),
+          ),
         ),
       ),
     );
