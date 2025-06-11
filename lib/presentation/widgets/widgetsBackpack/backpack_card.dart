@@ -161,6 +161,7 @@ class CategoryCard extends ConsumerWidget {
                     quantity: quantity,
                     isChecked: false,
                     category_id: categoryId,
+                    categoryName: title,
                   ));
                 }
 

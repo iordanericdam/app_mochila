@@ -49,9 +49,13 @@ class ItemNotifier extends StateNotifier<AsyncValue<List<Item>>> {
     try {
       final updatedItem = await ref.read(itemApiProvider).updateItem(item);
 
+      // Preserve categoryName if API response doesn't include it
+      final itemWithCategory =
+          updatedItem.copyWith(categoryName: item.categoryName);
+
       final updatedList = (state.value ?? [])
           .map((existingItem) =>
-              existingItem.id == item.id ? updatedItem : existingItem)
+              existingItem.id == item.id ? itemWithCategory : existingItem)
           .toList();
 
       state = AsyncData(updatedList);
@@ -71,9 +75,15 @@ class ItemNotifier extends StateNotifier<AsyncValue<List<Item>>> {
       // 2. Enviar al backend
       final result = await ref.read(itemApiProvider).updateItem(updatedItem);
 
+      // Mantener el nombre de categoría local si la respuesta no lo incluye
+      final itemWithCategory =
+          result.copyWith(categoryName: item.categoryName);
+
       // 3. Reconstruir la lista con el nuevo ítem actualizado
       final updatedList = (state.value ?? []).map((existingItem) {
-        return existingItem.id == result.id ? result : existingItem;
+        return existingItem.id == itemWithCategory.id
+            ? itemWithCategory
+            : existingItem;
       }).toList();
 
       // 4. Actualizar el estado
