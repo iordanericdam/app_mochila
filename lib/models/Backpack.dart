@@ -42,7 +42,7 @@ class Backpack {
       'trip_id': tripId,
       'color_id': colorId,
       'name': name,
-      'utlPhoto': urlPhoto,
+      'url_photo': urlPhoto,
       'description': description,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
