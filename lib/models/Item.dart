@@ -59,6 +59,7 @@ class Item {
     String? name,
     int? quantity,
     int? category_id,
+    String? categoryName,
     bool? isChecked,
   }) {
     return Item(
@@ -66,6 +67,7 @@ class Item {
       name: name ?? this.name,
       quantity: quantity ?? this.quantity,
       category_id: category_id ?? this.category_id,
+      categoryName: categoryName ?? this.categoryName,
       isChecked: isChecked ?? this.isChecked,
     );
   }
