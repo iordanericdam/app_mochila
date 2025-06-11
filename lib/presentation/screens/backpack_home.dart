@@ -2,6 +2,8 @@ import 'package:app_mochila/models/Backpack.dart';
 import 'package:app_mochila/models/Category.dart';
 import 'package:app_mochila/presentation/widgets/widgetsBackpack/backpack_card.dart';
 import 'package:app_mochila/providers/item_notifier.dart';
+import 'package:app_mochila/providers/item_category_notifier.dart';
+import 'package:app_mochila/presentation/widgets/floating_button.dart';
 import 'package:app_mochila/styles/app_colors.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/styles/constants.dart';
@@ -25,6 +27,8 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
     backpack = ModalRoute.of(context)!.settings.arguments as Backpack;
     // Llamamos a cargar los items cuando se monta la pantalla
     ref.read(itemNotifierProvider(backpack.id).notifier).loadItems();
+    // Cargar categorías de items
+    ref.read(itemCategoryNotifierProvider.notifier).loadCategories();
   }
 
   @override
@@ -34,6 +38,9 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
         "assets/images/default_home_images/demo_mochila.jpg"; // Verificar si es una URL o un asset/imagen local
     return Scaffold(
       drawer: const MenuDrawer(),
+      floatingActionButton: FloatingButton(
+        onPressed: _openCreateCategoryDialog,
+      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -117,50 +124,45 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
               Expanded(
                 child: Consumer(
                   builder: (context, ref, _) {
+                    final categoriesAsync = ref.watch(itemCategoryNotifierProvider);
                     final itemsAsync =
                         ref.watch(itemNotifierProvider(backpack.id));
-                    return itemsAsync.when(
-                      data: (items) {
-                        // if (items.isEmpty) {
-                        //   return const Center(
-                        //     child: Text(
-                        //       "No hay items en esta mochila",
-                        //       style: AppTextStyle.textFranja,
-                        //     ),
-                        //   );
-                        // }
-                        final List<Category> categories = [];
-                        for (var item in items) {
-                          final existingIndex = categories
-                              .indexWhere((cat) => cat.id == item.category_id);
-                          if (existingIndex != -1) {
-                            categories[existingIndex].items.add(item);
-                          } else {
-                            categories.add(
-                              Category(
-                                id: item.category_id,
-                                name: item.categoryName,
-                                items: [item],
-                              ),
-                            );
-                          }
-                        }
-                        return ListView.builder(
-                          padding: const EdgeInsets.all(16),
-                          itemCount: categories.length,
-                          itemBuilder: (context, index) {
-                            final category = categories[index];
-                            return Column(
-                              children: [
-                                CategoryCard(
-                                  backpackId: backpack.id,
-                                  categoryId: category.id,
-                                  title: category.name.toString(),
-                                ),
-                                sizedBox,
-                              ],
+                    return categoriesAsync.when(
+                      data: (allCategories) {
+                        return itemsAsync.when(
+                          data: (items) {
+                            final List<Category> categories = allCategories
+                                .map((cat) => Category(
+                                      id: cat.id,
+                                      name: cat.name,
+                                      items: items
+                                          .where((i) => i.category_id == cat.id)
+                                          .toList(),
+                                    ))
+                                .toList();
+
+                            return ListView.builder(
+                              padding: const EdgeInsets.all(16),
+                              itemCount: categories.length,
+                              itemBuilder: (context, index) {
+                                final category = categories[index];
+                                return Column(
+                                  children: [
+                                    CategoryCard(
+                                      backpackId: backpack.id,
+                                      categoryId: category.id,
+                                      title: category.name.toString(),
+                                    ),
+                                    sizedBox,
+                                  ],
+                                );
+                              },
                             );
                           },
+                          loading: () => const Center(
+                              child: CircularProgressIndicator()),
+                          error: (err, _) =>
+                              Center(child: Text('Error: $err')),
                         );
                       },
                       loading: () =>
@@ -171,6 +173,43 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _openCreateCategoryDialog() {
+    final TextEditingController nameController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Nueva categoría'),
+        content: TextField(
+          controller: nameController,
+          decoration: const InputDecoration(hintText: 'Nombre'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final name = nameController.text.trim();
+              if (name.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Introduce un nombre')),
+                );
+                return;
+              }
+              await ref
+                  .read(itemCategoryNotifierProvider.notifier)
+                  .addCategory(name);
+              Navigator.pop(context);
+            },
+            child: const Text('Crear'),
           ),
         ],
       ),
