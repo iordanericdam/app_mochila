@@ -1,7 +1,5 @@
-import 'package:app_mochila/data/category_name_to_id.dart';
 import 'package:app_mochila/models/Backpack.dart';
 import 'package:app_mochila/models/Category.dart';
-import 'package:app_mochila/models/Item.dart';
 import 'package:app_mochila/presentation/widgets/widgetsBackpack/backpack_card.dart';
 import 'package:app_mochila/providers/item_notifier.dart';
 import 'package:app_mochila/styles/app_colors.dart';
@@ -25,7 +23,7 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     backpack = ModalRoute.of(context)!.settings.arguments as Backpack;
-    // 👇 Llamamos a cargar los items cuando se monta la pantalla
+    // Llamamos a cargar los items cuando se monta la pantalla
     ref.read(itemNotifierProvider(backpack.id).notifier).loadItems();
   }
 
@@ -35,7 +33,7 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
     const String fallbackAsset =
         "assets/images/default_home_images/demo_mochila.jpg"; // Verificar si es una URL o un asset/imagen local
     return Scaffold(
-      drawer: const MenuDrawer(), // Le decimos al Scaffold que use el Drawer
+      drawer: const MenuDrawer(),
       body: Stack(
         children: [
           Positioned.fill(
@@ -80,8 +78,10 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
                     top: kdefaultPadding * 2,
                     right: kdefaultPadding,
                     child: Builder(
-                      builder: (context) => IconButton(  //<-- Usamos Builder para obtener el contexto correcto
-                        icon: const Icon(Icons.menu,color: Colors.white, size: 40),
+                      builder: (context) => IconButton(
+                        //<-- Usamos Builder para obtener el contexto correcto
+                        icon: const Icon(Icons.menu,
+                            color: Colors.white, size: 40),
                         onPressed: () {
                           Scaffold.of(context)
                               .openDrawer(); // <--- Abre el Drawer
@@ -119,18 +119,16 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
                   builder: (context, ref, _) {
                     final itemsAsync =
                         ref.watch(itemNotifierProvider(backpack.id));
-
                     return itemsAsync.when(
                       data: (items) {
-                        print("Items: $items");
-                        if (items.isEmpty) {
-                          return const Center(
-                            child: Text(
-                              "No hay items en esta mochila",
-                              style: AppTextStyle.textFranja,
-                            ),
-                          );
-                        }
+                        // if (items.isEmpty) {
+                        //   return const Center(
+                        //     child: Text(
+                        //       "No hay items en esta mochila",
+                        //       style: AppTextStyle.textFranja,
+                        //     ),
+                        //   );
+                        // }
                         final List<Category> categories = [];
                         for (var item in items) {
                           final existingIndex = categories
@@ -147,7 +145,6 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
                             );
                           }
                         }
-
                         return ListView.builder(
                           padding: const EdgeInsets.all(16),
                           itemCount: categories.length,
@@ -158,7 +155,7 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
                                 CategoryCard(
                                   backpackId: backpack.id,
                                   categoryId: category.id,
-                                  title: category.name,
+                                  title: category.name.toString(),
                                 ),
                                 sizedBox,
                               ],

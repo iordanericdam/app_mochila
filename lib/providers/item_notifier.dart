@@ -79,7 +79,6 @@ class ItemNotifier extends StateNotifier<AsyncValue<List<Item>>> {
       // 4. Actualizar el estado
       state = AsyncData(updatedList);
     } catch (e, st) {
-      print("Error en toggleChecked: $e");
       state = AsyncError(e, st);
     }
   }
@@ -101,3 +100,9 @@ final itemNotifierProvider =
     StateNotifierProvider.family<ItemNotifier, AsyncValue<List<Item>>, int>(
   (ref, backpackId) => ItemNotifier(ref, backpackId: backpackId),
 );
+
+final itemByCategoryProvider =
+    Provider.family<List<Item>, (int backpackId, int categoryId)>((ref, tuple) {
+  final allItems = ref.watch(itemNotifierProvider(tuple.$1)).value ?? [];
+  return allItems.where((item) => item.category_id == tuple.$2).toList();
+});
