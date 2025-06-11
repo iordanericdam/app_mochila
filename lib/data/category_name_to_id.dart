@@ -6,4 +6,7 @@ final Map<String, int> categoryNameToId = {
   'Playa': 4,
   'Ciudad': 5,
   'Camping': 12,
+  'Avión': 13,
+  'Nublado': 14,
+  'Lluvia': 15,
 };

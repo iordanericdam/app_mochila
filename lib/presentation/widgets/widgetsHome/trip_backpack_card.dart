@@ -1,6 +1,7 @@
 import 'package:app_mochila/models/Backpack.dart';
 import 'package:app_mochila/models/Trip.dart';
 import 'package:app_mochila/styles/app_colors.dart';
+import 'package:app_mochila/styles/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mochila/styles/app_text_style.dart';
 import 'package:app_mochila/utils/date_utils.dart';
@@ -22,9 +23,13 @@ class TripBackpackCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final String? imageUrl = trip.urlPhoto;
-    final bool isNetworkImage = imageUrl != null && imageUrl.startsWith('http'); // Verificar si es una URL o un asset/imagen local
-    const String fallbackAsset = "assets/images/default_home_images/demo_mochila.jpg"; // respaldo imagen local por defecto
-    final String countdownText = getCountdownText( trip.startDate, trip.endDate); // Texto con el contador de días
+    final bool isNetworkImage = imageUrl != null &&
+        imageUrl.startsWith(
+            'http'); // Verificar si es una URL o un asset/imagen local
+    const String fallbackAsset =
+        "assets/images/default_home_images/demo_mochila.jpg"; // respaldo imagen local por defecto
+    final String countdownText = getCountdownText(
+        trip.startDate, trip.endDate); // Texto con el contador de días
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 20.0),
@@ -103,10 +108,27 @@ class TripBackpackCard extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                         // Destino del viaje
+                        Text(
+                          trip.destination,
+                          style: AppTextStyle.textFranja.copyWith(
+                          
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         Text(
                           countdownText,
-                          style: AppTextStyle.textFranja,
+                          style: AppTextStyle.textFranja.copyWith(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,)
                         ),
+                        const SizedBox(height: 4),
+                        // Fechas del viaje
+                        Text(
+                          'Inicio: ${trip.startDate.day}/${trip.startDate.month}/${trip.startDate.year} Fin: ${trip.endDate.day}/${trip.endDate.month}/ ${trip.endDate.year}',
+                          style: AppTextStyle.textFranja.copyWith(fontSize: 12),
+                        ),
+                       
                       ],
                     ),
                   ),
@@ -118,7 +140,8 @@ class TripBackpackCard extends ConsumerWidget {
       ),
     );
   }
-  // Metodo para mostrar las opciones del viaje
+
+  // Metodo para mostrar   las opciones del viaje
   void showOptionsTrip(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
@@ -132,7 +155,7 @@ class TripBackpackCard extends ConsumerWidget {
             icon: const Icon(Icons.edit),
             label: const Text('Editar'),
             onPressed: () {
-              Navigator.pop(context); // cierra este diálogo
+              Navigator.pop(context); // cierra el dialog actual
               _openEditDialog(context, ref); // abre el editor de título
             },
           ),
@@ -141,17 +164,20 @@ class TripBackpackCard extends ConsumerWidget {
             icon: const Icon(Icons.delete, color: Colors.red),
             label: const Text('Eliminar', style: TextStyle(color: Colors.red)),
             onPressed: () {
-              Navigator.pop(context); // cierra este diálogo
-              _confirmDelete(context, ref); // pide confirmación
+              Navigator.pop(context); // cierra el dialog actu al
+              _confirmDelete(context, ref); //Confirmación
             },
           ),
         ],
       ),
     );
   }
-  //Metodo para editar el viaje, abre un dialogo
+
+  //Metodo para editar el viaje -> abre un dialog
   void _openEditDialog(BuildContext context, WidgetRef ref) {
-    final TextEditingController controller = TextEditingController(text: trip.name); // Innicializamos el controlador con el nombre actual del viaje
+    final TextEditingController controller = TextEditingController(
+        text: trip
+            .name); // Innicializamos el controlador con el nombre actual del viaje
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -171,7 +197,9 @@ class TripBackpackCard extends ConsumerWidget {
             onPressed: () {
               final newTitle = controller.text.trim();
               if (newTitle.isNotEmpty) {
-                ref.read(tripNotifierProvider.notifier) .updateTrip(trip.id!, {"name": newTitle}); // Notificamos al provider y actualizamos el viaje
+                ref.read(tripNotifierProvider.notifier).updateTrip(trip.id!, {
+                  "name": newTitle
+                }); // Notificamos al provider y actualizamos el viaje
               }
               Navigator.pop(context); // Cerramos el diálogo
             },
@@ -181,7 +209,8 @@ class TripBackpackCard extends ConsumerWidget {
       ),
     );
   }
-  // Metodo para borrar el viaje, abre un dialogo boolean
+
+  // Metodo para borrar el viaje-> abre un dialog
   void _confirmDelete(BuildContext context, WidgetRef ref) async {
     final ok = await showDialog<bool>(
       context: context,
@@ -206,7 +235,8 @@ class TripBackpackCard extends ConsumerWidget {
     );
 
     if (ok == true) {
-      ref.read(tripNotifierProvider.notifier).deleteTrip(trip.id!); // Notificamos al provider y eliminamos el viaje
+      ref.read(tripNotifierProvider.notifier).deleteTrip(
+          trip.id!); // Notificamos al provider y eliminamos el viaje
     }
   }
 
@@ -313,6 +343,4 @@ class TripBackpackCard extends ConsumerWidget {
   //     );
   //   }
   // }
-
-
 }

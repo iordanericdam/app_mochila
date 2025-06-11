@@ -121,11 +121,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Center(
                           child: Column(
                             children: [
-                              const Text(
-                                "Login",
-                                textAlign: TextAlign.center,
-                                style: AppTextStyle.heroTitle,
-                              ),
+                              // const Text(
+                              //   "Login",
+                              //   textAlign: TextAlign.center,
+                              //   style: AppTextStyle.heroTitle,
+                              // ),
                               kHalfSizedBox,
                               RichText(
                                 textAlign: TextAlign.center,
@@ -134,7 +134,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   style: AppTextStyle.normal,
                                   children: [
                                     TextSpan(
-                                        text: 'NombreApp',
+                                        text: 'WonderBag',
                                         style: AppTextStyle.normalBold),
                                   ],
                                 ),

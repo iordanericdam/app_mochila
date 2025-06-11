@@ -51,68 +51,72 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
           Column(
             children: [
               // AppBar + botones
-              Stack(
-                children: [
-                  Container(
-                    height: 180,
-                    decoration: const BoxDecoration(
-                      borderRadius:
-                          BorderRadius.vertical(bottom: Radius.circular(30)),
-                      color: Colors.transparent,
+              SizedBox(
+                height: 180,
+                child: Stack(
+                  children: [
+                    // Fondo de la franja
+                    Positioned.fill(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.backgroundLogoColor.withValues(alpha:0.7),
+                        ),
+                      ),
                     ),
-                  ),
-                  // Botón de atrás
-                  Positioned(
-                    top: kdefaultPadding * 2,
-                    left: kdefaultPadding,
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back,
-                          color: Colors.white, size: 30),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  // Botón de menú
-                  Positioned(
-                    top: kdefaultPadding * 2,
-                    right: kdefaultPadding,
-                    child: Builder(
-                      builder: (context) => IconButton(
-                        //<-- Usamos Builder para obtener el contexto correcto
-                        icon: const Icon(Icons.menu,
-                            color: Colors.white, size: 40),
+                    // Botón de atrás
+                    Positioned(
+                      top: kdefaultPadding * 2.8,
+                      left: kdefaultPadding,
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_back,
+                            color: Colors.white, size: 30),
                         onPressed: () {
-                          Scaffold.of(context)
-                              .openDrawer(); // <--- Abre el Drawer
+                          Navigator.pop(context);
                         },
                       ),
                     ),
-                  ),
-                  // Nombre de la mochila
-                  Positioned(
-                    bottom: 10,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 16),
-                      color:
-                          AppColors.backgroundLogoColor.withValues(alpha: 0.7),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            backpack.name,
-                            style: AppTextStyle.textFranja,
-                          ),
-                        ],
+                    // Botón de menú
+                    Positioned(
+                      top: kdefaultPadding * 2.6,
+                      right: kdefaultPadding,
+                      child: Builder(
+                        builder: (context) => IconButton(
+                          //<-- Usamos Builder para obtener el contexto correcto
+                          icon: const Icon(Icons.menu,
+                              color: Colors.white, size: 40),
+                          onPressed: () {
+                            Scaffold.of(context)
+                                .openDrawer(); // <--- Abre el Drawer
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    // Nombre de la mochila
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 16),
+                        color: AppColors.backgroundLogoColor
+                            .withValues(alpha: 0.7),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              backpack.name,
+                              style: AppTextStyle.textFranja,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              kHalfSizedBox,
               // Lista de items
               Expanded(
                 child: Consumer(
@@ -177,3 +181,157 @@ class _BackpackHomeState extends ConsumerState<BackpackHome> {
     );
   }
 }
+
+
+
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   final String? imageUrl = backpack.urlPhoto;
+  //   const String fallbackAsset =
+  //       "assets/images/default_home_images/demo_mochila.jpg"; // Verificar si es una URL o un asset/imagen local
+  //   return Scaffold(
+  //     drawer: const MenuDrawer(), // Le decimos al Scaffold que use el Drawer
+  //     body: Stack(
+  //       children: [
+  //         Positioned.fill(
+  //             child: Image.network(
+  //           imageUrl!,
+  //           fit: BoxFit.cover,
+  //           errorBuilder: (context, error, stackTrace) {
+  //             // Si la imagen de red falla, usar imagen local por defecto
+  //             return Image.asset(
+  //               fallbackAsset,
+  //               fit: BoxFit.cover,
+  //             );
+  //           },
+  //         )),
+  //         Column(
+  //           children: [
+  //             // AppBar + botones
+  //             Stack(
+  //               children: [
+  //                 Container(
+  //                   height: 180,
+  //                   decoration: const BoxDecoration(
+  //                     borderRadius:
+  //                         BorderRadius.vertical(bottom: Radius.circular(30)),
+  //                     color: Colors.transparent,
+  //                   ),
+  //                 ),
+  //                 // Botón de atrás
+  //                 Positioned(
+  //                   top: kdefaultPadding * 2,
+  //                   left: kdefaultPadding,
+  //                   child: IconButton(
+  //                     icon: const Icon(Icons.arrow_back,
+  //                         color: Colors.white, size: 30),
+  //                     onPressed: () {
+  //                       Navigator.pop(context);
+  //                     },
+  //                   ),
+  //                 ),
+  //                 // Botón de menú
+  //                 Positioned(
+  //                   top: kdefaultPadding * 2,
+  //                   right: kdefaultPadding,
+  //                   child: Builder(
+  //                     builder: (context) => IconButton(  //<-- Usamos Builder para obtener el contexto correcto
+  //                       icon: const Icon(Icons.menu,color: Colors.white, size: 40),
+  //                       onPressed: () {
+  //                         Scaffold.of(context)
+  //                             .openDrawer(); // <--- Abre el Drawer
+  //                       },
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 // Nombre de la mochila
+  //                 Positioned(
+  //                   bottom: 10,
+  //                   left: 0,
+  //                   right: 0,
+  //                   child: Container(
+  //                     padding: const EdgeInsets.symmetric(
+  //                         horizontal: 16, vertical: 16),
+  //                     color:
+  //                         AppColors.backgroundLogoColor.withValues(alpha: 0.7),
+  //                     child: Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.center,
+  //                       mainAxisSize: MainAxisSize.min,
+  //                       children: [
+  //                         Text(
+  //                           backpack.name,
+  //                           style: AppTextStyle.textFranja,
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //             // Lista de items
+  //             Expanded(
+  //               child: Consumer(
+  //                 builder: (context, ref, _) {
+  //                   final itemsAsync =
+  //                       ref.watch(itemNotifierProvider(backpack.id));
+
+  //                   return itemsAsync.when(
+  //                     data: (items) {
+  //                       print("Items: $items");
+  //                       if (items.isEmpty) {
+  //                         return const Center(
+  //                           child: Text(
+  //                             "No hay items en esta mochila",
+  //                             style: AppTextStyle.textFranja,
+  //                           ),
+  //                         );
+  //                       }
+  //                       final List<Category> categories = [];
+  //                       for (var item in items) {
+  //                         final existingIndex = categories
+  //                             .indexWhere((cat) => cat.id == item.category_id);
+  //                         if (existingIndex != -1) {
+  //                           categories[existingIndex].items.add(item);
+  //                         } else {
+  //                           categories.add(
+  //                             Category(
+  //                               id: item.category_id,
+  //                               name: item.categoryName,
+  //                               items: [item],
+  //                             ),
+  //                           );
+  //                         }
+  //                       }
+
+  //                       return ListView.builder(
+  //                         padding: const EdgeInsets.all(16),
+  //                         itemCount: categories.length,
+  //                         itemBuilder: (context, index) {
+  //                           final category = categories[index];
+  //                           return Column(
+  //                             children: [
+  //                               CategoryCard(
+  //                                 backpackId: backpack.id,
+  //                                 categoryId: category.id,
+  //                                 title: category.name,
+  //                               ),
+  //                               sizedBox,
+  //                             ],
+  //                           );
+  //                         },
+  //                       );
+  //                     },
+  //                     loading: () =>
+  //                         const Center(child: CircularProgressIndicator()),
+  //                     error: (err, _) => Center(child: Text('Error: $err')),
+  //                   );
+  //                 },
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
